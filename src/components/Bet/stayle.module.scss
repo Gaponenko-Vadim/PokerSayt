@@ -1,0 +1,28 @@
+.bet {
+  position: absolute;
+  top: -20px; // Позиционируем ставку над игроком
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4caf50; // Зеленый цвет для ставки
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 10; // Чтобы ставка была поверх других элементов
+}
+
+// Дополнительные стили для разных типов ставок
+.bet[data-bet="1BB"] {
+  background-color: #4caf50; // Зеленый для стандартной ставки
+}
+
+.bet[data-bet="2BB"] {
+  background-color: #ff9800; // Оранжевый для рейза
+}
+
+.bet[data-bet="All-in"] {
+  background-color: #f44336; // Красный для алл-ина
+}

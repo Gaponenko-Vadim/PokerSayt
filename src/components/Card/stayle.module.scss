@@ -1,0 +1,28 @@
+.cardsContainer {
+  position: absolute;
+  bottom: 50px; // Отступ от нижнего края стола
+  left: 50%;
+  transform: translateX(-50%); // Центрирование по горизонтали
+  display: flex;
+  gap: 10px; // Расстояние между картами
+}
+
+.card {
+  width: 60px; // Ширина карты
+  height: px; // Высота карты
+  background-color: white;
+  border-radius: 8px; // Закругленные углы
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); // Тень для эффекта карты
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-10px); // Эффект поднятия карты при наведении
+  }
+}

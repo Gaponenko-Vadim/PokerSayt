@@ -1,0 +1,56 @@
+.statusPlayer {
+  position: absolute;
+  bottom: 30%; // Размещаем под игроком
+  left: -30%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  margin-top: 10px; // Отступ от игрока
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap; // Текст не переносится
+  display: flex;
+  gap: 8px; // Отступ между кнопками
+}
+
+.statusLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.dotsContainer {
+  display: flex;
+  flex-direction: column; // Точки располагаются вертикально
+  gap: 8px;
+  margin-left: 8px; // Отступ слева от игрока
+}
+
+.dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+
+  transition: opacity 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+.red {
+  background-color: #9f0707; // Красный цвет для "neutral"
+}
+
+.yellow {
+  background-color: #ffcc00; // Жёлтый цвет для "aggressive"
+}
+
+.green {
+  background-color: #057609; // Зелёный цвет для "tight"
+}

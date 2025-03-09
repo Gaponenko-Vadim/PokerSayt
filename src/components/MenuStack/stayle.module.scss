@@ -1,0 +1,61 @@
+.playerStack {
+  position: absolute;
+  top: 100%; // Размещаем под игроком
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  margin-top: 10px; // Отступ от игрока
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap; // Текст не переносится
+  display: flex;
+  justify-content: center; // Центрируем активную кнопку
+  align-items: center;
+  width: 100px; // Ширина контейнера (можно настроить под ваш дизайн)
+  height: 40px; // Высота контейнера (можно настроить под ваш дизайн)
+}
+
+.stackButton {
+  position: absolute; // Позиционируем кнопки абсолютно
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 1px solid #fff;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.2s,
+    color 0.2s;
+  opacity: 0; // По умолчанию кнопки скрыты
+  visibility: hidden; // По умолчанию кнопки невидимы
+
+  &.active {
+    opacity: 1; // Активная кнопка видна
+    visibility: visible; // Активная кнопка видима
+    background-color: #ffcc00; // Цвет активной кнопки
+    color: #000;
+    border-color: #ffcc00;
+    transform: translateX(0); // Активная кнопка по центру
+  }
+}
+
+.playerStack:hover .stackButton {
+  opacity: 1; // При наведении все кнопки становятся видимыми
+  visibility: visible; // При наведении все кнопки видимы
+}
+
+.playerStack:hover .stackButton:nth-child(1) {
+  transform: translateX(-50px); // Первая кнопка смещается влево
+}
+
+.playerStack:hover .stackButton:nth-child(2) {
+  transform: translateX(0); // Вторая кнопка (активная) остается по центру
+}
+
+.playerStack:hover .stackButton:nth-child(3) {
+  transform: translateX(50px); // Третья кнопка смещается вправо
+}

@@ -1,0 +1,9 @@
+@forward "./reset.scss";
+@forward "./variable.scss";
+#root {
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+
+  background-color: #333333;
+}

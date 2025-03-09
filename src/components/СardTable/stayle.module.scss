@@ -1,0 +1,30 @@
+.poker__table {
+  width: 700px;
+  height: 400px;
+  background-color: #006400;
+  border-radius: 70px;
+  position: relative;
+  margin: 50px auto;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    border-radius: 20px;
+  }
+}
+
+.table__title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 36px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}

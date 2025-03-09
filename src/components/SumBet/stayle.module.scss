@@ -1,0 +1,25 @@
+.sumBetContainer {
+  position: absolute;
+  top: 80%;
+  left: 80%;
+  transform: translate(-50%, -50%);
+  font-size: 36px;
+  font-weight: bold;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+  color: #ecf0f1; // Светлый цвет текста
+}
+
+.sumBetContainer h3 {
+  font-size: 18px;
+  color: #ecf0f1;
+}
+
+.sumBetContainer p {
+  font-size: 16px;
+  color: #bdc3c7; // Серый цвет для текста
+}
+
+.sumBetContainer strong {
+  font-size: 18px;
+  color: #1abc9c; // Зеленый цвет для итоговой суммы
+}
