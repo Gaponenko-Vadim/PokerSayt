@@ -53,7 +53,6 @@ export const calculateEV = (
 
   // Диапазон рук противника
   const opponentRange = maxBetPlayer.cards;
-  console.log(opponentRange);
 
   // Проверяем, что диапазон рук противника не пуст
   if (!opponentRange || opponentRange.length === 0) {

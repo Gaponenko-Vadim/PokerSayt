@@ -1,7 +1,8 @@
 import styles from "./style.module.scss";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Redux/store";
-import HintEv from "../HintEv";
+import HintEv from "../Hint/HintEv";
+import HintEquity from "../Hint/HintEquity";
 
 const GeneralHint = () => {
   const selectedCards = useSelector(
@@ -35,7 +36,7 @@ const GeneralHint = () => {
 
     // Получаем диапазон карт для позиции mainPlayer
     const rangeForMainPlayer = getRangeForMainPlayer();
-    // console.log(rangeForMainPlayer, mainPlayer);
+    console.log(mainPlayer.selectedCards);
 
     // Преобразуем карты mainPlayer в отсортированную строку для сравнения
     const mainPlayerString = JSON.stringify(
@@ -51,6 +52,7 @@ const GeneralHint = () => {
 
   return (
     <div className={styles.generalHint}>
+      <HintEquity />
       <HintEv />
       {selectedCards.length === 2 && (
         <p>

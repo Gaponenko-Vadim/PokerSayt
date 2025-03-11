@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../../Redux/store";
-import { calculateEV } from "../../utilits/allСombinations/calculateEV";
+import { RootState } from "../../../Redux/store";
+import { calculateEV } from "../../../utilits/allСombinations/calculateEV";
 
 const HintEv = () => {
   const mainPlayer = useSelector(
