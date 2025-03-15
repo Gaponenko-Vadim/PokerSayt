@@ -3,10 +3,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../Redux/store";
 import { calculateEquity } from "../../../utilits/allСombinations/calculateEquity";
 
-// Определяем типы для MainPlayers и PlayerData
 type MainPlayers = {
   position: string;
-  selectedCards?: string[]; // ['8черва', '9трефа']
+  selectedCards?: string[];
   stackSize?: number;
 };
 
@@ -17,12 +16,30 @@ type PlayerData = {
   stackSize: number;
   bet: string | null;
   status: string;
-  cards: string[][]; // [['2пика', '2черва'], ['2пика', '2трефа']]
+  cards: string[][];
+};
+
+const findMaxBetPlayerCards = (allPlayers: {
+  [key: string]: PlayerData;
+}): string[][] | null => {
+  let maxBetPlayer: PlayerData | null = null;
+  let maxBet = 0;
+
+  for (const player of Object.values(allPlayers)) {
+    if (player.bet) {
+      const currentBet = parseFloat(player.bet);
+      if (currentBet > maxBet) {
+        maxBet = currentBet;
+        maxBetPlayer = player;
+      }
+    }
+  }
+
+  return maxBetPlayer && maxBetPlayer.cards ? maxBetPlayer.cards : null;
 };
 
 const HintEquity = () => {
-  // Добавляем тип для состояния: число (эквити) или null
-  const [aq, setAq] = useState<number | null>(null);
+  const [equity, setEquity] = useState<number | null>(null);
 
   const mainPlayer = useSelector(
     (state: RootState) => state.infoPlayers.mainPlayers
@@ -33,25 +50,33 @@ const HintEquity = () => {
   ) as { [key: string]: PlayerData };
 
   useEffect(() => {
-    // Проверяем наличие mainPlayer и selectedCards
-    if (mainPlayer && mainPlayer.selectedCards) {
+    if (mainPlayer && mainPlayer.selectedCards?.length === 2) {
       try {
-        const equity = calculateEquity(allPlayers, mainPlayer.selectedCards);
-        setAq(equity);
+        const villainRange = findMaxBetPlayerCards(allPlayers);
+        console.log(villainRange);
+        if (villainRange && villainRange.length > 0) {
+          const calculatedEquity = calculateEquity(
+            mainPlayer.selectedCards,
+            villainRange
+          );
+          setEquity(calculatedEquity);
+        } else {
+          setEquity(null);
+        }
       } catch (error) {
         console.error("Error calculating equity:", error);
-        setAq(null);
+        setEquity(null);
       }
     } else {
-      setAq(null); // Если данных нет, сбрасываем эквити
+      setEquity(null);
     }
   }, [mainPlayer, allPlayers]);
 
   return (
     <div className="hint-equity">
       {mainPlayer ? (
-        aq !== null ? (
-          <p>Эквити: {aq}%</p>
+        equity !== null ? (
+          <p>Эквити: {equity.toFixed(2)}%</p>
         ) : (
           <p>Недостаточно данных для расчета эквити</p>
         )

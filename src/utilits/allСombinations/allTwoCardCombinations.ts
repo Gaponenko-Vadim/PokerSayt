@@ -1,3 +1,5 @@
+export { equityTable } from "../../constants/equityTable";
+
 export const suits = ["пика", "черва", "трефа", "буба"];
 export const values = [
   "2",

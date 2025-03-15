@@ -1,5 +1,6 @@
-export const suits = ["пика", "черва", "трефа", "буба"] as const;
-export const values = [
+import { equityTable } from "../../constants/equityTable";
+
+const values = [
   "2",
   "3",
   "4",
@@ -13,231 +14,129 @@ export const values = [
   "Q",
   "K",
   "A",
-] as const;
+];
 
-type Suit = (typeof suits)[number];
-type Value = (typeof values)[number];
+const formatHand = (cards: string[]): string => {
+  const [card1, card2] = cards;
+  const rank1 = card1[0];
+  const rank2 = card2[0];
+  const suit1 = card1.slice(1);
+  const suit2 = card2.slice(1);
 
-type PlayerData = {
-  position: string;
-  action: string;
-  stack: "little" | "middle" | "big" | null;
-  stackSize: number;
-  bet: string | null;
-  status: string;
-  cards: string[][];
-};
-
-type Card = {
-  rank: Value;
-  suit: Suit;
-};
-
-/**
- * Преобразует текстовый диапазон (например, "77", "AKs") в массив комбинаций карт
- * @param range Массив строк диапазона
- * @returns Массив комбинаций карт
- */
-export function rangeToCombos(range: string[]): string[][] {
-  const combos: string[][] = [];
-  range.forEach((hand) => {
-    const isPair = hand.length === 2 && hand[0] === hand[1];
-    const isSuited = hand.endsWith("s");
-
-    if (isPair) {
-      const rank = hand[0];
-      for (let i = 0; i < suits.length; i++) {
-        for (let j = i + 1; j < suits.length; j++) {
-          combos.push([`${rank}${suits[i]}`, `${rank}${suits[j]}`]);
-        }
-      }
-    } else if (isSuited) {
-      const ranks = hand.slice(0, -1);
-      suits.forEach((suit) => {
-        combos.push([`${ranks[0]}${suit}`, `${ranks[1]}${suit}`]);
-      });
-    } else {
-      const ranks = hand.slice(0, -1);
-      for (let i = 0; i < suits.length; i++) {
-        for (let j = 0; j < suits.length; j++) {
-          if (i !== j) {
-            combos.push([`${ranks[0]}${suits[i]}`, `${ranks[1]}${suits[j]}`]);
-          }
-        }
-      }
-    }
-  });
-  return combos;
-}
-
-/**
- * Находит карты игрока с максимальной ставкой
- * @param allPlayers Объект с данными игроков
- * @returns Массив комбинаций карт или null
- */
-export function findMaxBetPlayerCards(allPlayers: {
-  [key: string]: PlayerData;
-}): string[][] | null {
-  let maxBetPlayer: PlayerData | null = null;
-  let maxBet = 0;
-
-  for (const player of Object.values(allPlayers)) {
-    const bet = player.bet ? parseFloat(player.bet) : 0;
-    if (bet > maxBet) {
-      maxBet = bet;
-      maxBetPlayer = player;
-    }
-  }
-  return maxBetPlayer?.cards ?? null;
-}
-
-/**
- * Рассчитывает эквити выбранных карт против диапазона игрока с максимальной ставкой
- * @param allPlayers Объект с данными игроков
- * @param selectedCards Выбранные карты игрока (например, ['2пика', '5трефа'])
- * @returns Процент эквити
- */
-export function calculateEquity(
-  allPlayers: { [key: string]: PlayerData },
-  selectedCards: string[]
-): number {
-  const villainRange = findMaxBetPlayerCards(allPlayers);
-
-  if (!villainRange || !selectedCards || selectedCards.length !== 2) {
-    return 0;
+  if (rank1 === rank2) {
+    return `${rank1}${rank2}`;
   }
 
-  const heroHand = {
-    card1: parseCard(selectedCards[0]),
-    card2: parseCard(selectedCards[1]),
-  };
+  const isSuited = suit1 === suit2;
+  if (values.indexOf(rank1) > values.indexOf(rank2)) {
+    return isSuited ? `${rank1}${rank2}s` : `${rank1}${rank2}o`;
+  }
+  return isSuited ? `${rank2}${rank1}s` : `${rank2}${rank1}o`;
+};
 
-  let wins = 0;
-  let ties = 0;
+/**
+ * Рассчитывает эквити выбранных карт против диапазона оппонента
+ * @param selectedCards Выбранные карты игрока
+ * @param villainRange Диапазон оппонента
+ * @returns Процент эквити или null
+ */
+export const calculateEquity = (
+  selectedCards: string[],
+  villainRange: string[][]
+): number | null => {
+  const selectedHand = formatHand(selectedCards);
+  console.log("selectedHand:", selectedHand);
+  console.log("villainRange length:", villainRange.length);
+  console.log("villainRange sample:", JSON.stringify(villainRange.slice(0, 5)));
 
+  const selectedRanks = selectedCards.map((card) => card[0]);
+  const selectedCardsSet = new Set(selectedCards);
+
+  // Сначала считаем "сырые" комбинации без множителей
+  const comboCountRaw: Record<string, number> = {};
   for (const villainCombo of villainRange) {
-    const villainHand = {
-      card1: parseCard(villainCombo[0]),
-      card2: parseCard(villainCombo[1]),
-    };
-
-    const result = compareHands(heroHand, villainHand);
-    if (result === 1) wins++;
-    else if (result === 0) ties++;
+    if (villainCombo.some((card) => selectedCardsSet.has(card))) {
+      console.log(
+        `Skipping ${JSON.stringify(villainCombo)} due to card overlap`
+      );
+      continue;
+    }
+    const villainHand = formatHand(villainCombo);
+    comboCountRaw[villainHand] = (comboCountRaw[villainHand] || 0) + 1;
   }
 
-  const totalComparisons = villainRange.length;
-  return Number((((wins + ties / 2) / totalComparisons) * 100).toFixed(2));
-}
+  // Применяем множители
+  const comboCount: Record<string, number> = {};
+  for (const villainHand in comboCountRaw) {
+    const rawCount = comboCountRaw[villainHand];
+    const villainRanks =
+      villainHand.length === 2
+        ? [villainHand[0], villainHand[1]] // Пара, например "22"
+        : [villainHand[0], villainHand[1]]; // Suited/off-suited, например "T2"
+    const isSuited = villainHand.endsWith("s"); // Проверяем, suited ли рука
 
-/**
- * Парсит строку карты в объект с рангом и мастью
- * @param card Строка карты (например, '2пика')
- * @returns Объект с рангом и мастью
- */
-function parseCard(card: string): Card {
-  const rank = card[0] as Value;
-  const suit = card.slice(1) as Suit;
+    // Сравниваем ранги напрямую, учитывая количество совпадений
+    const overlapCount = villainRanks.filter((rank) =>
+      selectedRanks.includes(rank)
+    ).length;
 
-  if (!values.includes(rank) || !suits.includes(suit)) {
-    throw new Error(`Invalid card: ${card}`);
-  }
-  return { rank, suit };
-}
+    console.log(
+      `Applying multiplier to ${villainHand}, rawCount: ${rawCount}, overlapCount: ${overlapCount}, isSuited: ${isSuited}`
+    );
 
-/**
- * Сравнивает две руки на префлопе с откалиброванными вероятностями
- * @param hero Рука героя
- * @param villain Рука оппонента
- * @returns 1 (победа), 0 (ничья), -1 (поражение)
- */
-function compareHands(
-  hero: { card1: Card; card2: Card },
-  villain: { card1: Card; card2: Card }
-): number {
-  const rankValues: Record<Value, number> = {
-    "2": 2,
-    "3": 3,
-    "4": 4,
-    "5": 5,
-    "6": 6,
-    "7": 7,
-    "8": 8,
-    "9": 9,
-    T: 10,
-    J: 11,
-    Q: 12,
-    K: 13,
-    A: 14,
-  };
-
-  const heroRank1 = rankValues[hero.card1.rank];
-  const heroRank2 = rankValues[hero.card2.rank];
-  const villainRank1 = rankValues[villain.card1.rank];
-  const villainRank2 = rankValues[villain.card2.rank];
-
-  const isHeroPair = heroRank1 === heroRank2;
-  const isVillainPair = villainRank1 === villainRank2;
-  const isHeroSuited = hero.card1.suit === hero.card2.suit;
-  const isVillainSuited = villain.card1.suit === villain.card2.suit;
-
-  // Пара против пары
-  if (isHeroPair && isVillainPair) {
-    if (heroRank1 > villainRank1) return 1;
-    if (heroRank1 < villainRank1) return -1;
-    return 0;
+    if (overlapCount === 2) {
+      comboCount[villainHand] = 1; // Фиксированно 1 для полного пересечения
+      console.log(`Set ${villainHand} to 1 (full overlap)`);
+    } else if (overlapCount === 1) {
+      if (isSuited) {
+        comboCount[villainHand] = 2; // Фиксированно 2 для suited рук с частичным пересечением
+        console.log(`Set ${villainHand} to 2 (partial overlap, suited)`);
+      } else {
+        comboCount[villainHand] = rawCount; // Для off-suited рук сохраняем rawCount
+        console.log(
+          `Kept ${villainHand} as is (partial overlap, off-suited), count: ${comboCount[villainHand]}`
+        );
+      }
+    } else {
+      comboCount[villainHand] = rawCount; // Оставляем как есть для нет пересечений
+      console.log(
+        `Kept ${villainHand} as is (no overlap), count: ${comboCount[villainHand]}`
+      );
+    }
   }
 
-  // Пара против непары
-  if (isHeroPair && !isVillainPair) {
-    const villainHigh = Math.max(villainRank1, villainRank2);
-    if (villainHigh > heroRank1) return Math.random() < 0.52 ? 1 : -1; // Пара vs оверкарты: ~52%
-    return Math.random() < 0.8 ? 1 : -1; // Пара vs младшие: ~80%
+  console.log("Final comboCount:", JSON.stringify(comboCount));
+
+  let totalEquity = 0;
+  let totalCombinations = 0;
+
+  for (const villainHand in comboCount) {
+    const count = comboCount[villainHand];
+    const key1 = `${selectedHand} vs ${villainHand}`;
+    const key2 = `${villainHand} vs ${selectedHand}`;
+
+    const equityValue = equityTable[key1]?.hand1 || equityTable[key2]?.hand2;
+
+    if (equityValue !== undefined) {
+      totalEquity += equityValue * count;
+      totalCombinations += count;
+      console.log(
+        `Key: ${key1}, Equity: ${equityValue}, Count: ${count}, Subtotal: ${
+          equityValue * count
+        }`
+      );
+    } else {
+      console.warn(`No equity data for ${key1} or ${key2}`);
+    }
   }
 
-  // Непара против пары
-  if (!isHeroPair && isVillainPair) {
-    const heroHigh = Math.max(heroRank1, heroRank2);
-    if (heroHigh > villainRank1) return Math.random() < 0.48 ? 1 : -1; // Оверкарты vs пара: ~48%
-    return Math.random() < (isHeroSuited ? 0.55 : 0.5) ? 1 : -1; // Младшие vs пара: ~55% для суйтед, 50% для оффсьют
-  }
+  console.log("totalEquity:", totalEquity);
+  console.log("totalCombinations:", totalCombinations);
 
-  // Непара против непары
-  const heroHigh = Math.max(heroRank1, heroRank2);
-  const villainHigh = Math.max(villainRank1, villainRank2);
-  const heroLow = Math.min(heroRank1, heroRank2);
-  const villainLow = Math.min(villainRank1, villainRank2);
+  if (totalCombinations === 0) return null;
 
-  // Проверка на коннекторы для суйтед рук
-  const isHeroConnected = Math.abs(heroRank1 - heroRank2) === 1 && isHeroSuited;
-  const isVillainConnected =
-    Math.abs(villainRank1 - villainRank2) === 1 && isVillainSuited;
+  const calculatedEquity = totalEquity / totalCombinations;
+  console.log("calculatedEquity:", calculatedEquity);
 
-  if (heroHigh > villainHigh) {
-    return Math.random() <
-      (isHeroSuited ? (isHeroConnected ? 0.65 : 0.6) : 0.55)
-      ? 1
-      : -1; // Увеличено для суйтед и коннекторов
-  }
-  if (heroHigh < villainHigh) {
-    return Math.random() <
-      (isHeroSuited ? (isHeroConnected ? 0.45 : 0.4) : 0.35)
-      ? 1
-      : -1; // Увеличено для суйтед и коннекторов
-  }
-  if (heroLow > villainLow) {
-    return Math.random() < (isHeroSuited ? 0.6 : 0.55) ? 1 : -1;
-  }
-  if (heroLow < villainLow) {
-    return Math.random() < (isHeroSuited ? 0.45 : 0.4) ? 1 : -1;
-  }
-
-  // Ничья: учитываем суйтед и коннекторы
-  if (isHeroSuited && !isVillainSuited) return Math.random() < 0.55 ? 1 : -1;
-  if (!isHeroSuited && isVillainSuited) return Math.random() < 0.45 ? 1 : -1;
-  if (isHeroConnected && !isVillainConnected)
-    return Math.random() < 0.55 ? 1 : -1;
-  if (!isHeroConnected && isVillainConnected)
-    return Math.random() < 0.45 ? 1 : -1;
-  return 0;
-}
+  return calculatedEquity;
+};
