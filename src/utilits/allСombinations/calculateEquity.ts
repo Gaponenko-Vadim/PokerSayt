@@ -85,8 +85,94 @@ export const calculateEquity = (
       `Applying multiplier to ${villainHand}, rawCount: ${rawCount}, overlapCount: ${overlapCount}, isSuited: ${isSuited}`
     );
 
-    // Новая логика для AKs против AKo (те же ранги, но не одномастные)
+    // Проверка на одинаковые пары (например, AA vs AA)
     if (
+      selectedHand.length === 2 && // Выбранная рука - пара
+      villainHand.length === 2 && // Рука оппонента - пара
+      selectedHand === villainHand // Обе пары одинаковы
+    ) {
+      comboCount[villainHand] = 1; // Устанавливаем 1 для одинаковых пар
+      console.log(`Set ${villainHand} to 1 (same pair vs same pair)`);
+    }
+    // Новая логика для разномастной руки игрока против пары с пересечением (1 или 2 карты)
+    else if (
+      !isSelectedHandSuited && // Выбранная рука разномастная (например, "32o", "AKo")
+      villainHand.length === 2 && // Рука оппонента - пара (например, "33", "AA")
+      (overlapCount === 1 || overlapCount === 2) // Пересечение по одной или двум картам
+    ) {
+      comboCount[villainHand] = 3; // Устанавливаем 3 для разномастной руки против пары с пересечением
+      console.log(
+        `Set ${villainHand} to 3 (off-suited vs pair with one or two overlaps)`
+      );
+    }
+    // Новая логика для пары против одномастной руки с пересечением по одной карте (QQ vs QJs)
+    else if (
+      selectedHand.length === 2 && // Выбранная рука - пара
+      villainHand.length !== 2 && // Рука оппонента - не пара
+      isSuited && // Рука оппонента одномастная
+      overlapCount === 1 // Пересечение по одной карте
+    ) {
+      comboCount[villainHand] = 2; // Устанавливаем 2 для пары против одномастной руки с одним пересечением
+      console.log(`Set ${villainHand} to 2 (pair vs suited with one overlap)`);
+    }
+    // Новая логика для пары против разномастной руки с пересечением по одной карте (AA vs ATo)
+    else if (
+      selectedHand.length === 2 && // Выбранная рука - пара
+      villainHand.length !== 2 && // Рука оппонента - не пара
+      !isSuited && // Рука оппонента разномастная
+      overlapCount === 1 // Пересечение по одной карте
+    ) {
+      comboCount[villainHand] = 6; // Устанавливаем 6 для пары против разномастной руки с одним пересечением
+      console.log(
+        `Set ${villainHand} to 6 (pair vs off-suited with one overlap)`
+      );
+    }
+    // Новая логика для разномастной руки против разномастной с полным совпадением рангов (AKo vs AKo)
+    else if (
+      !isSelectedHandSuited && // Выбранная рука разномастная
+      !isSuited && // Рука оппонента разномастная
+      overlapCount === 2 && // Полное совпадение рангов
+      villainHand.slice(0, 2) === selectedHand.slice(0, 2) // Те же ранги (например, "AK")
+    ) {
+      comboCount[villainHand] = 7; // Устанавливаем 7 для AKo vs AKo
+      console.log(
+        `Set ${villainHand} to 7 (off-suited vs same ranks off-suited)`
+      );
+    }
+    // Новая логика для разномастной руки против одномастной с полным совпадением рангов (AKo vs AKs)
+    else if (
+      !isSelectedHandSuited && // Выбранная рука разномастная
+      isSuited && // Рука оппонента одномастная
+      overlapCount === 2 && // Полное совпадение рангов
+      villainHand.slice(0, 2) === selectedHand.slice(0, 2) // Те же ранги (например, "AK")
+    ) {
+      comboCount[villainHand] = 2; // Устанавливаем 2 для AKo vs AKs
+      console.log(`Set ${villainHand} to 2 (off-suited vs same ranks suited)`);
+    }
+    // Новая логика для разномастной руки против разномастной с пересечением по одной карте (AKo vs AQo)
+    else if (
+      !isSelectedHandSuited && // Выбранная рука разномастная
+      !isSuited && // Рука оппонента разномастная
+      overlapCount === 1 // Пересечение по одной карте
+    ) {
+      comboCount[villainHand] = 9; // Устанавливаем 9 для AKo vs AQo
+      console.log(
+        `Set ${villainHand} to 9 (off-suited vs off-suited with one overlap)`
+      );
+    }
+    // Новая логика для разномастной руки против одномастной с пересечением по одной карте (AKo vs AQs)
+    else if (
+      !isSelectedHandSuited && // Выбранная рука разномастная
+      isSuited && // Рука оппонента одномастная
+      overlapCount === 1 // Пересечение по одной карте
+    ) {
+      comboCount[villainHand] = 3; // Устанавливаем 3 для AKo vs AQs
+      console.log(
+        `Set ${villainHand} to 3 (off-suited vs suited with one overlap)`
+      );
+    }
+    // Новая логика для AKs против AKo (те же ранги, но не одномастные)
+    else if (
       isSelectedHandSuited &&
       !isSuited &&
       overlapCount === 2 && // Полное совпадение рангов
@@ -112,9 +198,6 @@ export const calculateEquity = (
     else if (isSelectedHandSuited && overlapCount > 0) {
       comboCount[villainHand] = 3; // Устанавливаем 3 для AKs против любых других рук с пересечением
       console.log(`Set ${villainHand} to 3 (selected suited with overlap)`);
-    } else if (overlapCount === 2) {
-      comboCount[villainHand] = 1; // Фиксированно 1 для полного пересечения (пары, если рука игрока не suited)
-      console.log(`Set ${villainHand} to 1 (full overlap)`);
     } else if (overlapCount === 1) {
       if (isSuited) {
         comboCount[villainHand] = 2; // Фиксированно 2 для suited рук с частичным пересечением
