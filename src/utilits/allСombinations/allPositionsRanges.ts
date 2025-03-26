@@ -338,5 +338,3 @@ export const bbRange = [
   "42o",
   "32o",
 ];
-
-// export const bbRange = ["22", "33", "44", "55", "66", "77"];
