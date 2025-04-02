@@ -1,31 +1,47 @@
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../Redux/store";
+import { updateMainPlayerSumBet } from "../../Redux/slice/infoPlayers"; // Импортируем действие
 import styles from "./stayle.module.scss";
 
 const SumBet = () => {
-  // Получаем данные о ставках из слайса infoPlayers
+  const dispatch = useDispatch();
   const players = useSelector((state: RootState) => state.infoPlayers.players);
+  const mainPlayers = useSelector(
+    (state: RootState) => state.infoPlayers.mainPlayers
+  );
 
-  // Рассчитываем общую сумму ставок
-  const totalBet = Object.values(players).reduce((sum, player) => {
-    if (player.bet) {
-      // Преобразуем ставку в число (убираем "BB" или "All-in")
-      const betValue = player.bet === "All-in" ? 0 : parseFloat(player.bet);
-      return sum + betValue;
+  // Функция для расчета общей суммы ставок
+  const calculateSumBet = () => {
+    const totalBet = Object.values(players).reduce((sum, player) => {
+      if (player.bet) {
+        const betValue = player.bet === "All-in" ? 0 : parseFloat(player.bet);
+        return sum + betValue;
+      }
+      return sum;
+    }, 0);
+
+    const ante = 0.2;
+    const totalWithAnte = totalBet + Object.keys(players).length * ante;
+    return totalWithAnte;
+  };
+
+  useEffect(() => {
+    const totalWithAnte = calculateSumBet();
+
+    // Если mainPlayers существует, обновляем его sumBet
+    if (mainPlayers) {
+      dispatch(updateMainPlayerSumBet({ sumBet: totalWithAnte }));
     }
-    return sum;
-  }, 0);
+  }, [players, dispatch, mainPlayers]); // Зависимости: players, dispatch, mainPlayers
 
-  // Добавляем анте (0.2BB за каждую позицию)
-  const ante = 0.2;
-  const totalWithAnte = totalBet + Object.keys(players).length * ante;
-
+  const totalWithAnte = calculateSumBet(); // Для отображения
+  console.log(mainPlayers);
   return (
     <div className={styles.sumBetContainer}>
       <h3>Общая сумма ставок:</h3>
-
       <p>
-        <strong> {totalWithAnte.toFixed(2)}BB</strong>
+        <strong>{totalWithAnte.toFixed(2)}BB</strong>
       </p>
     </div>
   );

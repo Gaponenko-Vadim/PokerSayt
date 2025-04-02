@@ -1,6 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { convertRangeToCards } from "../../utilits/allСombinations/allTwoCardCombinations";
 import {
+  PlayerData,
+  MainPlayers,
+  PlayerAction,
+  PlayerStack,
+  PlayerStatus,
+} from "../../components/type";
+import {
   utgRange,
   utg1Range,
   mpRange,
@@ -12,25 +19,6 @@ import {
 } from "../../utilits/allСombinations/allPositionsRanges";
 
 // Типы
-type PlayerAction = "fold" | "call" | "raise" | "allin";
-type PlayerStack = "little" | "middle" | "big" | null;
-type PlayerStatus = string;
-
-type PlayerData = {
-  position: string;
-  action: PlayerAction;
-  stack: PlayerStack; // Тип стека (little, middle, big)
-  stackSize: number; // Числовое значение стека (18, 30, 50)
-  bet: string | null;
-  status: PlayerStatus;
-  cards: string[][];
-};
-
-type MainPlayers = {
-  position: string;
-  selectedCards?: string[];
-  stackSize: number;
-};
 
 type TypeinfoPlayers = {
   players: { [key: string]: PlayerData };
@@ -48,8 +36,8 @@ const createPlayer = (position: string, cards: string[][] = []): PlayerData => {
   return {
     position,
     action: "fold",
-    stack: "middle", // Устанавливаем стек как "middle" по умолчанию
-    stackSize: 30, // Значение стека по умолчанию (middle)
+    stack: "middle",
+    stackSize: 30,
     bet: position === "BB" ? "1BB" : position === "SB" ? "0.5BB" : null,
     status: "tight",
     cards,
@@ -67,13 +55,8 @@ export const infoPlayers = createSlice({
       action: PayloadAction<{ positions: string[] }>
     ) => {
       const { positions } = action.payload;
-
-      // Очищаем текущий объект игроков
       state.players = {};
-
-      // Добавляем новые позиции
       positions.forEach((position) => {
-        // Определяем диапазон карт для позиции
         let cards: string[][] = [];
         switch (position) {
           case "UTG":
@@ -105,8 +88,6 @@ export const infoPlayers = createSlice({
           default:
             cards = [];
         }
-
-        // Создаем игрока с начальными значениями
         state.players[position] = createPlayer(position, cards);
       });
     },
@@ -117,28 +98,39 @@ export const infoPlayers = createSlice({
       action: PayloadAction<{
         position?: string;
         cards?: Array<{ code: string }>;
+        equity?: number;
+        sumBet?: number;
       }>
     ) => {
-      const { position, cards } = action.payload;
+      const { position, cards, equity, sumBet } = action.payload;
 
-      // Инициализируем mainPlayers, если он ещё не существует
       if (!state.mainPlayers) {
         state.mainPlayers = {
           position: "",
           selectedCards: [],
           stackSize: 30,
+          equity: null,
+          sumBet: 0,
+          myBet: null,
         };
       }
 
-      // Если передана позиция, обновляем её
       if (position) {
         state.mainPlayers.position = position;
+        state.mainPlayers.myBet = state.players[position]?.bet || null; // Инициализируем myBet из playerData
       }
 
-      // Если переданы карты, обновляем их
       if (cards && cards.length > 0) {
         const selectedCards = cards.map((card) => card.code);
         state.mainPlayers.selectedCards = selectedCards;
+      }
+
+      if (equity !== undefined) {
+        state.mainPlayers.equity = equity;
+      }
+
+      if (sumBet !== undefined) {
+        state.mainPlayers.sumBet = sumBet;
       }
     },
 
@@ -153,15 +145,12 @@ export const infoPlayers = createSlice({
     ) => {
       const { position, action: newAction, customBet } = action.payload;
 
-      // Если игрок отсутствует, инициализируем его
       if (!state.players[position]) {
         state.players[position] = createPlayer(position);
       }
 
-      // Обновляем действие игрока
       state.players[position].action = newAction;
 
-      // Обновляем ставку в зависимости от действия
       if (newAction === "call") {
         const maxBet = Object.values(state.players).reduce((max, player) => {
           if (player.bet) {
@@ -171,6 +160,10 @@ export const infoPlayers = createSlice({
           return max;
         }, 0);
         state.players[position].bet = `${maxBet}BB`;
+        if (state.mainPlayers && state.mainPlayers.position === position) {
+          state.mainPlayers.sumBet = maxBet;
+          // myBet обновляется через компонент, а не здесь
+        }
       } else if (newAction === "raise") {
         const maxBet = Object.values(state.players).reduce((max, player) => {
           if (player.bet) {
@@ -181,10 +174,19 @@ export const infoPlayers = createSlice({
         }, 0);
         const newBet = maxBet * 2;
         state.players[position].bet = `${newBet}BB`;
+        if (state.mainPlayers && state.mainPlayers.position === position) {
+          state.mainPlayers.sumBet = newBet;
+        }
       } else if (newAction === "allin") {
         state.players[position].bet = customBet || "All-in";
+        if (state.mainPlayers && state.mainPlayers.position === position) {
+          state.mainPlayers.sumBet = state.players[position].stackSize;
+        }
       } else if (newAction === "fold") {
         state.players[position].bet = null;
+        if (state.mainPlayers && state.mainPlayers.position === position) {
+          state.mainPlayers.sumBet = 0;
+        }
       }
     },
 
@@ -195,15 +197,12 @@ export const infoPlayers = createSlice({
     ) => {
       const { position, value } = action.payload;
 
-      // Если игрок отсутствует, инициализируем его
       if (!state.players[position]) {
         state.players[position] = createPlayer(position);
       }
 
-      // Обновляем стек игрока
       state.players[position].stack = value;
 
-      // Устанавливаем числовое значение стека в зависимости от выбранного типа
       switch (value) {
         case "little":
           state.players[position].stackSize = 18;
@@ -215,7 +214,7 @@ export const infoPlayers = createSlice({
           state.players[position].stackSize = 50;
           break;
         default:
-          state.players[position].stackSize = 0; // или null, если нужно
+          state.players[position].stackSize = 0;
       }
     },
 
@@ -226,12 +225,10 @@ export const infoPlayers = createSlice({
     ) => {
       const { position, value } = action.payload;
 
-      // Если игрок отсутствует, инициализируем его
       if (!state.players[position]) {
         state.players[position] = createPlayer(position);
       }
 
-      // Обновляем статус игрока
       state.players[position].status = value;
     },
 
@@ -242,20 +239,79 @@ export const infoPlayers = createSlice({
     ) => {
       const { position, cards } = action.payload;
 
-      // Если игрок отсутствует, инициализируем его
       if (!state.players[position]) {
         state.players[position] = createPlayer(position);
       }
 
-      // Обновляем карты игрока
       state.players[position].cards = cards;
+    },
+
+    // Обновление эквити mainPlayers
+    updateMainPlayerEquity: (
+      state,
+      action: PayloadAction<{ equity: number | null }>
+    ) => {
+      const { equity } = action.payload;
+
+      if (!state.mainPlayers) {
+        state.mainPlayers = {
+          position: "",
+          selectedCards: [],
+          stackSize: 30,
+          equity: null,
+          sumBet: 0,
+          myBet: null,
+        };
+      }
+
+      state.mainPlayers.equity = equity;
+    },
+
+    // Обновление суммы ставок mainPlayers
+    updateMainPlayerSumBet: (
+      state,
+      action: PayloadAction<{ sumBet: number }>
+    ) => {
+      const { sumBet } = action.payload;
+
+      if (!state.mainPlayers) {
+        state.mainPlayers = {
+          position: "",
+          selectedCards: [],
+          stackSize: 30,
+          equity: null,
+          sumBet: 0,
+          myBet: null,
+        };
+      }
+
+      state.mainPlayers.sumBet = sumBet;
+    },
+
+    // Новое действие для обновления myBet
+    updateMainPlayerMyBet: (
+      state,
+      action: PayloadAction<{ myBet: string | null }>
+    ) => {
+      const { myBet } = action.payload;
+
+      if (!state.mainPlayers) {
+        state.mainPlayers = {
+          position: "",
+          selectedCards: [],
+          stackSize: 30,
+          equity: null,
+          sumBet: 0,
+          myBet: null,
+        };
+      }
+
+      state.mainPlayers.myBet = myBet;
     },
 
     // Сброс состояния игроков
     resetselectAction: (state) => {
-      // Проходим по всем позициям и сбрасываем состояния игроков
       Object.keys(state.players).forEach((position) => {
-        // Определяем диапазон карт для позиции
         let cards: string[][] = [];
         switch (position) {
           case "UTG":
@@ -287,8 +343,6 @@ export const infoPlayers = createSlice({
           default:
             cards = [];
         }
-
-        // Сбрасываем состояние игрока, но сохраняем карты
         state.players[position] = createPlayer(position, cards);
       });
     },
@@ -304,6 +358,9 @@ export const {
   initializeMainPlayer,
   updatePlayerStackInfo,
   updatePlayerCards,
+  updateMainPlayerEquity,
+  updateMainPlayerSumBet,
+  updateMainPlayerMyBet, // Добавляем новое действие
 } = infoPlayers.actions;
 
 // Экспортируем редьюсер

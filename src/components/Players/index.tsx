@@ -85,14 +85,6 @@ const Players: React.FC<PlayersProps> = ({
 
             {i !== 3 && (
               <>
-                <div
-                  className={`${styles.actionButton} ${
-                    styles[player.action] || styles.fold
-                  }`}
-                  onClick={(event) => handleOpenModal(event, currentPosition)}
-                >
-                  {player.action}
-                </div>
                 {player.action !== "fold" && (
                   <MenuStack
                     player={player}
@@ -101,6 +93,14 @@ const Players: React.FC<PlayersProps> = ({
                 )}
               </>
             )}
+            <div
+              className={`${styles.actionButton} ${
+                styles[player.action] || styles.fold
+              }`}
+              onClick={(event) => handleOpenModal(event, currentPosition)}
+            >
+              {player.action}
+            </div>
             <StatusPlayer
               player={player}
               position={currentPosition}

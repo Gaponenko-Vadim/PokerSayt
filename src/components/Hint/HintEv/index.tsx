@@ -1,62 +1,160 @@
-import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../Redux/store";
-import { calculateEV } from "../../../utilits/allСombinations/calculateEV";
+import { PlayerData } from "../../type";
+import { calculateEquityFold } from "../../../utilits/calculateEquityFold";
 
 const HintEv = () => {
-  const mainPlayer = useSelector(
-    (state: RootState) => state.infoPlayers.mainPlayers
-  );
-  const allPlayers = useSelector(
+  const infoPlayers = useSelector(
     (state: RootState) => state.infoPlayers.players
   );
+  const infoMain = useSelector(
+    (state: RootState) => state.infoPlayers.mainPlayers
+  );
 
-  // Используем состояние для хранения значения EV
-  const [ev, setEv] = useState<number | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  // Находим максимальную ставку за столом
+  const getMaxBet = (allPlayers: { [key: string]: PlayerData }): number => {
+    return Object.values(allPlayers).reduce((max, player) => {
+      if (!player.bet || player.bet === "All-in") return max;
+      const currentBet = parseFloat(player.bet);
+      return Math.max(max, currentBet);
+    }, 0);
+  };
 
-  useEffect(() => {
-    // Проверяем, что mainPlayer и allPlayers существуют
-    if (!mainPlayer || !allPlayers) {
-      setError("Данные игроков не загружены.");
-      setEv(null);
-      return;
-    }
+  // Получаем минимальный стек среди активных оппонентов
+  const getMinOpponentStack = (allPlayers: {
+    [key: string]: PlayerData;
+  }): number => {
+    const activePlayers = Object.values(allPlayers).filter(
+      (p) => p.action !== "fold" && p.stackSize > 0
+    );
+    return Math.min(...activePlayers.map((p) => p.stackSize));
+  };
 
-    // Проверяем, что selectedCards содержит 2 карты
-    if (!mainPlayer.selectedCards || mainPlayer.selectedCards.length !== 2) {
-      setError("Недостаточно данных для расчета EV: отсутствуют карты.");
-      setEv(null);
-      return;
-    }
+  const calculateRaiseEV = () => {
+    if (!infoMain || infoMain.equity === null || !infoMain.myBet) return null;
 
-    // Проверяем, что stackSize mainPlayer определен
-    if (mainPlayer.stackSize === undefined || mainPlayer.stackSize === null) {
-      setError("Недостаточно данных для расчета EV: отсутствует стек.");
-      setEv(null);
-      return;
-    }
+    const maxBet = getMaxBet(infoPlayers);
+    const currentBet = parseFloat(infoMain.myBet);
+    const equity = infoMain.equity / 100;
+    const minOpponentStack = getMinOpponentStack(infoPlayers);
 
-    // Если все данные на месте, рассчитываем EV
-    try {
-      const evCalc = calculateEV(mainPlayer, allPlayers);
-      setEv(evCalc); // Обновляем состояние
-      setError(null); // Сбрасываем ошибку, если она была
-    } catch {
-      // Убрали переменную 'e', так как она не используется
-      setError("Ошибка при расчете EV.");
-      setEv(null);
-    }
-  }, [mainPlayer, allPlayers]); // Зависимости: mainPlayer и allPlayers // Зависимости: mainPlayer и allPlayers
+    // Размер рейза (2.3x от максимальной ставки)
+    const raiseSize = Math.max(maxBet * 2.3, 3);
+    const chipsToAdd = raiseSize - currentBet;
+    const opponentCallAmount = raiseSize - maxBet;
+
+    // Ограничиваем максимальный возможный пот (по минимальному стек)
+    const effectivePotRaise =
+      infoMain.sumBet +
+      Math.min(chipsToAdd, infoMain.stackSize) +
+      Math.min(opponentCallAmount, minOpponentStack);
+
+    // EV рейза
+    const evRaise = equity * effectivePotRaise - chipsToAdd;
+
+    // Расчет для алл-ина
+    const allInSize = infoMain.stackSize + currentBet; // Полный размер твоего алл-ина
+    const chipsToAddAllIn = infoMain.stackSize; // Сколько тебе нужно добавить для алл-ина
+    const opponentCallAmountAllIn = allInSize - maxBet; // Сколько оппоненту нужно доставить
+
+    // Эффективный пот для алл-ина
+    const effectivePotAllIn =
+      infoMain.sumBet +
+      chipsToAddAllIn +
+      Math.min(opponentCallAmountAllIn, minOpponentStack);
+
+    // EV алл-ина
+    const evAllIn = equity * effectivePotAllIn - chipsToAddAllIn;
+
+    return {
+      raiseSize,
+      chipsToAdd,
+      opponentCallAmount,
+      effectivePotRaise,
+      evRaise,
+      allInSize,
+      chipsToAddAllIn,
+      opponentCallAmountAllIn,
+      effectivePotAllIn,
+      evAllIn,
+    };
+  };
+
+  const raiseData = calculateRaiseEV();
+  console.log(getMaxBet(infoPlayers));
 
   return (
-    <div>
-      {error ? (
-        <div>{error}</div> // Показываем ошибку, если она есть
-      ) : ev !== null ? (
-        <div>EV: {ev}</div> // Показываем EV, если он рассчитан
-      ) : (
-        <div>Загрузка данных...</div> // Сообщение о загрузке
+    <div className="p-4 bg-gray-100 rounded-lg">
+      <h3 className="text-xl font-bold mb-4">EV рейза и алл-ина</h3>
+
+      {raiseData && (
+        <div className="space-y-4">
+          {/* Блок для рейза 2.3x */}
+          <div>
+            <h4 className="text-lg font-semibold">Рейз 2.3x</h4>
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                {/* <span>Размер рейза:</span>
+                <span>{raiseData.raiseSize.toFixed(2)} BB</span> */}
+              </div>
+              <div className="flex justify-between">
+                <span>Мне нужно добавить:</span>
+                <span>{raiseData.chipsToAdd.toFixed(2)} BB</span>
+              </div>
+              <div className="flex justify-between">
+                {/* <span>Оппоненту нужно добавить:</span>
+                <span>{raiseData.opponentCallAmount.toFixed(2)} BB</span> */}
+              </div>
+              <div className="flex justify-between">
+                {/* <span>Эффективный пот:</span>
+                <span>{raiseData.effectivePotRaise.toFixed(2)} BB</span> */}
+              </div>
+              <div className="flex justify-between font-bold">
+                <span>EV рейза:</span>
+                <span
+                  className={
+                    raiseData.evRaise >= 0 ? "text-green-500" : "text-red-500"
+                  }
+                >
+                  {raiseData.evRaise.toFixed(2)} BB
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Блок для алл-ина */}
+          <div>
+            <h4 className="text-lg font-semibold">Алл-ин</h4>
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                {/* <span>Размер алл-ина:</span>
+                <span>{raiseData.allInSize.toFixed(2)} BB</span> */}
+              </div>
+              <div className="flex justify-between">
+                {/* <span>Мне нужно добавить:</span>
+                <span>{raiseData.chipsToAddAllIn.toFixed(2)} BB</span> */}
+              </div>
+              <div className="flex justify-between">
+                {/* <span>Оппоненту нужно добавить:</span>
+                <span>{raiseData.opponentCallAmountAllIn.toFixed(2)} BB</span> */}
+              </div>
+              <div className="flex justify-between">
+                {/* <span>Эффективный пот:</span>
+                <span>{raiseData.effectivePotAllIn.toFixed(2)} BB</span> */}
+              </div>
+              <div className="flex justify-between font-bold">
+                <span>EV алл-ина:</span>
+                <span
+                  className={
+                    raiseData.evAllIn >= 0 ? "text-green-500" : "text-red-500"
+                  }
+                >
+                  {raiseData.evAllIn.toFixed(2)} BB
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

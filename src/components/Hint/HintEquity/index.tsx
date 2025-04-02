@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../Redux/store";
 import { calculateEquity } from "../../../utilits/allСombinations/calculateEquity";
+import { updateMainPlayerEquity } from "../../../Redux/slice/infoPlayers";
 
 type MainPlayers = {
   position: string;
   selectedCards?: string[];
   stackSize?: number;
+  equity: number | null; // Эквити из Redux
 };
 
 type PlayerData = {
@@ -39,7 +41,7 @@ const findMaxBetPlayerCards = (allPlayers: {
 };
 
 const HintEquity = () => {
-  const [equity, setEquity] = useState<number | null>(null);
+  const dispatch = useDispatch();
 
   const mainPlayer = useSelector(
     (state: RootState) => state.infoPlayers.mainPlayers
@@ -53,30 +55,29 @@ const HintEquity = () => {
     if (mainPlayer && mainPlayer.selectedCards?.length === 2) {
       try {
         const villainRange = findMaxBetPlayerCards(allPlayers);
-        console.log(villainRange);
         if (villainRange && villainRange.length > 0) {
           const calculatedEquity = calculateEquity(
             mainPlayer.selectedCards,
             villainRange
           );
-          setEquity(calculatedEquity);
+          dispatch(updateMainPlayerEquity({ equity: calculatedEquity })); // Обновляем эквити в Redux
         } else {
-          setEquity(null);
+          dispatch(updateMainPlayerEquity({ equity: null })); // Сбрасываем эквити в Redux
         }
       } catch (error) {
         console.error("Error calculating equity:", error);
-        setEquity(null);
+        dispatch(updateMainPlayerEquity({ equity: null })); // Сбрасываем эквити в случае ошибки
       }
     } else {
-      setEquity(null);
+      dispatch(updateMainPlayerEquity({ equity: null })); // Сбрасываем эквити, если данных недостаточно
     }
-  }, [mainPlayer, allPlayers]);
+  }, [mainPlayer, allPlayers, dispatch]); // Зависимости: mainPlayer, allPlayers, dispatch
 
   return (
     <div className="hint-equity">
       {mainPlayer ? (
-        equity !== null ? (
-          <p>Эквити: {equity.toFixed(2)}%</p>
+        mainPlayer.equity !== null ? (
+          <p>Эквити: {mainPlayer.equity.toFixed(2)}%</p>
         ) : (
           <p>Недостаточно данных для расчета эквити</p>
         )

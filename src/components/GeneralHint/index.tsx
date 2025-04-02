@@ -36,7 +36,7 @@ const GeneralHint = () => {
 
     // Получаем диапазон карт для позиции mainPlayer
     const rangeForMainPlayer = getRangeForMainPlayer();
-    console.log(mainPlayer.selectedCards);
+    // console.log(mainPlayer.selectedCards);
 
     // Преобразуем карты mainPlayer в отсортированную строку для сравнения
     const mainPlayerString = JSON.stringify(
@@ -49,7 +49,7 @@ const GeneralHint = () => {
       return rangeString === mainPlayerString;
     });
   };
-
+  console.log(mainPlayer);
   return (
     <div className={styles.generalHint}>
       <HintEquity />
