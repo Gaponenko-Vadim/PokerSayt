@@ -11,6 +11,7 @@ const ButtonReset = () => {
     dispatch(resetAllCards()); // Сброс всех карт
     dispatch(setNextPozition()); // Изменение позиции
     dispatch(resetselectAction()); // Сброс состояния игроков и ставок
+    // dispatch(updatePlayerStatus());
   };
 
   return (

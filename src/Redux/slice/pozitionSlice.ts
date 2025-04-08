@@ -1,23 +1,23 @@
 // pozitionSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
+import { PlayerStatus } from "../../components/type";
 type TypePosition = {
   value: string[];
-  order: { index: number; status: string }[];
+  order: { index: number; status: PlayerStatus }[];
   index: number;
 };
 
 const initialState: TypePosition = {
   value: ["SB", "BB", "UTG", "UTG+1", "MP", "MP+1", "HJ", "BT"],
   order: [
-    { index: 4, status: "tight" },
-    { index: 2, status: "tight" },
-    { index: 6, status: "tight" },
-    { index: 0, status: "tight" },
-    { index: 5, status: "tight" },
-    { index: 7, status: "tight" },
-    { index: 3, status: "tight" },
-    { index: 1, status: "tight" },
+    { index: 4, status: "standard" },
+    { index: 2, status: "standard" },
+    { index: 6, status: "standard" },
+    { index: 0, status: "standard" },
+    { index: 5, status: "standard" },
+    { index: 7, status: "standard" },
+    { index: 3, status: "standard" },
+    { index: 1, status: "standard" },
   ],
   index: 0,
 };
@@ -31,7 +31,7 @@ export const pozitionSlice = createSlice({
     },
     updatePlayerStatus: (
       state,
-      action: PayloadAction<{ index: number; status: string }>
+      action: PayloadAction<{ index: number; status: PlayerStatus }>
     ) => {
       const { index, status } = action.payload;
       const player = state.order.find((player) => player.index === index);

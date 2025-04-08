@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { RootState } from "../../Redux/store";
+import { useDispatch, useSelector } from "react-redux";
 import { updatePlayerAction } from "../../Redux/slice/infoPlayers";
 import styles from "./stayle.module.scss";
-
-type PlayerAction = "fold" | "call" | "raise" | "allin";
+import { PlayerAction } from "../type";
 
 interface ModalActionsProps {
   position: string;
@@ -11,19 +11,47 @@ interface ModalActionsProps {
 }
 
 const ModalActions: React.FC<ModalActionsProps> = ({ position, onClose }) => {
+  const infoPlayers = useSelector(
+    (state: RootState) => state.infoPlayers.players
+  );
   const dispatch = useDispatch();
-  const allActions = ["fold", "call", "raise", "allin"] as const;
+  const baseActions = ["fold", "call", "raise", "allin"] as const;
 
   const [showBetInput, setShowBetInput] = useState(false);
   const [betValue, setBetValue] = useState("");
+  const [showRaiseOptions, setShowRaiseOptions] = useState(false); // Состояние для подменю raise
+
+  // Проверяем, есть ли у любого игрока "raise 2bb", "raise 3bb", "raise 4bb" или другие рейзы
+  const hasRaise = Object.values(infoPlayers).some(
+    (player) =>
+      player.action === "2bb" ||
+      player.action === "3bb" ||
+      player.action === "4bb" ||
+      player.action === "33%" ||
+      player.action === "50%" ||
+      player.action === "75%" ||
+      player.action === "100%"
+  );
+
+  // Опции для первого уровня рейза
+  const initialRaiseOptions = ["2bb", "3bb", "4bb"] as const;
+  // Опции для второго уровня рейза (после первого рейза)
+  const subsequentRaiseOptions = ["33%", "50%", "75%", "100%"] as const;
 
   const handleActionClick = (value: PlayerAction) => {
     if (value === "allin") {
       setShowBetInput(true);
+    } else if (value === "raise") {
+      setShowRaiseOptions(true); // Показываем подменю raise
     } else {
       dispatch(updatePlayerAction({ position, action: value }));
       onClose();
     }
+  };
+
+  const handleRaiseOptionClick = (value: PlayerAction) => {
+    dispatch(updatePlayerAction({ position, action: value }));
+    onClose();
   };
 
   const handleBetSubmit = () => {
@@ -37,6 +65,10 @@ const ModalActions: React.FC<ModalActionsProps> = ({ position, onClose }) => {
       );
       onClose();
     }
+  };
+
+  const handleBackClick = () => {
+    setShowRaiseOptions(false); // Возвращаемся к основному списку
   };
 
   return (
@@ -55,9 +87,22 @@ const ModalActions: React.FC<ModalActionsProps> = ({ position, onClose }) => {
             Подтвердить
           </button>
         </div>
+      ) : showRaiseOptions ? (
+        <ul className={styles.list}>
+          {(hasRaise ? subsequentRaiseOptions : initialRaiseOptions).map(
+            (value, i) => (
+              <li key={i} onClick={() => handleRaiseOptionClick(value)}>
+                {value}
+              </li>
+            )
+          )}
+          <li key="back" onClick={handleBackClick}>
+            Назад
+          </li>
+        </ul>
       ) : (
         <ul className={styles.list}>
-          {allActions.map((value, i) => (
+          {baseActions.map((value, i) => (
             <li key={i} onClick={() => handleActionClick(value)}>
               {value}
             </li>

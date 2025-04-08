@@ -164,7 +164,7 @@ export const infoPlayers = createSlice({
           state.mainPlayers.sumBet = maxBet;
           // myBet обновляется через компонент, а не здесь
         }
-      } else if (newAction === "raise") {
+      } else if (newAction === "2bb") {
         const maxBet = Object.values(state.players).reduce((max, player) => {
           if (player.bet) {
             const betValue = parseFloat(player.bet);
@@ -173,6 +173,45 @@ export const infoPlayers = createSlice({
           return max;
         }, 0);
         const newBet = maxBet * 2;
+        state.players[position].bet = `${newBet}BB`;
+        if (state.mainPlayers && state.mainPlayers.position === position) {
+          state.mainPlayers.sumBet = newBet;
+        }
+      } else if (newAction === "3bb") {
+        const maxBet = Object.values(state.players).reduce((max, player) => {
+          if (player.bet) {
+            const betValue = parseFloat(player.bet);
+            return betValue > max ? betValue : max;
+          }
+          return max;
+        }, 0);
+        const newBet = maxBet * 3;
+        state.players[position].bet = `${newBet}BB`;
+        if (state.mainPlayers && state.mainPlayers.position === position) {
+          state.mainPlayers.sumBet = newBet;
+        }
+      } else if (newAction === "4bb") {
+        const maxBet = Object.values(state.players).reduce((max, player) => {
+          if (player.bet) {
+            const betValue = parseFloat(player.bet);
+            return betValue > max ? betValue : max;
+          }
+          return max;
+        }, 0);
+        const newBet = maxBet * 4;
+        state.players[position].bet = `${newBet}BB`;
+        if (state.mainPlayers && state.mainPlayers.position === position) {
+          state.mainPlayers.sumBet = newBet;
+        }
+      } else if (newAction === "33%") {
+        const maxBet = Object.values(state.players).reduce((max, player) => {
+          if (player.bet) {
+            const betValue = parseFloat(player.bet);
+            return betValue > max ? betValue : max;
+          }
+          return max;
+        }, 0);
+        const newBet = maxBet * 4;
         state.players[position].bet = `${newBet}BB`;
         if (state.mainPlayers && state.mainPlayers.position === position) {
           state.mainPlayers.sumBet = newBet;

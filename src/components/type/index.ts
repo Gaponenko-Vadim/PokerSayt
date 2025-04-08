@@ -1,6 +1,17 @@
-export type PlayerAction = "fold" | "call" | "raise" | "allin";
-export type PlayerStack = "little" | "middle" | "big" | null;
-export type PlayerStatus = "neutral" | "aggressive" | "tight";
+export type PlayerAction =
+  | "fold"
+  | "call"
+  | "raise"
+  | "allin"
+  | "2bb"
+  | "3bb"
+  | "4bb"
+  | "33%"
+  | "50%"
+  | "75%"
+  | "100%";
+export type PlayerStack = "little" | "middle" | "big";
+export type PlayerStatus = "standard" | "tight" | "weak" | "fish";
 
 export type PlayerData = {
   position: string;

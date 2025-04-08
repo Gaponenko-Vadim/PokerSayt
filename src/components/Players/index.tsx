@@ -7,6 +7,7 @@ import Bet from "../Bet";
 import MenuStack from "../MenuStack";
 import MainPlayer from "../MainPlayer";
 import { updatePlayerStatus } from "../../Redux/slice/pozitionSlice";
+import { PlayerStatus } from "../type";
 import StatusPlayer from "../StatusPlayer";
 
 interface PlayersProps {
@@ -56,7 +57,7 @@ const Players: React.FC<PlayersProps> = ({
   };
 
   // Обработчик изменения статуса игрока
-  const handleStatusChange = (index: number, status: string) => {
+  const handleStatusChange = (index: number, status: PlayerStatus) => {
     dispatch(updatePlayerStatus({ index, status })); // Обновляем статус через Redux
   };
   console.log(playersData);
@@ -65,7 +66,8 @@ const Players: React.FC<PlayersProps> = ({
       {positionsOrder.map((orderItem, i) => {
         const currentPosition =
           pozitionTable[(index + orderItem.index) % pozitionTable.length];
-        const player = playersData[currentPosition]; // Данные игрока берутся из infoPlayers
+        const player = playersData[currentPosition];
+        const actionClass = player?.action?.replace(/ [\d.]+$/, "") || "fold"; // Данные игрока берутся из infoPlayers
 
         // Если данные игрока отсутствуют, пропускаем отрисовку
         if (!player) {
@@ -95,7 +97,7 @@ const Players: React.FC<PlayersProps> = ({
             )}
             <div
               className={`${styles.actionButton} ${
-                styles[player.action] || styles.fold
+                styles[actionClass] || styles.fold
               }`}
               onClick={(event) => handleOpenModal(event, currentPosition)}
             >

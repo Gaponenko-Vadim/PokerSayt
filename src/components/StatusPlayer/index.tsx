@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { updatePlayerStackInfo } from "../../Redux/slice/infoPlayers";
 import { useDispatch } from "react-redux";
 import styles from "./stayle.module.scss"; // Импортируем стили
+import { PlayerStatus } from "../type";
 type Player = {
   action: string;
   status: string;
@@ -10,8 +11,8 @@ type Player = {
 interface StatusPlayerProps {
   player: Player;
   position: string; // Позиция игрока (например, "UTG", "BB")
-  currentStatus: string;
-  onChange: (status: string) => void; // Функция для обновления статуса
+  currentStatus: PlayerStatus;
+  onChange: (status: PlayerStatus) => void; // Функция для обновления статуса
 }
 
 const StatusPlayer: React.FC<StatusPlayerProps> = ({
@@ -23,9 +24,10 @@ const StatusPlayer: React.FC<StatusPlayerProps> = ({
   const dispatch = useDispatch();
 
   // Определяем, какие точки показывать при наведении
-  const showRed = currentStatus !== "neutral";
-  const showYellow = currentStatus !== "aggressive";
-  const showGreen = currentStatus !== "tight";
+  const showRed = currentStatus !== "tight";
+  const showYellow = currentStatus !== "weak";
+  const showGreen = currentStatus !== "standard";
+
   useEffect(() => {
     if (currentStatus) {
       dispatch(updatePlayerStackInfo({ position, value: currentStatus }));
@@ -42,9 +44,9 @@ const StatusPlayer: React.FC<StatusPlayerProps> = ({
         {/* Всегда видимая точка (активный статус) */}
         <button
           className={`${styles.dot} ${
-            currentStatus === "tight"
+            currentStatus === "standard"
               ? styles.green
-              : currentStatus === "aggressive"
+              : currentStatus === "weak"
               ? styles.yellow
               : styles.red
           }`}
@@ -52,8 +54,8 @@ const StatusPlayer: React.FC<StatusPlayerProps> = ({
           title={
             currentStatus === "tight"
               ? "Тайтовый"
-              : currentStatus === "aggressive"
-              ? "Агрессивный"
+              : currentStatus === "weak"
+              ? "Слабый"
               : "Нейтральный"
           }
         />
@@ -63,22 +65,22 @@ const StatusPlayer: React.FC<StatusPlayerProps> = ({
             {showRed && (
               <button
                 className={`${styles.dot} ${styles.red}`}
-                onClick={() => onChange("neutral")}
-                title="Нейтральный"
+                onClick={() => onChange("tight")}
+                title="Тайтовый"
               />
             )}
             {showYellow && (
               <button
                 className={`${styles.dot} ${styles.yellow}`}
-                onClick={() => onChange("aggressive")}
-                title="Агрессивный"
+                onClick={() => onChange("weak")}
+                title="Слабый"
               />
             )}
             {showGreen && (
               <button
                 className={`${styles.dot} ${styles.green}`}
-                onClick={() => onChange("tight")}
-                title="Тайтовый"
+                onClick={() => onChange("standard")}
+                title="Стандартный"
               />
             )}
           </>
