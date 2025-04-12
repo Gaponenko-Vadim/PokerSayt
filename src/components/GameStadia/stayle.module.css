@@ -1,0 +1,62 @@
+.gameStadiaContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.stadiaList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 10px;
+}
+
+.stadiaItem {
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Стили для каждой стадии */
+.initial {
+  background-color: #006400; /* Зелёный для initial */
+}
+
+.average {
+  color: white;
+  background-color: #ffcc00; /* Жёлтый для Average */
+}
+
+.late {
+  background-color: #dc3545; /* Красный для late */
+}
+
+.prize {
+  background-color: #800080; /* Фиолетовый для prize */
+}
+
+.stadiaItem:hover {
+  opacity: 0.8; /* Эффект при наведении */
+}
+
+.selected {
+  color: white; /* Белый текст для выбранной стадии */
+  font-weight: bold; /* Жирный текст для выделения */
+  &.average {
+    color: rgb(21, 21, 21);
+  }
+}
+
+.hidden {
+  display: none; /* Скрытие невыбранных стадий */
+}

@@ -1,0 +1,77 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5); /* Затемнение экрана */
+  z-index: 1000; /* Поверх всего */
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Центрирование таблицы */
+}
+
+.tableMatrix {
+  position: relative; /* Для позиционирования кнопки закрытия */
+  color: black;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  z-index: 1001; /* Выше затемнения */
+  max-width: 600px; /* Ограничение ширины */
+  width: 100%;
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #aaa;
+
+  &:hover {
+    color: #555;
+  }
+}
+
+.selectedPosition {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.matrixGrid {
+  display: grid;
+  grid-template-columns: repeat(13, 30px);
+  grid-template-rows: repeat(13, 30px);
+  gap: 2px;
+}
+
+.matrixCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+  font-size: 12px;
+
+  &.pair {
+    background: #d3d3d3; /* Серый для пар */
+  }
+
+  &.suited {
+    background: #f0f8ff; /* Светло-серый для мастевых карт */
+  }
+
+  &.unsuited {
+    background: #f0f0f0; /* Оставить как есть для разномастных карт */
+  }
+
+  &.highlighted {
+    background: #ffcccc; /* Красный фон для выделенных ячеек */
+    font-weight: bold; /* Жирный текст для акцента */
+  }
+}

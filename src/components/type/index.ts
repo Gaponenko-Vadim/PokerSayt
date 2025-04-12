@@ -13,6 +13,8 @@ export type PlayerAction =
 export type PlayerStack = "little" | "middle" | "big";
 export type PlayerStatus = "standard" | "tight" | "weak" | "fish";
 
+export type TypeGameStadia = "initial" | "Average" | "late" | "prize";
+
 export type PlayerData = {
   position: string;
   action: PlayerAction;
@@ -21,6 +23,7 @@ export type PlayerData = {
   bet: string | null;
   status: PlayerStatus;
   cards: string[][];
+  cardsdiaposon: string[]; // Новое поле для сырого диапазона карт
 };
 
 export type MainPlayers = {

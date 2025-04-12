@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { convertRangeToCards } from "../../utilits/allСombinations/allTwoCardCombinations";
+import { TypeGameStadia } from "../../components/type";
 import {
   PlayerData,
   MainPlayers,
@@ -7,92 +8,171 @@ import {
   PlayerStack,
   PlayerStatus,
 } from "../../components/type";
-import {
-  utgRange,
-  utg1Range,
-  mpRange,
-  mp1Range,
-  hjRange,
-  btnRange,
-  sbRange,
-  bbRange,
-} from "../../utilits/allСombinations/allPositionsRanges";
+import rages from "../../constants/positionsRanges8maxMtt";
 
-// Типы
-
-type TypeinfoPlayers = {
+type TypeInfoPlayers = {
   players: { [key: string]: PlayerData };
   mainPlayers: MainPlayers | null;
+  stadia: TypeGameStadia | null;
+};
+
+// Константы
+const INITIAL_STACK_SIZE = 30;
+const STACK_SIZES: Record<PlayerStack, number> = {
+  little: 18,
+  middle: 30,
+  big: 50,
+};
+
+// Типизация для структуры диапазонов
+interface RangeActions {
+  open: string[];
+  threeBet: string[];
+  fourBet: string[];
+  allIn: string[];
+}
+
+interface Range {
+  middle: RangeActions;
+  little: RangeActions;
+  ultraShort: RangeActions;
+  big: RangeActions;
+}
+
+// Обновленный тип PlayerData
+
+export const POSITION_RANGES: Record<
+  string,
+  Partial<Record<PlayerStatus, Range>>
+> = {
+  UTG: {
+    standard: rages.utgRangeStandardAverage,
+    tight: rages.utgRangeTightAverage,
+    weak: rages.utgRangeWeakAverage,
+  },
+  "UTG+1": {
+    standard: rages.utg1RangeStandardAverage,
+    tight: rages.utg1RangeTightAverage,
+    weak: rages.utg1RangeWeakAverage,
+  },
+  MP: {
+    standard: rages.mpRangeStandardAverage,
+    tight: rages.mpRangeTightAverage,
+    weak: rages.mpRangeWeakAverage,
+  },
+  "MP+1": {
+    standard: rages.mpPlus1RangeStandardAverage,
+    tight: rages.mpPlus1RangeTightAverage,
+    weak: rages.mpPlus1RangeWeakAverage,
+  },
+  HJ: {
+    standard: rages.hjRangeStandardAverage,
+    tight: rages.hjRangeTightAverage,
+    weak: rages.hjRangeWeakAverage,
+  },
+  BT: {
+    standard: rages.btnRangeStandardAverage,
+    tight: rages.btnRangeTightAverage,
+    weak: rages.btnRangeWeakAverage,
+  },
+  SB: {
+    standard: rages.sbRangeStandardAverage,
+    tight: rages.sbRangeTightAverage,
+    weak: rages.sbRangeWeakAverage,
+  },
+  BB: {
+    standard: rages.bbRangeStandardAverage,
+    tight: rages.bbRangeTightAverage,
+    weak: rages.bbRangeWeakAverage,
+  },
 };
 
 // Начальное состояние
-const initialState: TypeinfoPlayers = {
+const initialState: TypeInfoPlayers = {
   players: {},
   mainPlayers: null,
+  stadia: null,
 };
 
-// Функция для создания игрока с начальными значениями
-const createPlayer = (position: string, cards: string[][] = []): PlayerData => {
+// Утилитные функции
+const createPlayer = (
+  position: string,
+  status: PlayerStatus = "tight",
+  stack: PlayerStack = "middle",
+  cards: string[][] = [],
+  cardsdiaposon: string[] = []
+): PlayerData => ({
+  position,
+  action: "fold",
+  stack,
+  stackSize: STACK_SIZES[stack],
+  bet: position === "BB" ? "1BB" : position === "SB" ? "0.5BB" : null,
+  status,
+  cards,
+  cardsdiaposon,
+});
+
+// Обновленная функция getCardsByPosition, возвращающая оба значения
+const getCardsByPosition = (
+  position: string,
+  status: PlayerStatus,
+  stack: PlayerStack
+): { raw: string[]; converted: string[][] } => {
+  const positionRanges = POSITION_RANGES[position];
+  if (!positionRanges) {
+    return { raw: [], converted: [] };
+  }
+
+  const range = positionRanges[status] || positionRanges.weak;
+  if (!range || !range[stack]) {
+    return { raw: [], converted: [] };
+  }
+
+  const openRange = range[stack].open || [];
   return {
-    position,
-    action: "fold",
-    stack: "middle",
-    stackSize: 30,
-    bet: position === "BB" ? "1BB" : position === "SB" ? "0.5BB" : null,
-    status: "tight",
-    cards,
+    raw: openRange, // Сырой диапазон
+    converted: openRange.flatMap((hand) => convertRangeToCards(hand)), // Преобразованные карты
   };
 };
+
+const initializeMainPlayerIfNull = (state: TypeInfoPlayers): MainPlayers => {
+  if (!state.mainPlayers) {
+    state.mainPlayers = {
+      position: "",
+      selectedCards: [],
+      stackSize: INITIAL_STACK_SIZE,
+      equity: null,
+      sumBet: 0,
+      myBet: null,
+    };
+  }
+  return state.mainPlayers;
+};
+
+const getMaxBet = (players: { [key: string]: PlayerData }): number =>
+  Object.values(players).reduce((max, player) => {
+    const betValue = player.bet ? parseFloat(player.bet) : 0;
+    return Math.max(max, betValue);
+  }, 0);
 
 // Создаем слайс
 export const infoPlayers = createSlice({
   name: "info",
   initialState,
   reducers: {
-    // Инициализация позиций
     initializePositions: (
       state,
       action: PayloadAction<{ positions: string[] }>
     ) => {
       const { positions } = action.payload;
-      state.players = {};
-      positions.forEach((position) => {
-        let cards: string[][] = [];
-        switch (position) {
-          case "UTG":
-            cards = utgRange.flatMap((utgRange) =>
-              convertRangeToCards(utgRange)
-            );
-            break;
-          case "UTG+1":
-            cards = utg1Range.flatMap((range) => convertRangeToCards(range));
-            break;
-          case "MP":
-            cards = mpRange.flatMap((range) => convertRangeToCards(range));
-            break;
-          case "MP+1":
-            cards = mp1Range.flatMap((range) => convertRangeToCards(range));
-            break;
-          case "HJ":
-            cards = hjRange.flatMap((range) => convertRangeToCards(range));
-            break;
-          case "BT":
-            cards = btnRange.flatMap((range) => convertRangeToCards(range));
-            break;
-          case "SB":
-            cards = sbRange.flatMap((range) => convertRangeToCards(range));
-            break;
-          case "BB":
-            cards = bbRange.flatMap((range) => convertRangeToCards(range));
-            break;
-          default:
-            cards = [];
-        }
-        state.players[position] = createPlayer(position, cards);
-      });
+      state.players = positions.reduce((acc, position) => {
+        const status: PlayerStatus = "tight";
+        const stack: PlayerStack = "middle";
+        const { raw, converted } = getCardsByPosition(position, status, stack);
+        acc[position] = createPlayer(position, status, stack, converted, raw);
+        return acc;
+      }, {} as { [key: string]: PlayerData });
     },
-
-    // Инициализация mainPlayers
     initializeMainPlayer: (
       state,
       action: PayloadAction<{
@@ -103,38 +183,21 @@ export const infoPlayers = createSlice({
       }>
     ) => {
       const { position, cards, equity, sumBet } = action.payload;
-
-      if (!state.mainPlayers) {
-        state.mainPlayers = {
-          position: "",
-          selectedCards: [],
-          stackSize: 30,
-          equity: null,
-          sumBet: 0,
-          myBet: null,
-        };
-      }
-
+      const mainPlayer = initializeMainPlayerIfNull(state);
       if (position) {
-        state.mainPlayers.position = position;
-        state.mainPlayers.myBet = state.players[position]?.bet || null; // Инициализируем myBet из playerData
+        mainPlayer.position = position;
+        mainPlayer.myBet = state.players[position]?.bet || null;
       }
-
-      if (cards && cards.length > 0) {
-        const selectedCards = cards.map((card) => card.code);
-        state.mainPlayers.selectedCards = selectedCards;
+      if (cards) {
+        mainPlayer.selectedCards = cards.map((card) => card.code);
       }
-
       if (equity !== undefined) {
-        state.mainPlayers.equity = equity;
+        mainPlayer.equity = equity;
       }
-
       if (sumBet !== undefined) {
-        state.mainPlayers.sumBet = sumBet;
+        mainPlayer.sumBet = sumBet;
       }
     },
-
-    // Обновление действия игрока
     updatePlayerAction: (
       state,
       action: PayloadAction<{
@@ -144,246 +207,153 @@ export const infoPlayers = createSlice({
       }>
     ) => {
       const { position, action: newAction, customBet } = action.payload;
-
       if (!state.players[position]) {
         state.players[position] = createPlayer(position);
       }
-
       state.players[position].action = newAction;
 
-      if (newAction === "call") {
-        const maxBet = Object.values(state.players).reduce((max, player) => {
-          if (player.bet) {
-            const betValue = parseFloat(player.bet);
-            return betValue > max ? betValue : max;
-          }
-          return max;
-        }, 0);
+      if (newAction === "fold") {
+        state.players[position].bet = null;
+        if (state.mainPlayers && state.mainPlayers.position === position) {
+          state.mainPlayers.sumBet = 0;
+        }
+      } else if (newAction === "call") {
+        const maxBet = getMaxBet(state.players);
         state.players[position].bet = `${maxBet}BB`;
         if (state.mainPlayers && state.mainPlayers.position === position) {
           state.mainPlayers.sumBet = maxBet;
-          // myBet обновляется через компонент, а не здесь
         }
-      } else if (newAction === "2bb") {
-        const maxBet = Object.values(state.players).reduce((max, player) => {
-          if (player.bet) {
-            const betValue = parseFloat(player.bet);
-            return betValue > max ? betValue : max;
-          }
-          return max;
-        }, 0);
-        const newBet = maxBet * 2;
-        state.players[position].bet = `${newBet}BB`;
+      } else if (["2bb", "3bb", "4bb"].includes(newAction)) {
+        const multipliers: { [key in "2bb" | "3bb" | "4bb"]: number } = {
+          "2bb": 2,
+          "3bb": 3,
+          "4bb": 4,
+        };
+        const maxBet = getMaxBet(state.players);
+        const multiplier = multipliers[newAction as "2bb" | "3bb" | "4bb"];
+
+        state.players[position].bet = String(maxBet * multiplier) + "BB";
         if (state.mainPlayers && state.mainPlayers.position === position) {
-          state.mainPlayers.sumBet = newBet;
+          state.mainPlayers.sumBet = parseFloat(
+            customBet || String(multiplier)
+          );
         }
-      } else if (newAction === "3bb") {
-        const maxBet = Object.values(state.players).reduce((max, player) => {
-          if (player.bet) {
-            const betValue = parseFloat(player.bet);
-            return betValue > max ? betValue : max;
-          }
-          return max;
-        }, 0);
-        const newBet = maxBet * 3;
-        state.players[position].bet = `${newBet}BB`;
+      } else if (["33%", "50%", "75%", "100%"].includes(newAction)) {
+        const coefficients: {
+          [key in "33%" | "50%" | "75%" | "100%"]: number;
+        } = {
+          "33%": 0.33,
+          "50%": 0.5,
+          "75%": 0.75,
+          "100%": 1,
+        };
+        const maxBet = getMaxBet(state.players);
+        const coefficient =
+          coefficients[newAction as "33%" | "50%" | "75%" | "100%"];
+        const sumBet = state.mainPlayers?.sumBet || 0;
+
+        const betValue = Number(
+          (maxBet + (sumBet + maxBet) * coefficient).toFixed(1)
+        );
+        state.players[position].bet = `${betValue}BB`;
         if (state.mainPlayers && state.mainPlayers.position === position) {
-          state.mainPlayers.sumBet = newBet;
-        }
-      } else if (newAction === "4bb") {
-        const maxBet = Object.values(state.players).reduce((max, player) => {
-          if (player.bet) {
-            const betValue = parseFloat(player.bet);
-            return betValue > max ? betValue : max;
-          }
-          return max;
-        }, 0);
-        const newBet = maxBet * 4;
-        state.players[position].bet = `${newBet}BB`;
-        if (state.mainPlayers && state.mainPlayers.position === position) {
-          state.mainPlayers.sumBet = newBet;
-        }
-      } else if (newAction === "33%") {
-        const maxBet = Object.values(state.players).reduce((max, player) => {
-          if (player.bet) {
-            const betValue = parseFloat(player.bet);
-            return betValue > max ? betValue : max;
-          }
-          return max;
-        }, 0);
-        const newBet = maxBet * 4;
-        state.players[position].bet = `${newBet}BB`;
-        if (state.mainPlayers && state.mainPlayers.position === position) {
-          state.mainPlayers.sumBet = newBet;
+          state.mainPlayers.sumBet = betValue;
         }
       } else if (newAction === "allin") {
         state.players[position].bet = customBet || "All-in";
         if (state.mainPlayers && state.mainPlayers.position === position) {
           state.mainPlayers.sumBet = state.players[position].stackSize;
         }
-      } else if (newAction === "fold") {
-        state.players[position].bet = null;
-        if (state.mainPlayers && state.mainPlayers.position === position) {
-          state.mainPlayers.sumBet = 0;
-        }
       }
     },
 
-    // Обновление стека игрока
     updatePlayerStack: (
       state,
       action: PayloadAction<{ position: string; value: PlayerStack }>
     ) => {
       const { position, value } = action.payload;
-
       if (!state.players[position]) {
         state.players[position] = createPlayer(position);
       }
-
       state.players[position].stack = value;
-
-      switch (value) {
-        case "little":
-          state.players[position].stackSize = 18;
-          break;
-        case "middle":
-          state.players[position].stackSize = 30;
-          break;
-        case "big":
-          state.players[position].stackSize = 50;
-          break;
-        default:
-          state.players[position].stackSize = 0;
-      }
+      state.players[position].stackSize = STACK_SIZES[value] || 0;
+      const { raw, converted } = getCardsByPosition(
+        position,
+        state.players[position].status,
+        value
+      );
+      state.players[position].cardsdiaposon = raw;
+      state.players[position].cards = converted;
     },
 
-    // Обновление статуса игрока
     updatePlayerStackInfo: (
       state,
       action: PayloadAction<{ position: string; value: PlayerStatus }>
     ) => {
       const { position, value } = action.payload;
-
       if (!state.players[position]) {
         state.players[position] = createPlayer(position);
       }
-
       state.players[position].status = value;
+      const { raw, converted } = getCardsByPosition(
+        position,
+        value,
+        state.players[position].stack
+      );
+      state.players[position].cardsdiaposon = raw;
+      state.players[position].cards = converted;
     },
 
-    // Обновление карт игрока
     updatePlayerCards: (
       state,
       action: PayloadAction<{ position: string; cards: string[][] }>
     ) => {
       const { position, cards } = action.payload;
-
       if (!state.players[position]) {
         state.players[position] = createPlayer(position);
       }
-
       state.players[position].cards = cards;
     },
 
-    // Обновление эквити mainPlayers
     updateMainPlayerEquity: (
       state,
       action: PayloadAction<{ equity: number | null }>
     ) => {
-      const { equity } = action.payload;
-
-      if (!state.mainPlayers) {
-        state.mainPlayers = {
-          position: "",
-          selectedCards: [],
-          stackSize: 30,
-          equity: null,
-          sumBet: 0,
-          myBet: null,
-        };
-      }
-
-      state.mainPlayers.equity = equity;
+      const mainPlayer = initializeMainPlayerIfNull(state);
+      mainPlayer.equity = action.payload.equity;
     },
 
-    // Обновление суммы ставок mainPlayers
     updateMainPlayerSumBet: (
       state,
       action: PayloadAction<{ sumBet: number }>
     ) => {
-      const { sumBet } = action.payload;
-
-      if (!state.mainPlayers) {
-        state.mainPlayers = {
-          position: "",
-          selectedCards: [],
-          stackSize: 30,
-          equity: null,
-          sumBet: 0,
-          myBet: null,
-        };
-      }
-
-      state.mainPlayers.sumBet = sumBet;
+      const mainPlayer = initializeMainPlayerIfNull(state);
+      mainPlayer.sumBet = action.payload.sumBet;
     },
 
-    // Новое действие для обновления myBet
     updateMainPlayerMyBet: (
       state,
       action: PayloadAction<{ myBet: string | null }>
     ) => {
-      const { myBet } = action.payload;
-
-      if (!state.mainPlayers) {
-        state.mainPlayers = {
-          position: "",
-          selectedCards: [],
-          stackSize: 30,
-          equity: null,
-          sumBet: 0,
-          myBet: null,
-        };
-      }
-
-      state.mainPlayers.myBet = myBet;
+      const mainPlayer = initializeMainPlayerIfNull(state);
+      mainPlayer.myBet = action.payload.myBet;
     },
 
-    // Сброс состояния игроков
     resetselectAction: (state) => {
-      Object.keys(state.players).forEach((position) => {
-        let cards: string[][] = [];
-        switch (position) {
-          case "UTG":
-            cards = utgRange.flatMap((utgRange) =>
-              convertRangeToCards(utgRange)
-            );
-            break;
-          case "UTG+1":
-            cards = utg1Range.flatMap((range) => convertRangeToCards(range));
-            break;
-          case "MP":
-            cards = mpRange.flatMap((range) => convertRangeToCards(range));
-            break;
-          case "MP+1":
-            cards = mp1Range.flatMap((range) => convertRangeToCards(range));
-            break;
-          case "HJ":
-            cards = hjRange.flatMap((range) => convertRangeToCards(range));
-            break;
-          case "BT":
-            cards = btnRange.flatMap((range) => convertRangeToCards(range));
-            break;
-          case "SB":
-            cards = sbRange.flatMap((range) => convertRangeToCards(range));
-            break;
-          case "BB":
-            cards = bbRange.flatMap((range) => convertRangeToCards(range));
-            break;
-          default:
-            cards = [];
-        }
-        state.players[position] = createPlayer(position, cards);
-      });
+      state.players = Object.keys(state.players).reduce((acc, position) => {
+        const status = state.players[position].status;
+        const stack = state.players[position].stack;
+        const { raw, converted } = getCardsByPosition(position, status, stack);
+        acc[position] = createPlayer(position, status, stack, converted, raw);
+        return acc;
+      }, {} as { [key: string]: PlayerData });
+    },
+
+    updateGameStadia: (
+      state,
+      action: PayloadAction<{ stadia: TypeGameStadia | null }>
+    ) => {
+      state.stadia = action.payload.stadia;
     },
   },
 });
@@ -399,7 +369,8 @@ export const {
   updatePlayerCards,
   updateMainPlayerEquity,
   updateMainPlayerSumBet,
-  updateMainPlayerMyBet, // Добавляем новое действие
+  updateMainPlayerMyBet,
+  updateGameStadia,
 } = infoPlayers.actions;
 
 // Экспортируем редьюсер

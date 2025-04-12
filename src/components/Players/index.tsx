@@ -9,8 +9,8 @@ import MainPlayer from "../MainPlayer";
 import { updatePlayerStatus } from "../../Redux/slice/pozitionSlice";
 import { PlayerStatus } from "../type";
 import StatusPlayer from "../StatusPlayer";
-
 interface PlayersProps {
+  setOpenMatrix: (isOpen: boolean) => void;
   setIsModalOpen: (isOpen: boolean) => void;
   setModalPosition: (position: { top: number; left: number }) => void;
   setSelectedPosition: (position: string | null) => void;
@@ -20,6 +20,7 @@ const Players: React.FC<PlayersProps> = ({
   setIsModalOpen,
   setModalPosition,
   setSelectedPosition,
+  setOpenMatrix,
 }) => {
   const dispatch = useDispatch();
 
@@ -27,6 +28,7 @@ const Players: React.FC<PlayersProps> = ({
   const pozitionTable = useSelector(
     (state: RootState) => state.pozitionSlice.value
   );
+  const selectedStadiatt = useSelector((state: RootState) => state.infoPlayers);
   const index = useSelector((state: RootState) => state.pozitionSlice.index);
   const positionsOrder = useSelector(
     (state: RootState) => state.pozitionSlice.order
@@ -41,6 +43,11 @@ const Players: React.FC<PlayersProps> = ({
   React.useEffect(() => {
     dispatch(initializePositions({ positions: pozitionTable }));
   }, [dispatch, pozitionTable]);
+
+  const handleOpenMatrixl = (currentPosition: string) => {
+    setOpenMatrix(true);
+    setSelectedPosition(currentPosition);
+  };
 
   // Обработчик открытия модального окна
   const handleOpenModal = (
@@ -61,6 +68,7 @@ const Players: React.FC<PlayersProps> = ({
     dispatch(updatePlayerStatus({ index, status })); // Обновляем статус через Redux
   };
   console.log(playersData);
+  console.log(selectedStadiatt);
   return (
     <>
       {positionsOrder.map((orderItem, i) => {
@@ -79,7 +87,12 @@ const Players: React.FC<PlayersProps> = ({
             {i === 3 ? ( // Если это позиция для MainPlayer
               <MainPlayer currentPosition={currentPosition} player={player} />
             ) : (
-              <div className={styles.player}>{currentPosition}</div>
+              <div
+                className={styles.player}
+                onClick={() => handleOpenMatrixl(currentPosition)}
+              >
+                {currentPosition}
+              </div>
             )}
             {currentPosition === "BT" && ( // Если это дилер
               <div className={styles.dealerChip}>D</div>
