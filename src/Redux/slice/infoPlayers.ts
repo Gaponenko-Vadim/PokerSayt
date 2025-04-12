@@ -1,20 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { convertRangeToCards } from "../../utilits/allСombinations/allTwoCardCombinations";
+import { getMaxBet } from "../../utilits/getMaxBet";
 import { TypeGameStadia } from "../../components/type";
 import {
+  ReduxPlayerAction,
   PlayerData,
   MainPlayers,
-  PlayerAction,
   PlayerStack,
   PlayerStatus,
+  TypeInfoPlayers,
 } from "../../components/type";
 import rages from "../../constants/positionsRanges8maxMtt";
-
-type TypeInfoPlayers = {
-  players: { [key: string]: PlayerData };
-  mainPlayers: MainPlayers | null;
-  stadia: TypeGameStadia | null;
-};
 
 // Константы
 const INITIAL_STACK_SIZE = 30;
@@ -149,11 +145,11 @@ const initializeMainPlayerIfNull = (state: TypeInfoPlayers): MainPlayers => {
   return state.mainPlayers;
 };
 
-const getMaxBet = (players: { [key: string]: PlayerData }): number =>
-  Object.values(players).reduce((max, player) => {
-    const betValue = player.bet ? parseFloat(player.bet) : 0;
-    return Math.max(max, betValue);
-  }, 0);
+// const getMaxBet = (players: { [key: string]: PlayerData }): number =>
+//   Object.values(players).reduce((max, player) => {
+//     const betValue = player.bet ? parseFloat(player.bet) : 0;
+//     return Math.max(max, betValue);
+//   }, 0);
 
 // Создаем слайс
 export const infoPlayers = createSlice({
@@ -202,7 +198,7 @@ export const infoPlayers = createSlice({
       state,
       action: PayloadAction<{
         position: string;
-        action: PlayerAction;
+        action: ReduxPlayerAction;
         customBet?: string;
       }>
     ) => {
@@ -223,46 +219,21 @@ export const infoPlayers = createSlice({
         if (state.mainPlayers && state.mainPlayers.position === position) {
           state.mainPlayers.sumBet = maxBet;
         }
-      } else if (["2bb", "3bb", "4bb"].includes(newAction)) {
-        const multipliers: { [key in "2bb" | "3bb" | "4bb"]: number } = {
-          "2bb": 2,
-          "3bb": 3,
-          "4bb": 4,
-        };
-        const maxBet = getMaxBet(state.players);
-        const multiplier = multipliers[newAction as "2bb" | "3bb" | "4bb"];
-
-        state.players[position].bet = String(maxBet * multiplier) + "BB";
+      } else if (newAction === "raise") {
+        state.players[position].bet = customBet || "0BB";
         if (state.mainPlayers && state.mainPlayers.position === position) {
-          state.mainPlayers.sumBet = parseFloat(
-            customBet || String(multiplier)
-          );
-        }
-      } else if (["33%", "50%", "75%", "100%"].includes(newAction)) {
-        const coefficients: {
-          [key in "33%" | "50%" | "75%" | "100%"]: number;
-        } = {
-          "33%": 0.33,
-          "50%": 0.5,
-          "75%": 0.75,
-          "100%": 1,
-        };
-        const maxBet = getMaxBet(state.players);
-        const coefficient =
-          coefficients[newAction as "33%" | "50%" | "75%" | "100%"];
-        const sumBet = state.mainPlayers?.sumBet || 0;
-
-        const betValue = Number(
-          (maxBet + (sumBet + maxBet) * coefficient).toFixed(1)
-        );
-        state.players[position].bet = `${betValue}BB`;
-        if (state.mainPlayers && state.mainPlayers.position === position) {
-          state.mainPlayers.sumBet = betValue;
+          const betValue = customBet
+            ? parseFloat(customBet.replace("BB", ""))
+            : 0;
+          state.mainPlayers.sumBet = isNaN(betValue) ? 0 : betValue;
         }
       } else if (newAction === "allin") {
         state.players[position].bet = customBet || "All-in";
         if (state.mainPlayers && state.mainPlayers.position === position) {
-          state.mainPlayers.sumBet = state.players[position].stackSize;
+          const betValue = customBet
+            ? parseFloat(customBet.replace("BB", ""))
+            : state.players[position].stackSize;
+          state.mainPlayers.sumBet = isNaN(betValue) ? 0 : betValue;
         }
       }
     },

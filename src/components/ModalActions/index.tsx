@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { RootState } from "../../Redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { updatePlayerAction } from "../../Redux/slice/infoPlayers";
+import {
+  setLostmaxBet,
+  setLostsumBet,
+} from "../../Redux/slice/actionLastStackSlice";
+import { PlayerAction, ReduxPlayerAction } from "../type";
+import { getMaxBet } from "../../utilits/getMaxBet";
 import styles from "./stayle.module.scss";
-import { PlayerAction } from "../type";
 
 interface ModalActionsProps {
   position: string;
@@ -14,53 +19,147 @@ const ModalActions: React.FC<ModalActionsProps> = ({ position, onClose }) => {
   const infoPlayers = useSelector(
     (state: RootState) => state.infoPlayers.players
   );
+  const mainPlayers = useSelector(
+    (state: RootState) => state.infoPlayers.mainPlayers
+  );
+  const useLastBet = useSelector(
+    (state: RootState) => state.actionLastStackSlice
+  );
   const dispatch = useDispatch();
+  const currentBet = infoPlayers[position]?.bet || null;
   const baseActions = ["fold", "call", "raise", "allin"] as const;
 
   const [showBetInput, setShowBetInput] = useState(false);
   const [betValue, setBetValue] = useState("");
-  const [showRaiseOptions, setShowRaiseOptions] = useState(false); // Состояние для подменю raise
+  const [showRaiseOptions, setShowRaiseOptions] = useState(false);
 
-  // Проверяем, есть ли у любого игрока "raise 2bb", "raise 3bb", "raise 4bb" или другие рейзы
-  const hasRaise = Object.values(infoPlayers).some(
-    (player) =>
-      player.action === "2bb" ||
-      player.action === "3bb" ||
-      player.action === "4bb" ||
-      player.action === "33%" ||
-      player.action === "50%" ||
-      player.action === "75%" ||
-      player.action === "100%"
-  );
+  // Проверяем, есть ли уже ставка (2-бет или выше)
+  const hasRaise = getMaxBet(infoPlayers) > 1;
 
-  // Опции для первого уровня рейза
   const initialRaiseOptions = ["2bb", "3bb", "4bb"] as const;
-  // Опции для второго уровня рейза (после первого рейза)
   const subsequentRaiseOptions = ["33%", "50%", "75%", "100%"] as const;
 
-  const handleActionClick = (value: PlayerAction) => {
+  // Рассчитываем ставки для рейзов
+  const maxBet = getMaxBet(infoPlayers);
+  const sumBet = mainPlayers?.sumBet || 0;
+  const coefficients: { [key in "33%" | "50%" | "75%" | "100%"]: number } = {
+    "33%": 0.33,
+    "50%": 0.5,
+    "75%": 0.75,
+    "100%": 1,
+  };
+
+  // Отладка входных данных
+  console.log("infoPlayers:", infoPlayers);
+  console.log("mainPlayers:", mainPlayers);
+  console.log("maxBet:", maxBet, "sumBet:", sumBet, "currentBet:", currentBet);
+  console.log("useLastBet:", useLastBet);
+
+  // Отслеживание изменений useLastBet
+  useEffect(() => {
+    console.log("useLastBet updated:", useLastBet);
+  }, [useLastBet]);
+
+  const getRaiseBetValue = (action: PlayerAction): string => {
+    if (["2bb", "3bb", "4bb"].includes(action)) {
+      const multipliers: { [key in "2bb" | "3bb" | "4bb"]: number } = {
+        "2bb": 2,
+        "3bb": 3,
+        "4bb": 4,
+      };
+      const multiplier = multipliers[action as "2bb" | "3bb" | "4bb"];
+      const currentBetValue = parseFloat(currentBet?.replace("BB", "") || "0");
+      if (maxBet === currentBetValue) {
+        const betValue = useLastBet.lostMaxBet * multiplier;
+        console.log(`Using last bet for ${action}:`, betValue);
+        return Number(betValue.toFixed(1)) + "BB";
+      }
+      const betValue = maxBet * multiplier;
+      console.log(`Using maxBet for ${action}:`, betValue);
+      return Number(betValue.toFixed(1)) + "BB";
+    }
+    if (["33%", "50%", "75%", "100%"].includes(action)) {
+      const coefficient =
+        coefficients[action as "33%" | "50%" | "75%" | "100%"];
+      const currentBetValue = parseFloat(currentBet?.replace("BB", "") || "0");
+      if (maxBet === currentBetValue) {
+        const betValue = Number(
+          (
+            useLastBet.lostMaxBet +
+            (useLastBet.lostSumBet + useLastBet.lostMaxBet) * coefficient
+          ).toFixed(1)
+        );
+        console.log(`Using last bet for ${action}:`, betValue);
+        return `${betValue}BB`;
+      }
+      const betValue = Number(
+        (maxBet + (sumBet + maxBet) * coefficient).toFixed(1)
+      );
+      console.log(`Using maxBet and sumBet for ${action}:`, betValue);
+      return `${betValue}BB`;
+    }
+    return "0BB";
+  };
+
+  const handleActionClick = (value: ReduxPlayerAction) => {
+    console.log("Action clicked:", value);
     if (value === "allin") {
       setShowBetInput(true);
     } else if (value === "raise") {
-      setShowRaiseOptions(true); // Показываем подменю raise
+      setShowRaiseOptions(true);
     } else {
-      dispatch(updatePlayerAction({ position, action: value }));
+      dispatch(
+        updatePlayerAction({
+          position,
+          action: value,
+          customBet: undefined,
+        })
+      );
       onClose();
     }
   };
 
   const handleRaiseOptionClick = (value: PlayerAction) => {
-    dispatch(updatePlayerAction({ position, action: value }));
+    console.log("Raise option clicked:", value);
+    const bet = getRaiseBetValue(value);
+    const currentBetValue = parseFloat(currentBet?.replace("BB", "") || "0");
+
+    // Update useLastBet only if maxBet !== currentBetValue
+    if (maxBet !== currentBetValue) {
+      if (["2bb", "3bb", "4bb"].includes(value)) {
+        console.log("Dispatching setLostmaxBet:", { lostMaxBet: maxBet });
+        dispatch(setLostmaxBet(maxBet));
+      } else if (["33%", "50%", "75%", "100%"].includes(value)) {
+        console.log("Dispatching setLostmaxBet and setLostsumBet:", {
+          lostMaxBet: maxBet,
+          lostSumBet: sumBet,
+        });
+        dispatch(setLostmaxBet(maxBet));
+        dispatch(setLostsumBet(sumBet));
+      }
+    } else {
+      console.log("Skipping useLastBet update: maxBet === currentBetValue");
+    }
+
+    dispatch(
+      updatePlayerAction({
+        position,
+        action: "raise",
+        customBet: bet,
+      })
+    );
     onClose();
   };
 
   const handleBetSubmit = () => {
-    if (betValue) {
+    const parsedBet = parseFloat(betValue);
+    const stackSize = infoPlayers[position]?.stackSize || 0;
+    if (parsedBet > 0 && parsedBet <= stackSize) {
       dispatch(
         updatePlayerAction({
           position,
           action: "allin",
-          customBet: `${betValue}BB`,
+          customBet: `${parsedBet}BB`,
         })
       );
       onClose();
@@ -68,7 +167,7 @@ const ModalActions: React.FC<ModalActionsProps> = ({ position, onClose }) => {
   };
 
   const handleBackClick = () => {
-    setShowRaiseOptions(false); // Возвращаемся к основному списку
+    setShowRaiseOptions(false);
   };
 
   return (
@@ -92,7 +191,9 @@ const ModalActions: React.FC<ModalActionsProps> = ({ position, onClose }) => {
           {(hasRaise ? subsequentRaiseOptions : initialRaiseOptions).map(
             (value, i) => (
               <li key={i} onClick={() => handleRaiseOptionClick(value)}>
-                {value}
+                {value}{" "}
+                {["33%", "50%", "75%", "100%"].includes(value) &&
+                  `(${getRaiseBetValue(value)})`}
               </li>
             )
           )}

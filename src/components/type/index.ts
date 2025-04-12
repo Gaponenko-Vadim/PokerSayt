@@ -10,10 +10,17 @@ export type PlayerAction =
   | "50%"
   | "75%"
   | "100%";
+export type ReduxPlayerAction = "fold" | "call" | "raise" | "allin";
 export type PlayerStack = "little" | "middle" | "big";
 export type PlayerStatus = "standard" | "tight" | "weak" | "fish";
 
 export type TypeGameStadia = "initial" | "Average" | "late" | "prize";
+
+export type TypeInfoPlayers = {
+  players: { [key: string]: PlayerData };
+  mainPlayers: MainPlayers | null;
+  stadia: TypeGameStadia | null;
+};
 
 export type PlayerData = {
   position: string;
