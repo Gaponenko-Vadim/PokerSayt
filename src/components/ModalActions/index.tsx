@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { RootState } from "../../Redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { updatePlayerAction } from "../../Redux/slice/infoPlayers";
+import {
+  updatePlayerAction,
+  setPlayerCount,
+} from "../../Redux/slice/infoPlayers";
 import {
   setLostmaxBet,
   setLostsumBet,
+  setHasRaise,
 } from "../../Redux/slice/actionLastStackSlice";
 import { PlayerAction, ReduxPlayerAction } from "../type";
 import { getMaxBet } from "../../utilits/getMaxBet";
@@ -49,11 +53,22 @@ const ModalActions: React.FC<ModalActionsProps> = ({ position, onClose }) => {
     "100%": 1,
   };
 
+  // Определяем, какое условие использовать для выбора опций
+  const currentBetValue = parseFloat(currentBet?.replace("BB", "") || "0");
+  const raiseOptionsCondition =
+    maxBet === currentBetValue ? useLastBet.hasRaise : hasRaise;
+
   // Отладка входных данных
   console.log("infoPlayers:", infoPlayers);
   console.log("mainPlayers:", mainPlayers);
   console.log("maxBet:", maxBet, "sumBet:", sumBet, "currentBet:", currentBet);
   console.log("useLastBet:", useLastBet);
+  console.log(
+    "hasRaise:",
+    hasRaise,
+    "raiseOptionsCondition:",
+    raiseOptionsCondition
+  );
 
   // Отслеживание изменений useLastBet
   useEffect(() => {
@@ -123,9 +138,57 @@ const ModalActions: React.FC<ModalActionsProps> = ({ position, onClose }) => {
     console.log("Raise option clicked:", value);
     const bet = getRaiseBetValue(value);
     const currentBetValue = parseFloat(currentBet?.replace("BB", "") || "0");
+    const betValue = parseFloat(bet.replace("BB", ""));
 
-    // Update useLastBet only if maxBet !== currentBetValue
+    // Update useLastBet and count only if maxBet !== currentBetValue
     if (maxBet !== currentBetValue) {
+      // Обновление count
+      if (maxBet <= 1) {
+        // Первый рейз за столом
+        console.log(`First raise detected, setting count to 1 for ${position}`);
+        dispatch(
+          setPlayerCount({
+            position,
+            count: 1,
+          })
+        );
+      } else {
+        // Последующие рейзы
+        console.log(
+          `Checking subsequent raise: betValue=${betValue}, maxBet * 2=${
+            maxBet * 2
+          }`
+        );
+        if (betValue > maxBet * 1.5) {
+          const maxBetPlayerPosition = Object.keys(infoPlayers).find((pos) => {
+            const playerBet = infoPlayers[pos].bet
+              ? parseFloat(infoPlayers[pos].bet!.replace("BB", ""))
+              : 0;
+            return playerBet === maxBet;
+          });
+
+          console.log("maxBetPlayerPosition:", maxBetPlayerPosition);
+          if (maxBetPlayerPosition) {
+            const maxBetPlayerCount =
+              infoPlayers[maxBetPlayerPosition].count || 0;
+            console.log(
+              `Updating count for ${position}: ${maxBetPlayerCount} + 1 due to bet ${bet} > ${maxBet} * 2`
+            );
+            dispatch(
+              setPlayerCount({
+                position,
+                count: maxBetPlayerCount + 1,
+              })
+            );
+          }
+        } else {
+          console.log(
+            `Count not updated: betValue=${betValue} <= ${maxBet} * 2`
+          );
+        }
+      }
+
+      // Обновление useLastBet
       if (["2bb", "3bb", "4bb"].includes(value)) {
         console.log("Dispatching setLostmaxBet:", { lostMaxBet: maxBet });
         dispatch(setLostmaxBet(maxBet));
@@ -136,9 +199,12 @@ const ModalActions: React.FC<ModalActionsProps> = ({ position, onClose }) => {
         });
         dispatch(setLostmaxBet(maxBet));
         dispatch(setLostsumBet(sumBet));
+        dispatch(setHasRaise(hasRaise));
       }
     } else {
-      console.log("Skipping useLastBet update: maxBet === currentBetValue");
+      console.log(
+        "Skipping count and useLastBet update: maxBet === currentBetValue"
+      );
     }
 
     dispatch(
@@ -188,15 +254,16 @@ const ModalActions: React.FC<ModalActionsProps> = ({ position, onClose }) => {
         </div>
       ) : showRaiseOptions ? (
         <ul className={styles.list}>
-          {(hasRaise ? subsequentRaiseOptions : initialRaiseOptions).map(
-            (value, i) => (
-              <li key={i} onClick={() => handleRaiseOptionClick(value)}>
-                {value}{" "}
-                {["33%", "50%", "75%", "100%"].includes(value) &&
-                  `(${getRaiseBetValue(value)})`}
-              </li>
-            )
-          )}
+          {(raiseOptionsCondition
+            ? subsequentRaiseOptions
+            : initialRaiseOptions
+          ).map((value, i) => (
+            <li key={i} onClick={() => handleRaiseOptionClick(value)}>
+              {value}{" "}
+              {["33%", "50%", "75%", "100%"].includes(value) &&
+                `(${getRaiseBetValue(value)})`}
+            </li>
+          ))}
           <li key="back" onClick={handleBackClick}>
             Назад
           </li>

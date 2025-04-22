@@ -11,12 +11,14 @@ import SumBet from "../SumBet";
 import GeneralHint from "../GeneralHint";
 import GameStadia from "../GameStadia";
 import TableMatrix from "../TableMatrix"; // Импортируем TableMatrix
+import CardPostFlop from "../CardPostFlop";
 
 const CardTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOpenMatrix, setOpenMatrix] = useState(false);
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
   const [selectedPosition, setSelectedPosition] = useState<string | null>(null);
+  const [isFlop, setFlop] = useState(false);
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -46,14 +48,18 @@ const CardTable = () => {
             />
           )}
           {selectedCards.length === 2 ? (
-            <GeneralHint />
+            isFlop ? (
+              <CardPostFlop />
+            ) : (
+              <GeneralHint setFlop={setFlop} />
+            )
           ) : (
             <div className={styles.table__title}>PokeRoChek</div>
           )}
         </div>
         <SumBet />
       </div>
-      <ButtonReset />
+      <ButtonReset setFlop={setFlop} />
       <ModalDialog
         isOpen={isModalOpen}
         onClose={handleCloseModal}

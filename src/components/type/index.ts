@@ -31,10 +31,12 @@ export type PlayerData = {
   status: PlayerStatus;
   cards: string[][];
   cardsdiaposon: string[]; // Новое поле для сырого диапазона карт
+  count: number;
 };
 
 export type MainPlayers = {
   position: string;
+  cardsOnTheTable?: string[];
   selectedCards?: string[];
   stackSize: number;
   equity: number | null;

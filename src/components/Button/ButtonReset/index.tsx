@@ -4,8 +4,11 @@ import { resetAllCards } from "../../../Redux/slice/cardSlice";
 import { resetselectAction } from "../../../Redux/slice/infoPlayers"; // Импортируем из infoPlayers
 import { resetselectLostAction } from "../../../Redux/slice/actionLastStackSlice";
 import styles from "./stayle.module.scss";
-
-const ButtonReset = () => {
+import React from "react";
+interface FlopProps {
+  setFlop: (isOpen: boolean) => void;
+}
+const ButtonReset: React.FC<FlopProps> = ({ setFlop }) => {
   const dispatch = useDispatch();
 
   const handleResetAndChangePosition = () => {
@@ -13,6 +16,8 @@ const ButtonReset = () => {
     dispatch(setNextPozition()); // Изменение позиции
     dispatch(resetselectAction()); // Сброс состояния игроков и ставок
     dispatch(resetselectLostAction());
+
+    setFlop(false);
   };
 
   return (

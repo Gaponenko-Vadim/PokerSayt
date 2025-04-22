@@ -1,10 +1,15 @@
 import styles from "./style.module.scss";
+import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Redux/store";
 import HintEv from "../Hint/HintEv";
 import HintEquity from "../Hint/HintEquity";
 
-const GeneralHint = () => {
+interface FlopProps {
+  setFlop: (isOpen: boolean) => void;
+}
+
+const GeneralHint: React.FC<FlopProps> = ({ setFlop }) => {
   const selectedCards = useSelector(
     (state: RootState) => state.cardSlice.selectedCards
   );
@@ -49,7 +54,7 @@ const GeneralHint = () => {
       return rangeString === mainPlayerString;
     });
   };
-  console.log(mainPlayer);
+
   return (
     <div className={styles.generalHint}>
       <HintEquity />
@@ -61,6 +66,9 @@ const GeneralHint = () => {
             : "Карты не входят в диапазон"}
         </p>
       )}
+      <button className={styles.openButton} onClick={() => setFlop(true)}>
+        Открыть флоп
+      </button>
     </div>
   );
 };

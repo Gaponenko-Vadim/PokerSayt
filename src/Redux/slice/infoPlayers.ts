@@ -35,8 +35,6 @@ interface Range {
   big: RangeActions;
 }
 
-// Обновленный тип PlayerData
-
 export const POSITION_RANGES: Record<
   string,
   Partial<Record<PlayerStatus, Range>>
@@ -106,7 +104,50 @@ const createPlayer = (
   status,
   cards,
   cardsdiaposon,
+  count: 0,
 });
+
+// Функция для получения диапазона на основе count и action
+const getRangeByActionAndCount = (
+  position: string,
+  status: PlayerStatus,
+  stack: PlayerStack,
+  action: ReduxPlayerAction,
+  count: number
+): { raw: string[]; converted: string[][] } => {
+  const positionRanges = POSITION_RANGES[position];
+  if (!positionRanges) {
+    return { raw: [], converted: [] };
+  }
+
+  const range = positionRanges[status] || positionRanges.weak;
+  if (!range || !range[stack]) {
+    return { raw: [], converted: [] };
+  }
+
+  let selectedRange: string[] = [];
+
+  if (action === "allin") {
+    selectedRange = range[stack].allIn || [];
+  } else if (action === "raise") {
+    if (count === 1 || count === 0) {
+      selectedRange = range[stack].open || [];
+    } else if (count === 2) {
+      selectedRange = range[stack].threeBet || [];
+    } else if (count === 3) {
+      selectedRange = range[stack].fourBet || [];
+    } else {
+      selectedRange = range[stack].open || [];
+    }
+  } else {
+    selectedRange = range[stack].open || [];
+  }
+
+  return {
+    raw: selectedRange,
+    converted: selectedRange.flatMap((hand) => convertRangeToCards(hand)),
+  };
+};
 
 // Обновленная функция getCardsByPosition, возвращающая оба значения
 const getCardsByPosition = (
@@ -126,8 +167,8 @@ const getCardsByPosition = (
 
   const openRange = range[stack].open || [];
   return {
-    raw: openRange, // Сырой диапазон
-    converted: openRange.flatMap((hand) => convertRangeToCards(hand)), // Преобразованные карты
+    raw: openRange,
+    converted: openRange.flatMap((hand) => convertRangeToCards(hand)),
   };
 };
 
@@ -144,12 +185,6 @@ const initializeMainPlayerIfNull = (state: TypeInfoPlayers): MainPlayers => {
   }
   return state.mainPlayers;
 };
-
-// const getMaxBet = (players: { [key: string]: PlayerData }): number =>
-//   Object.values(players).reduce((max, player) => {
-//     const betValue = player.bet ? parseFloat(player.bet) : 0;
-//     return Math.max(max, betValue);
-//   }, 0);
 
 // Создаем слайс
 export const infoPlayers = createSlice({
@@ -236,8 +271,39 @@ export const infoPlayers = createSlice({
           state.mainPlayers.sumBet = isNaN(betValue) ? 0 : betValue;
         }
       }
-    },
 
+      // Обновление диапазона на основе action и текущего count
+      const { raw, converted } = getRangeByActionAndCount(
+        position,
+        state.players[position].status,
+        state.players[position].stack,
+        newAction,
+        state.players[position].count
+      );
+      state.players[position].cardsdiaposon = raw;
+      state.players[position].cards = converted;
+    },
+    setPlayerCount: (
+      state,
+      action: PayloadAction<{ position: string; count: number }>
+    ) => {
+      const { position, count } = action.payload;
+      if (!state.players[position]) {
+        state.players[position] = createPlayer(position);
+      }
+      state.players[position].count = count;
+
+      // Обновление диапазона на основе текущего action и нового count
+      const { raw, converted } = getRangeByActionAndCount(
+        position,
+        state.players[position].status,
+        state.players[position].stack,
+        state.players[position].action as ReduxPlayerAction,
+        count
+      );
+      state.players[position].cardsdiaposon = raw;
+      state.players[position].cards = converted;
+    },
     updatePlayerStack: (
       state,
       action: PayloadAction<{ position: string; value: PlayerStack }>
@@ -248,15 +314,16 @@ export const infoPlayers = createSlice({
       }
       state.players[position].stack = value;
       state.players[position].stackSize = STACK_SIZES[value] || 0;
-      const { raw, converted } = getCardsByPosition(
+      const { raw, converted } = getRangeByActionAndCount(
         position,
         state.players[position].status,
-        value
+        value,
+        state.players[position].action as ReduxPlayerAction,
+        state.players[position].count
       );
       state.players[position].cardsdiaposon = raw;
       state.players[position].cards = converted;
     },
-
     updatePlayerStackInfo: (
       state,
       action: PayloadAction<{ position: string; value: PlayerStatus }>
@@ -266,15 +333,16 @@ export const infoPlayers = createSlice({
         state.players[position] = createPlayer(position);
       }
       state.players[position].status = value;
-      const { raw, converted } = getCardsByPosition(
+      const { raw, converted } = getRangeByActionAndCount(
         position,
         value,
-        state.players[position].stack
+        state.players[position].stack,
+        state.players[position].action as ReduxPlayerAction,
+        state.players[position].count
       );
       state.players[position].cardsdiaposon = raw;
       state.players[position].cards = converted;
     },
-
     updatePlayerCards: (
       state,
       action: PayloadAction<{ position: string; cards: string[][] }>
@@ -285,7 +353,6 @@ export const infoPlayers = createSlice({
       }
       state.players[position].cards = cards;
     },
-
     updateMainPlayerEquity: (
       state,
       action: PayloadAction<{ equity: number | null }>
@@ -293,7 +360,6 @@ export const infoPlayers = createSlice({
       const mainPlayer = initializeMainPlayerIfNull(state);
       mainPlayer.equity = action.payload.equity;
     },
-
     updateMainPlayerSumBet: (
       state,
       action: PayloadAction<{ sumBet: number }>
@@ -301,7 +367,6 @@ export const infoPlayers = createSlice({
       const mainPlayer = initializeMainPlayerIfNull(state);
       mainPlayer.sumBet = action.payload.sumBet;
     },
-
     updateMainPlayerMyBet: (
       state,
       action: PayloadAction<{ myBet: string | null }>
@@ -309,8 +374,10 @@ export const infoPlayers = createSlice({
       const mainPlayer = initializeMainPlayerIfNull(state);
       mainPlayer.myBet = action.payload.myBet;
     },
-
     resetselectAction: (state) => {
+      if (state.mainPlayers?.selectedCards) {
+        state.mainPlayers.selectedCards = [];
+      }
       state.players = Object.keys(state.players).reduce((acc, position) => {
         const status = state.players[position].status;
         const stack = state.players[position].stack;
@@ -319,7 +386,6 @@ export const infoPlayers = createSlice({
         return acc;
       }, {} as { [key: string]: PlayerData });
     },
-
     updateGameStadia: (
       state,
       action: PayloadAction<{ stadia: TypeGameStadia | null }>
@@ -342,6 +408,7 @@ export const {
   updateMainPlayerSumBet,
   updateMainPlayerMyBet,
   updateGameStadia,
+  setPlayerCount,
 } = infoPlayers.actions;
 
 // Экспортируем редьюсер
