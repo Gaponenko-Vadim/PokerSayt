@@ -71,8 +71,8 @@ const HintEquity = () => {
               return {
                 ...equityResult,
                 cardsLength: player.cards.length,
-                cards: player.cards, // Сохраняем диапазон для corelyaciya
-                playerIndex: index, // Для отслеживания игрока
+                cards: player.cards,
+                playerIndex: index,
               };
             }
             return null;
@@ -87,8 +87,6 @@ const HintEquity = () => {
               totalCountSum: number;
               cardsLength: number;
               cards: string[][];
-              cardsdiaposon: string[];
-
               playerIndex: number;
             } => result !== null && result.equity !== null
           );
@@ -96,34 +94,19 @@ const HintEquity = () => {
           if (validResults.length > 0) {
             let averageEquity;
 
-            if (validResults.length > 1) {
-              if (validResults.length === 2) {
-                // Вычисляем корреляцию с новыми параметрами
-                const commonCombos = equityFull(
-                  validResults[0].cards,
-                  validResults[1].cards,
-                  mainPlayer.selectedCards,
-                  validResults[0].equity,
-                  validResults[1].equity,
-                  validResults[0].totalCountSum,
-                  validResults[1].totalCountSum
-                );
-                // Новая формула для двух диапазонов: equity1 * equity2 * overlapPercentage
+            if (validResults.length >= 1) {
+              // Подготовим данные для equityFull: все диапазоны, эквити и totalCountSum
+              const opponentRanges = validResults.map((result) => ({
+                cards: result.cards,
+                equity: result.equity,
+                totalCountSum: result.totalCountSum,
+              }));
 
-                averageEquity = commonCombos;
-
-                // console.log("Common combinations:", commonCombos.commonCount);
-                // console.log(
-                //   "Overlap percentage:",
-                //   commonCombos.overlapPercentage
-                // );
-              } else {
-                // TODO: Уточнить формулу для трех и более диапазонов
-                // Временно используем среднее эквити
-                averageEquity =
-                  validResults.reduce((sum, result) => sum + result.equity, 0) /
-                  validResults.length;
-              }
+              // Вычисляем общее эквити для всех диапазонов
+              averageEquity = equityFull(
+                opponentRanges,
+                mainPlayer.selectedCards
+              );
             } else {
               // Для одного диапазона: просто берем эквити
               averageEquity = validResults[0].equity;
@@ -137,14 +120,13 @@ const HintEquity = () => {
           dispatch(updateMainPlayerEquity({ equity: null }));
         }
       } catch (error) {
-        console.error("Error calculating equity:", error);
+        console.error("Ошибка при расчете эквити:", error);
         dispatch(updateMainPlayerEquity({ equity: null }));
       }
     } else {
       dispatch(updateMainPlayerEquity({ equity: null }));
     }
   }, [mainPlayer, allPlayers, dispatch]);
-
   return (
     <div className="hint-equity">
       {mainPlayer ? (
