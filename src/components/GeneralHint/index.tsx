@@ -1,4 +1,5 @@
 import styles from "./style.module.scss";
+import { useState } from "react";
 import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../Redux/store";
@@ -10,6 +11,7 @@ interface FlopProps {
 }
 
 const GeneralHint: React.FC<FlopProps> = ({ setFlop }) => {
+  const [isGeneralHint, setGeneralHint] = useState(true);
   const selectedCards = useSelector(
     (state: RootState) => state.cardSlice.selectedCards
   );
@@ -41,7 +43,6 @@ const GeneralHint: React.FC<FlopProps> = ({ setFlop }) => {
 
     // Получаем диапазон карт для позиции mainPlayer
     const rangeForMainPlayer = getRangeForMainPlayer();
-    // console.log(mainPlayer.selectedCards);
 
     // Преобразуем карты mainPlayer в отсортированную строку для сравнения
     const mainPlayerString = JSON.stringify(
@@ -57,18 +58,41 @@ const GeneralHint: React.FC<FlopProps> = ({ setFlop }) => {
 
   return (
     <div className={styles.generalHint}>
-      <HintEquity />
-      <HintEv />
-      {selectedCards.length === 2 && (
-        <p>
-          {isInRange()
-            ? "Карты входят в диапазон"
-            : "Карты не входят в диапазон"}
-        </p>
+      {isGeneralHint ? (
+        <>
+          <HintEquity />
+          <HintEv />
+          {selectedCards.length === 2 && (
+            <p>
+              {isInRange()
+                ? "Карты входят в диапазон"
+                : "Карты не входят в диапазон"}
+            </p>
+          )}
+          <button
+            className={styles.resetIcon}
+            onClick={(e) => {
+              e.stopPropagation(); // Предотвращаем всплытие события
+              setGeneralHint(false);
+            }}
+          >
+            ×
+          </button>
+          <button className={styles.openButton} onClick={() => setFlop(true)}>
+            Открыть флоп
+          </button>
+        </>
+      ) : (
+        <div className={styles.compactHint}>
+          <p className={styles.compactText}>Подсказка скрыта</p>
+          <button
+            className={styles.compactButton}
+            onClick={() => setGeneralHint(true)}
+          >
+            Открыть подсказку
+          </button>
+        </div>
       )}
-      <button className={styles.openButton} onClick={() => setFlop(true)}>
-        Открыть флоп
-      </button>
     </div>
   );
 };

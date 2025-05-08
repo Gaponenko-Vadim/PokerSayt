@@ -38,12 +38,21 @@ const formatHand = (cards: string[]): string => {
  * Рассчитывает эквити выбранных карт против диапазона оппонента
  * @param selectedCards Выбранные карты игрока
  * @param villainRange Диапазон оппонента
- * @returns Процент эквити или null
+ * @returns Объект с общим эквити, суммой комбинаций и деталями по рукам
  */
 export const calculateEquity = (
   selectedCards: string[],
   villainRange: string[][]
-): { equity: number | null; totalCountSum: number } => {
+): {
+  equity: number | null;
+  totalCountSum: number;
+  handDetails: Array<{
+    hand: string;
+    combinations: number;
+    equity: number;
+    contribution: number;
+  }>;
+} => {
   const selectedHand = formatHand(selectedCards);
   const selectedRanks = selectedCards.map((card) => card[0]);
   const selectedCardsSet = new Set(selectedCards);
@@ -140,7 +149,15 @@ export const calculateEquity = (
 
   let totalEquity = 0;
   let totalCombinations = 0;
+  const handDetails: Array<{
+    hand: string;
+    combinations: number;
+    equity: number;
+    contribution: number;
+  }> = [];
 
+  // Рассчёт эквити для каждой руки
+  // console.log("Эквити против каждой руки оппонента:");
   for (const villainHand in comboCount) {
     const count = comboCount[villainHand];
     const key1 = `${selectedHand} vs ${villainHand}`;
@@ -149,24 +166,37 @@ export const calculateEquity = (
     const equityValue = equityTable[key1]?.hand1 || equityTable[key2]?.hand2;
 
     if (equityValue !== undefined) {
-      totalEquity += equityValue * count;
+      const contribution = equityValue * count;
+      // console.log(
+      //   `Рука: ${villainHand}, Комбинаций: ${count}, Эквити: ${equityValue.toFixed(
+      //     2
+      //   )}%, Вклад: ${contribution.toFixed(2)}`
+      // );
+      handDetails.push({
+        hand: villainHand,
+        combinations: count,
+        equity: equityValue,
+        contribution,
+      });
+      totalEquity += contribution;
       totalCombinations += count;
     } else {
-      console.warn(`No equity data for ${key1} or ${key2}`);
+      console.warn(`Нет данных эквити для ${key1} или ${key2}`);
     }
   }
 
-  // Подсчет суммы всех count
+  // Подсчёт суммы всех комбинаций
   const totalCountSum = Object.values(comboCount).reduce(
     (sum, count) => sum + count,
     0
   );
 
   if (totalCombinations === 0) {
-    return { equity: null, totalCountSum };
+    return { equity: null, totalCountSum, handDetails };
   }
 
   const calculatedEquity = totalEquity / totalCombinations;
-  console.log(totalCountSum);
-  return { equity: calculatedEquity, totalCountSum };
+  // console.log(`Общее эквити: ${calculatedEquity.toFixed(2)}%`);
+  // console.log(`Общее количество комбинаций: ${totalCountSum}`);
+  return { equity: calculatedEquity, totalCountSum, handDetails };
 };

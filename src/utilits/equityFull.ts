@@ -28,29 +28,29 @@ export const equityFull = (
     const totalCountSum2 = opponentRanges[1].totalCountSum;
 
     // Проверяем размеры диапазонов
-    console.log("Initial range1 length:", range1.length);
-    console.log("Initial range2 length:", range2.length);
-    console.log("Filtered range1 length (totalCountSum1):", totalCountSum1);
-    console.log("Filtered range2 length (totalCountSum2):", totalCountSum2);
+    // console.log("Initial range1 length:", range1.length);
+    // console.log("Initial range2 length:", range2.length);
+    // console.log("Filtered range1 length (totalCountSum1):", totalCountSum1);
+    // console.log("Filtered range2 length (totalCountSum2):", totalCountSum2);
 
     // Рассчитываем заблокированные комбинации
     const blockedCombos1 = range1.length - totalCountSum1;
     const blockedCombos2 = range2.length - totalCountSum2;
-    console.log("Blocked combos for range1:", blockedCombos1);
-    console.log("Blocked combos for range2:", blockedCombos2);
+    // console.log("Blocked combos for range1:", blockedCombos1);
+    // console.log("Blocked combos for range2:", blockedCombos2);
 
     // Рассчитываем процент от 1326 комбинаций
     const totalCombinations = 1326;
     const percentageRange1 = (totalCountSum1 / totalCombinations) * 100;
     const percentageRange2 = (totalCountSum2 / totalCombinations) * 100;
-    console.log(
-      "Percentage of range1 from 1326:",
-      percentageRange1.toFixed(2) + "%"
-    );
-    console.log(
-      "Percentage of range2 from 1326:",
-      percentageRange2.toFixed(2) + "%"
-    );
+    // console.log(
+    //   "Percentage of range1 from 1326:",
+    //   percentageRange1.toFixed(2) + "%"
+    // );
+    // console.log(
+    //   "Percentage of range2 from 1326:",
+    //   percentageRange2.toFixed(2) + "%"
+    // );
 
     const averageEquity = (equity1 / 100) * (equity2 / 100);
 
@@ -61,11 +61,11 @@ export const equityFull = (
     const equity = averageEquity * coff;
     const finalEquity = equity * 100;
 
-    console.log("Equity1:", equity1.toFixed(2) + "%");
-    console.log("Equity2:", equity2.toFixed(2) + "%");
-    console.log("Final equity:", finalEquity.toFixed(2) + "%");
-    console.log("Coff:", coff);
-    console.log("Средняя эквити:", (averageEquity * 100).toFixed(2) + "%");
+    // console.log("Equity1:", equity1.toFixed(2) + "%");
+    // console.log("Equity2:", equity2.toFixed(2) + "%");
+    // console.log("Final equity:", finalEquity.toFixed(2) + "%");
+    // console.log("Coff:", coff);
+    // console.log("Средняя эквити:", (averageEquity * 100).toFixed(2) + "%");
 
     return finalEquity;
   }
@@ -83,38 +83,38 @@ export const equityFull = (
     const totalCountSum3 = opponentRanges[2].totalCountSum;
 
     // Проверяем размеры диапазонов
-    console.log("Initial range1 length:", range1.length);
-    console.log("Initial range2 length:", range2.length);
-    console.log("Initial range3 length:", range3.length);
-    console.log("Filtered range1 length (totalCountSum1):", totalCountSum1);
-    console.log("Filtered range2 length (totalCountSum2):", totalCountSum2);
-    console.log("Filtered range3 length (totalCountSum3):", totalCountSum3);
+    // console.log("Initial range1 length:", range1.length);
+    // console.log("Initial range2 length:", range2.length);
+    // console.log("Initial range3 length:", range3.length);
+    // console.log("Filtered range1 length (totalCountSum1):", totalCountSum1);
+    // console.log("Filtered range2 length (totalCountSum2):", totalCountSum2);
+    // console.log("Filtered range3 length (totalCountSum3):", totalCountSum3);
 
     // Рассчитываем заблокированные комбинации
     const blockedCombos1 = range1.length - totalCountSum1;
     const blockedCombos2 = range2.length - totalCountSum2;
     const blockedCombos3 = range3.length - totalCountSum3;
-    console.log("Blocked combos for range1:", blockedCombos1);
-    console.log("Blocked combos for range2:", blockedCombos2);
-    console.log("Blocked combos for range3:", blockedCombos3);
+    // console.log("Blocked combos for range1:", blockedCombos1);
+    // console.log("Blocked combos for range2:", blockedCombos2);
+    // console.log("Blocked combos for range3:", blockedCombos3);
 
     // Рассчитываем процент от 1326 комбинаций
     const totalCombinations = 1326;
     const percentageRange1 = (totalCountSum1 / totalCombinations) * 100;
     const percentageRange2 = (totalCountSum2 / totalCombinations) * 100;
     const percentageRange3 = (totalCountSum3 / totalCombinations) * 100;
-    console.log(
-      "Percentage of range1 from 1326:",
-      percentageRange1.toFixed(2) + "%"
-    );
-    console.log(
-      "Percentage of range2 from 1326:",
-      percentageRange2.toFixed(2) + "%"
-    );
-    console.log(
-      "Percentage of range3 from 1326:",
-      percentageRange3.toFixed(2) + "%"
-    );
+    // console.log(
+    //   "Percentage of range1 from 1326:",
+    //   percentageRange1.toFixed(2) + "%"
+    // );
+    // console.log(
+    //   "Percentage of range2 from 1326:",
+    //   percentageRange2.toFixed(2) + "%"
+    // );
+    // console.log(
+    //   "Percentage of range3 from 1326:",
+    //   percentageRange3.toFixed(2) + "%"
+    // );
 
     const averageEquity = (equity1 / 100) * (equity2 / 100) * (equity3 / 100);
 
@@ -125,12 +125,12 @@ export const equityFull = (
     const equity = averageEquity * coff;
     const finalEquity = equity * 100;
 
-    console.log("Equity1:", equity1.toFixed(2) + "%");
-    console.log("Equity2:", equity2.toFixed(2) + "%");
-    console.log("Equity3:", equity3.toFixed(2) + "%");
-    console.log("Final equity:", finalEquity.toFixed(2) + "%");
-    console.log("Coff:", coff);
-    console.log("Средняя эквити:", (averageEquity * 100).toFixed(2) + "%");
+    // console.log("Equity1:", equity1.toFixed(2) + "%");
+    // console.log("Equity2:", equity2.toFixed(2) + "%");
+    // console.log("Equity3:", equity3.toFixed(2) + "%");
+    // console.log("Final equity:", finalEquity.toFixed(2) + "%");
+    // console.log("Coff:", coff);
+    // console.log("Средняя эквити:", (averageEquity * 100).toFixed(2) + "%");
 
     return finalEquity;
   }
@@ -147,7 +147,7 @@ export const equityFull = (
   // Ограничиваем эквити в диапазоне [0, 100]
   const clampedEquity = Math.min(Math.max(finalEquity, 0), 100);
 
-  console.log("Combined equity:", clampedEquity.toFixed(2) + "%");
+  // console.log("Combined equity:", clampedEquity.toFixed(2) + "%");
 
   return clampedEquity;
 };

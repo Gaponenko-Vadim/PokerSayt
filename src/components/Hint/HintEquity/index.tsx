@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../Redux/store";
 import { calculateEquity } from "../../../utilits/allСombinations/calculateEquity";
 import { updateMainPlayerEquity } from "../../../Redux/slice/infoPlayers";
-// import { corelyaciya } from "../../../utilits/corelyaciya";
 import { equityFull } from "../../../utilits/equityFull";
 
 // Типы данных
@@ -25,6 +24,46 @@ type PlayerData = {
   cardsdiaposon: string[];
 };
 
+// type EquityResult = {
+//   equity: number | null;
+//   totalCountSum: number;
+//   handDetails: Array<{
+//     hand: string;
+//     combinations: number;
+//     equity: number;
+//     contribution: number;
+//   }>;
+// };
+
+// Тип для валидных результатов с equity: number
+type ValidEquityResult = {
+  equity: number;
+  totalCountSum: number;
+  handDetails: Array<{
+    hand: string;
+    combinations: number;
+    equity: number;
+    contribution: number;
+  }>;
+  cardsLength: number;
+  cards: string[][];
+  playerIndex: number;
+};
+
+// Тип для OpponentRange (для equityFull)
+type OpponentRange = {
+  cards: string[][];
+  equity: number;
+  totalCountSum: number;
+  handDetails: Array<{
+    hand: string;
+    combinations: number;
+    equity: number;
+    contribution: number;
+  }>;
+};
+
+// Функция для поиска игроков с максимальной ставкой
 const findMaxBetPlayers = (allPlayers: {
   [key: string]: PlayerData;
 }): PlayerData[] => {
@@ -33,14 +72,17 @@ const findMaxBetPlayers = (allPlayers: {
   for (const player of Object.values(allPlayers)) {
     if (player.bet) {
       const currentBet = parseFloat(player.bet);
-      if (currentBet > maxBet) {
+      if (!isNaN(currentBet) && currentBet > maxBet) {
         maxBet = currentBet;
       }
     }
   }
 
   return Object.values(allPlayers).filter(
-    (player) => player.bet && parseFloat(player.bet) === maxBet
+    (player) =>
+      player.bet &&
+      !isNaN(parseFloat(player.bet)) &&
+      parseFloat(player.bet) === maxBet
   );
 };
 
@@ -56,77 +98,87 @@ const HintEquity = () => {
   ) as { [key: string]: PlayerData };
 
   useEffect(() => {
-    if (mainPlayer && mainPlayer.selectedCards?.length === 2) {
-      try {
-        const maxBetPlayers = findMaxBetPlayers(allPlayers);
+    // Проверяем, что mainPlayer существует и имеет две карты
+    if (
+      !mainPlayer ||
+      !mainPlayer.selectedCards ||
+      mainPlayer.selectedCards.length !== 2
+    ) {
+      dispatch(updateMainPlayerEquity({ equity: null }));
+      return;
+    }
 
-        if (maxBetPlayers.length > 0) {
-          // Рассчитываем эквити и сохраняем cards
-          const results = maxBetPlayers.map((player, index) => {
-            if (player.cards && player.cards.length > 0) {
-              const equityResult = calculateEquity(
-                mainPlayer.selectedCards!,
-                player.cards
-              );
-              return {
-                ...equityResult,
-                cardsLength: player.cards.length,
-                cards: player.cards,
-                playerIndex: index,
-              };
-            }
-            return null;
-          });
+    try {
+      const maxBetPlayers = findMaxBetPlayers(allPlayers);
 
-          // Фильтруем валидные результаты
-          const validResults = results.filter(
-            (
-              result
-            ): result is {
-              equity: number;
-              totalCountSum: number;
-              cardsLength: number;
-              cards: string[][];
-              playerIndex: number;
-            } => result !== null && result.equity !== null
+      // Если нет игроков с максимальной ставкой, сбрасываем эквити
+      if (maxBetPlayers.length === 0) {
+        dispatch(updateMainPlayerEquity({ equity: null }));
+        return;
+      }
+
+      // Рассчитываем эквити для каждого игрока
+      const results = maxBetPlayers.map((player, index) => {
+        if (player.cards && player.cards.length > 0) {
+          const equityResult = calculateEquity(
+            mainPlayer.selectedCards!,
+            player.cards
+          );
+          return {
+            ...equityResult,
+            cardsLength: player.cards.length,
+            cards: player.cards,
+            playerIndex: index,
+          };
+        }
+        return null;
+      });
+
+      // Фильтруем валидные результаты (с ненулевым эквити)
+      const validResults = results.filter(
+        (result): result is ValidEquityResult =>
+          result !== null && result.equity !== null
+      );
+
+      if (validResults.length > 0) {
+        let averageEquity: number;
+
+        if (validResults.length > 1) {
+          // Подготовка данных для equityFull
+          const opponentRanges: OpponentRange[] = validResults.map(
+            (result) => ({
+              cards: result.cards,
+              equity: result.equity,
+              totalCountSum: result.totalCountSum,
+              handDetails: result.handDetails,
+            })
           );
 
-          if (validResults.length > 0) {
-            let averageEquity;
-
-            if (validResults.length >= 1) {
-              // Подготовим данные для equityFull: все диапазоны, эквити и totalCountSum
-              const opponentRanges = validResults.map((result) => ({
-                cards: result.cards,
-                equity: result.equity,
-                totalCountSum: result.totalCountSum,
-              }));
-
-              // Вычисляем общее эквити для всех диапазонов
-              averageEquity = equityFull(
-                opponentRanges,
-                mainPlayer.selectedCards
-              );
-            } else {
-              // Для одного диапазона: просто берем эквити
-              averageEquity = validResults[0].equity;
-            }
-
-            dispatch(updateMainPlayerEquity({ equity: averageEquity }));
-          } else {
+          // Вычисляем эквити для мультипота
+          const equityFullResult = equityFull(
+            opponentRanges,
+            mainPlayer.selectedCards!
+          );
+          if (equityFullResult === null) {
             dispatch(updateMainPlayerEquity({ equity: null }));
+            return;
           }
+          averageEquity = equityFullResult;
         } else {
-          dispatch(updateMainPlayerEquity({ equity: null }));
+          // Для одного оппонента берём эквити напрямую
+          averageEquity = validResults[0].equity;
         }
-      } catch (error) {
-        console.error("Ошибка при расчете эквити:", error);
+
+        dispatch(updateMainPlayerEquity({ equity: averageEquity }));
+      } else {
         dispatch(updateMainPlayerEquity({ equity: null }));
       }
-    } else {
+    } catch (error) {
+      console.error("Ошибка при расчете эквити:", error);
       dispatch(updateMainPlayerEquity({ equity: null }));
     }
   }, [mainPlayer, allPlayers, dispatch]);
+
   return (
     <div className="hint-equity">
       {mainPlayer ? (

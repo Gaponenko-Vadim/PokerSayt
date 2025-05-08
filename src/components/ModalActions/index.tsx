@@ -12,6 +12,7 @@ import {
 } from "../../Redux/slice/actionLastStackSlice";
 import { PlayerAction, ReduxPlayerAction } from "../type";
 import { getMaxBet } from "../../utilits/getMaxBet";
+import { calculatePercentageRaiseBets } from "../../utilits/calculatePercentageRaiseBets";
 import styles from "./stayle.module.scss";
 
 interface ModalActionsProps {
@@ -46,12 +47,6 @@ const ModalActions: React.FC<ModalActionsProps> = ({ position, onClose }) => {
   // Рассчитываем ставки для рейзов
   const maxBet = getMaxBet(infoPlayers);
   const sumBet = mainPlayers?.sumBet || 0;
-  const coefficients: { [key in "33%" | "50%" | "75%" | "100%"]: number } = {
-    "33%": 0.33,
-    "50%": 0.5,
-    "75%": 0.75,
-    "100%": 1,
-  };
 
   // Определяем, какое условие использовать для выбора опций
   const currentBetValue = parseFloat(currentBet?.replace("BB", "") || "0");
@@ -94,23 +89,13 @@ const ModalActions: React.FC<ModalActionsProps> = ({ position, onClose }) => {
       return Number(betValue.toFixed(1)) + "BB";
     }
     if (["33%", "50%", "75%", "100%"].includes(action)) {
-      const coefficient =
-        coefficients[action as "33%" | "50%" | "75%" | "100%"];
-      const currentBetValue = parseFloat(currentBet?.replace("BB", "") || "0");
-      if (maxBet === currentBetValue) {
-        const betValue = Number(
-          (
-            useLastBet.lostMaxBet +
-            (useLastBet.lostSumBet + useLastBet.lostMaxBet) * coefficient
-          ).toFixed(1)
-        );
-        console.log(`Using last bet for ${action}:`, betValue);
-        return `${betValue}BB`;
-      }
-      const betValue = Number(
-        (maxBet + (sumBet + maxBet) * coefficient).toFixed(1)
+      const key = action.replace("%", "") as "33" | "50" | "75" | "100";
+      const raiseBets = calculatePercentageRaiseBets(
+        maxBet === currentBetValue ? useLastBet.lostMaxBet : maxBet,
+        maxBet === currentBetValue ? useLastBet.lostSumBet : sumBet
       );
-      console.log(`Using maxBet and sumBet for ${action}:`, betValue);
+      const betValue = raiseBets[key];
+      console.log(`Using raiseBets for ${action}:`, betValue);
       return `${betValue}BB`;
     }
     return "0BB";
@@ -145,7 +130,7 @@ const ModalActions: React.FC<ModalActionsProps> = ({ position, onClose }) => {
       // Обновление count
       if (maxBet <= 1) {
         // Первый рейз за столом
-        console.log(`First raise detected, setting count to 1 for ${position}`);
+        // console.log(`First raise detected, setting count to 1 for ${position}`);
         dispatch(
           setPlayerCount({
             position,
@@ -154,11 +139,11 @@ const ModalActions: React.FC<ModalActionsProps> = ({ position, onClose }) => {
         );
       } else {
         // Последующие рейзы
-        console.log(
-          `Checking subsequent raise: betValue=${betValue}, maxBet * 2=${
-            maxBet * 2
-          }`
-        );
+        // console.log(
+        //   `Checking subsequent raise: betValue=${betValue}, maxBet * 2=${
+        //     maxBet * 2
+        //   }`
+        // );
         if (betValue > maxBet * 1.5) {
           const maxBetPlayerPosition = Object.keys(infoPlayers).find((pos) => {
             const playerBet = infoPlayers[pos].bet
@@ -171,9 +156,9 @@ const ModalActions: React.FC<ModalActionsProps> = ({ position, onClose }) => {
           if (maxBetPlayerPosition) {
             const maxBetPlayerCount =
               infoPlayers[maxBetPlayerPosition].count || 0;
-            console.log(
-              `Updating count for ${position}: ${maxBetPlayerCount} + 1 due to bet ${bet} > ${maxBet} * 2`
-            );
+            // console.log(
+            //   `Updating count for ${position}: ${maxBetPlayerCount} + 1 due to bet ${bet} > ${maxBet} * 2`
+            // );
             dispatch(
               setPlayerCount({
                 position,

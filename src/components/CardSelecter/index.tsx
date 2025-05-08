@@ -52,8 +52,7 @@ const CardSelector = () => {
           {card.isSelected && (
             <button
               className={styles.resetIcon}
-              onClick={(e) => {
-                e.stopPropagation(); // Предотвращаем всплытие события
+              onClick={() => {
                 handleResetCard(index);
               }}
             >

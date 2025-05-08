@@ -10,7 +10,7 @@ import {
   PlayerStatus,
   TypeInfoPlayers,
 } from "../../components/type";
-import rages from "../../constants/positionsRanges8maxMtt";
+import { POSITION_RANGES } from "../../constants/pozition_ranges";
 
 // Константы
 const INITIAL_STACK_SIZE = 30;
@@ -18,67 +18,6 @@ const STACK_SIZES: Record<PlayerStack, number> = {
   little: 18,
   middle: 30,
   big: 50,
-};
-
-// Типизация для структуры диапазонов
-interface RangeActions {
-  open: string[];
-  threeBet: string[];
-  fourBet: string[];
-  allIn: string[];
-}
-
-interface Range {
-  middle: RangeActions;
-  little: RangeActions;
-  ultraShort: RangeActions;
-  big: RangeActions;
-}
-
-export const POSITION_RANGES: Record<
-  string,
-  Partial<Record<PlayerStatus, Range>>
-> = {
-  UTG: {
-    standard: rages.utgRangeStandardAverage,
-    tight: rages.utgRangeTightAverage,
-    weak: rages.utgRangeWeakAverage,
-  },
-  "UTG+1": {
-    standard: rages.utg1RangeStandardAverage,
-    tight: rages.utg1RangeTightAverage,
-    weak: rages.utg1RangeWeakAverage,
-  },
-  MP: {
-    standard: rages.mpRangeStandardAverage,
-    tight: rages.mpRangeTightAverage,
-    weak: rages.mpRangeWeakAverage,
-  },
-  "MP+1": {
-    standard: rages.mpPlus1RangeStandardAverage,
-    tight: rages.mpPlus1RangeTightAverage,
-    weak: rages.mpPlus1RangeWeakAverage,
-  },
-  HJ: {
-    standard: rages.hjRangeStandardAverage,
-    tight: rages.hjRangeTightAverage,
-    weak: rages.hjRangeWeakAverage,
-  },
-  BT: {
-    standard: rages.btnRangeStandardAverage,
-    tight: rages.btnRangeTightAverage,
-    weak: rages.btnRangeWeakAverage,
-  },
-  SB: {
-    standard: rages.sbRangeStandardAverage,
-    tight: rages.sbRangeTightAverage,
-    weak: rages.sbRangeWeakAverage,
-  },
-  BB: {
-    standard: rages.bbRangeStandardAverage,
-    tight: rages.bbRangeTightAverage,
-    weak: rages.bbRangeWeakAverage,
-  },
 };
 
 // Начальное состояние
@@ -139,8 +78,10 @@ const getRangeByActionAndCount = (
     } else {
       selectedRange = range[stack].open || [];
     }
+  } else if (action === "call" && (position === "SB" || position === "BB")) {
+    selectedRange = range[stack].defend_open || []; // Используем defend_open для SB и BB при call
   } else {
-    selectedRange = range[stack].open || [];
+    selectedRange = range[stack].open || []; // Для других действий или позиций
   }
 
   return {
