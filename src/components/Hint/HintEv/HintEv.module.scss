@@ -1,0 +1,51 @@
+.evContainer {
+  position: relative;
+  margin: 10px 0;
+}
+
+.evDisplay {
+  display: inline-block;
+  position: relative;
+}
+
+.evValue {
+  cursor: pointer;
+  font-weight: bold;
+  color: #333;
+}
+
+.evTooltip {
+  visibility: hidden;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  z-index: 10;
+  min-width: 200px;
+  opacity: 0;
+  transition: opacity 0.2s, visibility 0.2s;
+
+  h4 {
+    margin: 0 0 5px 0;
+    font-size: 14px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    margin: 5px 0;
+    font-size: 12px;
+  }
+}
+
+.evDisplay:hover .evTooltip {
+  visibility: visible;
+  opacity: 1;
+}

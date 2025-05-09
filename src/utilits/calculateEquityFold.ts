@@ -31,6 +31,8 @@ interface EquityFoldResult {
   AverageEquityVsDefend: number | null;
   BigEquityVsDefend: number | null;
   MaxEquityVsDefend: number | null;
+  FourBetPercentage: number; // Процент fourBet от опена
+  FourBetEquity: number | null; // Новое поле для эквити против fourBet
   hint: string;
 }
 
@@ -52,6 +54,7 @@ export const calculateEquityFold = (
     big: [],
     max: [],
   };
+
   // Определяем позиции, следующие за positionMainPlayer
   if (positionMainPlayer) {
     const standardOrder = [
@@ -179,6 +182,34 @@ export const calculateEquityFold = (
       big: null,
       max: null,
     };
+
+    // Рассчитываем процент fourBet от опена
+    let fourBetPercentage: number = 0;
+    const fourBetRaw = range?.[player.stack]?.fourBet || [];
+    const fourBetCards = fourBetRaw.flatMap((hand: string) =>
+      convertRangeToCards(hand)
+    );
+    // Фильтруем fourBet, исключая комбинации с картами главного игрока
+    const filteredFourBetCards = fourBetCards.filter(
+      (cardPair) => !cardPair.some((card) => mainPlayer.includes(card))
+    );
+    const fourBetCombos = filteredFourBetCards.length;
+    // Рассчитываем процент fourBet от опена
+    if (openCombos > 0) {
+      fourBetPercentage = (fourBetCombos / openCombos) * 100;
+    }
+
+    // Рассчитываем эквити против fourBet
+    let fourBetEquity: number | null = null;
+    if (filteredFourBetCards.length > 0) {
+      try {
+        const result = calculateEquity(mainPlayer, filteredFourBetCards);
+        fourBetEquity = result.equity !== null ? result.equity * 100 : null;
+      } catch (error) {
+        console.error("Ошибка в calculateEquity для fourBet:", error);
+        fourBetEquity = null;
+      }
+    }
 
     // Рассчитываем foldPercentage и equityVsDefend для каждого размера 3-бета
     const raiseResults = raiseSizes.map((raiseSize) => {
@@ -320,6 +351,8 @@ export const calculateEquityFold = (
         equityVsDefend["little"]
           ? equityVsDefend["little"].toFixed(2)
           : "не применимо"
+      }%. Эквити против 4-бет диапазона: ${
+        fourBetEquity ? fourBetEquity.toFixed(2) : "не применимо"
       }%.`;
     }
 
@@ -347,6 +380,10 @@ export const calculateEquityFold = (
       MaxEquityVsDefend: equityVsDefend["max"]
         ? parseFloat((equityVsDefend["max"] / 100).toFixed(2))
         : null,
+      FourBetPercentage: parseFloat(fourBetPercentage.toFixed(2)), // Процент fourBet от опена
+      FourBetEquity: fourBetEquity
+        ? parseFloat((fourBetEquity / 100).toFixed(2))
+        : null, // Эквити против fourBet
       hint,
     };
   });

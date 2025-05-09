@@ -4,6 +4,7 @@ import { PlayerData } from "../../type";
 import { calculateEquityFold } from "../../../utilits/calculateEquityFold";
 import { calculatePercentageRaiseBets } from "../../../utilits/calculatePercentageRaiseBets";
 import { getMaxBet } from "../../../utilits/getMaxBet";
+import styles from "./HintEv.module.scss";
 
 const HintEv = () => {
   const infoPlayers = useSelector(
@@ -32,7 +33,6 @@ const HintEv = () => {
   const findMaxBetPlayerCards = (allPlayers: { [key: string]: PlayerData }) => {
     let maxBet = 0;
 
-    // Находим максимальную ставку
     for (const player of Object.values(allPlayers)) {
       if (player.bet) {
         const currentBet = parseFloat(player.bet);
@@ -42,12 +42,11 @@ const HintEv = () => {
       }
     }
 
-    // Собираем данные игроков с максимальной ставкой
     const maxBetPlayers = Object.values(allPlayers)
       .filter((player) => player.bet && parseFloat(player.bet) === maxBet)
       .map((player) => ({
         position: player.position,
-        cards: player.cards, // cards в формате string[][], например [["2пика", "2черва"]]
+        cards: player.cards,
         status: player.status,
         stack: player.stack,
         stackSize: player.stackSize,
@@ -55,7 +54,6 @@ const HintEv = () => {
         bet: player.bet,
       }));
 
-    // Передаем данные в calculateEquityFold, если mainPlayer и positionMainPlayer определены
     if (
       mainPlayer &&
       Array.isArray(mainPlayer) &&
@@ -68,53 +66,135 @@ const HintEv = () => {
         fullPosition
       );
     }
-    // Возвращаем пустой массив, если mainPlayer или positionMainPlayer отсутствуют
     return [];
   };
 
   const result = findMaxBetPlayerCards(infoPlayers);
-  console.log("моя позиция", positionMainPlayer);
-  const bet = calculatePercentageRaiseBets(maxBet, sumBet);
+
   const ev = (
-    bet: number,
-    FoldPercentage: number,
+    bets: number[],
+    foldPercentages: number[], // Массив вероятностей фолда
+    equityVsDefends: number[], // Массив эквити против диапазона защиты
     mainPlayerBet: string,
     sumBet: number,
-    EquityVsDefend: number,
-    maxBet: number
+    maxBet: number,
+    FourBetPercentage: number,
+    FourBetEquity: number
   ) => {
     const numberPart = parseFloat(mainPlayerBet) - 0.2;
-    return (
-      sumBet * FoldPercentage +
-      (1 - FoldPercentage) *
-        (EquityVsDefend * (sumBet + (bet - numberPart) + (bet - maxBet)) -
-          (bet - numberPart))
-    );
+    const betPercentages = [33, 50, 75, 100];
+
+    const evResults = bets.map((bet, index) => {
+      const FoldPercentage = foldPercentages[index] / 100;
+      const EquityVsDefend = equityVsDefends[index] / 100;
+      const equityFold = sumBet * FoldPercentage;
+
+      const EquityVsDefendPercentage = 1 - FoldPercentage - FourBetPercentage;
+      const EquityVsDefendSum =
+        EquityVsDefend * (sumBet + (bet - numberPart) + (bet - maxBet)) -
+        (bet - numberPart);
+      const fourSumbet = sumBet + bet;
+      const fourBet = calculatePercentageRaiseBets(bet, fourSumbet);
+      const reiseFourBet =
+        FourBetEquity *
+          (fourSumbet + (fourBet[50] - numberPart) + (fourBet[50] - maxBet)) -
+        (fourBet[50] - numberPart);
+
+      const evValue =
+        equityFold +
+        EquityVsDefendPercentage * EquityVsDefendSum +
+        FourBetPercentage * reiseFourBet;
+
+      return {
+        betSize: bet,
+        betPercentage: betPercentages[index],
+        ev: evValue,
+      };
+    });
+
+    return evResults;
   };
 
   return (
     <>
-      {/* Отображаем данные игроков с максимальной ставкой */}
       {result.length > 0 ? (
-        result.map((player, index) => (
-          <div key={index}>
-            {mainPlayerBet && player.AverageEquityVsDefend
+        result.map((player, index) => {
+          const bets = calculatePercentageRaiseBets(maxBet, sumBet);
+          const evResults =
+            mainPlayerBet &&
+            player.LittleFoldPercentage &&
+            player.LittleEquityVsDefend &&
+            player.AverageFoldPercentage &&
+            player.AverageEquityVsDefend &&
+            player.BigFoldPercentage &&
+            player.BigEquityVsDefend &&
+            player.MaxFoldPercentage &&
+            player.MaxEquityVsDefend &&
+            player.FourBetEquity
               ? ev(
-                  bet[50],
-                  player.AverageFoldPercentage / 100,
+                  [bets[33], bets[50], bets[75], bets[100]],
+                  [
+                    player.LittleFoldPercentage,
+                    player.AverageFoldPercentage,
+                    player.BigFoldPercentage,
+                    player.MaxFoldPercentage,
+                  ],
+                  [
+                    player.LittleEquityVsDefend,
+                    player.AverageEquityVsDefend,
+                    player.BigEquityVsDefend,
+                    player.MaxEquityVsDefend,
+                  ],
                   mainPlayerBet,
                   sumBet,
-                  player.AverageEquityVsDefend / 100,
-                  maxBet
-                ).toFixed(2)
-              : null}
-            ЭкветиФолд: {player.AverageFoldPercentage}% Эквити против диапазона
-            защиты:{" "}
-            {player.AverageEquityVsDefend
-              ? `${player.AverageEquityVsDefend}%`
-              : "не применимо"}
-          </div>
-        ))
+                  maxBet,
+                  player.FourBetPercentage / 100,
+                  player.FourBetEquity / 100
+                )
+              : [];
+
+          const maxEv = evResults.reduce(
+            (max, curr) => (curr.ev > max.ev ? curr : max),
+            evResults[0] || { betSize: 0, betPercentage: 0, ev: -Infinity }
+          );
+
+          return (
+            <div key={index} className={styles.evContainer}>
+              <div className={styles.evDisplay}>
+                <span className={styles.evValue}>
+                  {maxEv.betPercentage === 100
+                    ? `100% (${maxEv.betSize}ББ) Ev ${maxEv.ev.toFixed(2)}bb`
+                    : `bet ${maxEv.betPercentage}% (${
+                        maxEv.betSize
+                      }ББ) Ev ${maxEv.ev.toFixed(2)}bb`}
+                </span>
+                <div className={styles.evTooltip}>
+                  <h4>EV для всех размеров ставок:</h4>
+                  <ul>
+                    {evResults.map((result) => (
+                      <li key={result.betPercentage}>
+                        {result.betPercentage === 100
+                          ? `100% (${result.betSize}ББ) Ev ${result.ev.toFixed(
+                              2
+                            )}bb`
+                          : `bet ${result.betPercentage}% (${
+                              result.betSize
+                            }ББ) Ev ${result.ev.toFixed(2)}bb`}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div>
+                ЭкветиФолд: {player.MaxFoldPercentage}% Эквити против
+                {player.AverageEquityVsDefend
+                  ? ` ${player.MaxEquityVsDefend}%`
+                  : "не применимо"}
+              </div>
+              <div></div>
+            </div>
+          );
+        })
       ) : (
         <div>Игроки с максимальными ставками не найдены</div>
       )}
