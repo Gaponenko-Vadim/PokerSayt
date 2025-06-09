@@ -1,3 +1,4 @@
+import styles from "./stayle.module.scss";
 import React, { useState, useEffect } from "react";
 import { RootState } from "../../Redux/store";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,7 +14,6 @@ import {
 import { PlayerAction, ReduxPlayerAction } from "../type";
 import { getMaxBet } from "../../utilits/getMaxBet";
 import { calculatePercentageRaiseBets } from "../../utilits/calculatePercentageRaiseBets";
-import styles from "./stayle.module.scss";
 
 interface ModalActionsProps {
   position: string;
@@ -30,6 +30,7 @@ const ModalActions: React.FC<ModalActionsProps> = ({ position, onClose }) => {
   const useLastBet = useSelector(
     (state: RootState) => state.actionLastStackSlice
   );
+
   const dispatch = useDispatch();
   const currentBet = infoPlayers[position]?.bet || null;
   const baseActions = ["fold", "call", "raise", "allin"] as const;
@@ -54,16 +55,16 @@ const ModalActions: React.FC<ModalActionsProps> = ({ position, onClose }) => {
     maxBet === currentBetValue ? useLastBet.hasRaise : hasRaise;
 
   // Отладка входных данных
-  console.log("infoPlayers:", infoPlayers);
-  console.log("mainPlayers:", mainPlayers);
-  console.log("maxBet:", maxBet, "sumBet:", sumBet, "currentBet:", currentBet);
-  console.log("useLastBet:", useLastBet);
-  console.log(
-    "hasRaise:",
-    hasRaise,
-    "raiseOptionsCondition:",
-    raiseOptionsCondition
-  );
+  // console.log("infoPlayers:", infoPlayers);
+  // console.log("mainPlayers:", mainPlayers);
+  // console.log("maxBet:", maxBet, "sumBet:", sumBet, "currentBet:", currentBet);
+  // console.log("useLastBet:", useLastBet);
+  // console.log(
+  //   "hasRaise:",
+  //   hasRaise,
+  //   "raiseOptionsCondition:",
+  //   raiseOptionsCondition
+  // );
 
   // Отслеживание изменений useLastBet
   useEffect(() => {

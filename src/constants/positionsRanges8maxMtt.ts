@@ -232,6 +232,7 @@ export const utgRangeStandardAverage = {
       "KQo",
     ],
     threeBet: [], // Не применимо для <10 BB (пуш или фолд)
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -344,6 +345,36 @@ export const utgRangeStandardAverage = {
       "KJo",
       "KQo",
     ],
+    threeBet: [
+      // Пары
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "ATs",
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки
+      "AQo",
+      "AKo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью)
+      "AKs",
+      // Несьютовые руки (велью)
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "66",
@@ -417,26 +448,6 @@ export const utgRangeStandardAverage = {
       // Сьютовые руки
       "AQs",
       "AKs",
-    ],
-    threeBet: [
-      // Пары
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "ATs",
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      // Несьютовые руки
-      "AQo",
-      "AKo",
     ],
     fourBet: [
       // Пары
@@ -503,6 +514,37 @@ export const utgRangeStandardAverage = {
       "AKo",
       "KQo",
     ],
+    threeBet: [
+      // Пары
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки
+      "AQo",
+      "AKo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блеф)
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки (велью)
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "66",
@@ -580,24 +622,6 @@ export const utgRangeStandardAverage = {
       "AQs",
       "AKs",
       // Несьютовые руки
-      "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      // Несьютовые руки
-      "AQo",
       "AKo",
     ],
     fourBet: [
@@ -676,6 +700,41 @@ export const utgRangeStandardAverage = {
       "KQo",
       "QJo",
     ],
+    threeBet: [
+      // Пары
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "ATs",
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      // Несьютовые руки
+      "AQo",
+      "AKo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блеф)
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки (велью)
+      "AQo",
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "66",
@@ -765,27 +824,6 @@ export const utgRangeStandardAverage = {
       // Несьютовые руки
       "AKo",
     ],
-    threeBet: [
-      // Пары
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "ATs",
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      // Несьютовые руки
-      "AQo",
-      "AKo",
-    ],
     fourBet: [
       // Пары
       "JJ",
@@ -832,6 +870,7 @@ export const utgRangeTightAverage = {
       "AKo",
     ],
     threeBet: [], // Не применимо для <10 BB (пуш или фолд)
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -881,6 +920,31 @@ export const utgRangeTightAverage = {
       "AQo",
       "AKo",
     ],
+    threeBet: [
+      // Пары
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки
+      "AKo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью)
+      "AKs",
+      // Несьютовые руки (велью)
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "88",
@@ -937,21 +1001,6 @@ export const utgRangeTightAverage = {
       "AA",
       // Сьютовые руки
       "AKs",
-    ],
-    threeBet: [
-      // Пары
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AQs",
-      "AKs",
-      "KQs",
-      // Несьютовые руки
-      "AKo",
     ],
     fourBet: [
       // Пары
@@ -993,6 +1042,31 @@ export const utgRangeTightAverage = {
       "AQo",
       "AKo",
     ],
+    threeBet: [
+      // Пары
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки
+      "AKo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блеф)
+      "AKs",
+      "KQs",
+      // Несьютовые руки (велью)
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "88",
@@ -1049,20 +1123,6 @@ export const utgRangeTightAverage = {
       "AA",
       // Сьютовые руки
       "AKs",
-    ],
-    threeBet: [
-      // Пары
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AQs",
-      "AKs",
-      "KQs",
-      // Несьютовые руки
-      "AKo",
     ],
     fourBet: [
       // Пары
@@ -1107,6 +1167,31 @@ export const utgRangeTightAverage = {
       "AKo",
       "KQo",
     ],
+    threeBet: [
+      // Пары
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки
+      "AKo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блеф)
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки (велью)
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "88",
@@ -1167,19 +1252,6 @@ export const utgRangeTightAverage = {
       "AA",
       // Сьютовые руки
       "AKs",
-      // Несьютовые руки
-      "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AQs",
-      "AKs",
-      "KQs",
       // Несьютовые руки
       "AKo",
     ],
@@ -1271,6 +1343,7 @@ export const utgRangeWeakAverage = {
       "JTo",
     ],
     threeBet: [], // Не применимо для <10 BB (пуш или фолд)
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -1403,6 +1476,43 @@ export const utgRangeWeakAverage = {
       "QJo",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      // Несьютовые руки
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      // Несьютовые руки (велью)
+      "AQo",
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "66",
@@ -1492,27 +1602,6 @@ export const utgRangeWeakAverage = {
       "AKs",
       // Несьютовые руки
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      // Несьютовые руки
-      "AQo",
-      "AKo",
-      "KQo",
     ],
     fourBet: [
       // Пары
@@ -1600,6 +1689,42 @@ export const utgRangeWeakAverage = {
       "QJo",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      // Несьютовые руки
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      // Несьютовые руки (велью)
+      "AQo",
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "66",
@@ -1689,26 +1814,6 @@ export const utgRangeWeakAverage = {
       "AKs",
       // Несьютовые руки
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      // Несьютовые руки
-      "AQo",
-      "AKo",
-      "KQo",
     ],
     fourBet: [
       // Пары
@@ -1805,6 +1910,44 @@ export const utgRangeWeakAverage = {
       "J9o",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      // Несьютовые руки
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      // Несьютовые руки (велью + блеф)
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "66",
@@ -1912,27 +2055,6 @@ export const utgRangeWeakAverage = {
       "AKs",
       // Несьютовые руки
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      // Несьютовые руки
-      "AQo",
-      "AKo",
-      "KQo",
     ],
     fourBet: [
       // Пары
@@ -2031,6 +2153,7 @@ export const utg1RangeStandardAverage = {
       "JTo",
     ],
     threeBet: [], // Не применимо для <10 BB (пуш или фолд)
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -2161,6 +2284,42 @@ export const utg1RangeStandardAverage = {
       "QJo",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      // Несьютовые руки
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      // Несьютовые руки (велью)
+      "AQo",
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "66",
@@ -2250,27 +2409,6 @@ export const utg1RangeStandardAverage = {
       "AKs",
       // Несьютовые руки
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      // Несьютовые руки
-      "AQo",
-      "AKo",
-      "KQo",
     ],
     fourBet: [
       // Пары
@@ -2347,6 +2485,42 @@ export const utg1RangeStandardAverage = {
       "KQo",
       "QJo",
     ],
+    threeBet: [
+      // Пары
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      // Несьютовые руки
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      // Несьютовые руки (велью)
+      "AQo",
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "66",
@@ -2436,26 +2610,6 @@ export const utg1RangeStandardAverage = {
       "AKs",
       // Несьютовые руки
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      // Несьютовые руки
-      "AQo",
-      "AKo",
-      "KQo",
     ],
     fourBet: [
       // Пары
@@ -2543,6 +2697,44 @@ export const utg1RangeStandardAverage = {
       "J9o",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      // Несьютовые руки
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      // Несьютовые руки (велью + блеф)
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "66",
@@ -2650,27 +2842,6 @@ export const utg1RangeStandardAverage = {
       // Несьютовые руки
       "AKo",
     ],
-    threeBet: [
-      // Пары
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      // Несьютовые руки
-      "AQo",
-      "AKo",
-      "KQo",
-    ],
     fourBet: [
       // Пары
       "JJ",
@@ -2719,6 +2890,7 @@ export const utg1RangeTightAverage = {
       "AKo",
     ],
     threeBet: [], // Не применимо для <10 BB (пуш или фолд)
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -2774,6 +2946,32 @@ export const utg1RangeTightAverage = {
       "AQo",
       "AKo",
     ],
+    threeBet: [
+      // Пары
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки
+      "AKo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью)
+      "AKs",
+      // Несьютовые руки (велью)
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "77",
@@ -2835,22 +3033,6 @@ export const utg1RangeTightAverage = {
       "AA",
       // Сьютовые руки
       "AKs",
-    ],
-    threeBet: [
-      // Пары
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AQs",
-      "AKs",
-      "KQs",
-      // Несьютовые руки
-      "AKo",
     ],
     fourBet: [
       // Пары
@@ -2896,6 +3078,31 @@ export const utg1RangeTightAverage = {
       "AQo",
       "AKo",
     ],
+    threeBet: [
+      // Пары
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки
+      "AKo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью)
+      "AKs",
+      // Несьютовые руки (велью)
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "77",
@@ -2957,21 +3164,6 @@ export const utg1RangeTightAverage = {
       "AA",
       // Сьютовые руки
       "AKs",
-    ],
-    threeBet: [
-      // Пары
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AQs",
-      "AKs",
-      "KQs",
-      // Несьютовые руки
-      "AKo",
     ],
     fourBet: [
       // Пары
@@ -3021,6 +3213,33 @@ export const utg1RangeTightAverage = {
       "AKo",
       "KQo",
     ],
+    threeBet: [
+      // Пары
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки
+      "AKo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + редкий блеф)
+      "AQs",
+      "AKs",
+      // Несьютовые руки (велью)
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "77",
@@ -3091,22 +3310,6 @@ export const utg1RangeTightAverage = {
       "AA",
       // Сьютовые руки
       "AKs",
-      // Несьютовые руки
-      "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AQs",
-      "AKs",
-      "KQs",
       // Несьютовые руки
       "AKo",
     ],
@@ -3208,6 +3411,7 @@ export const utg1RangeWeakAverage = {
       "JTo",
     ],
     threeBet: [], // Не применимо для <10 BB (пуш или фолд)
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -3363,6 +3567,50 @@ export const utg1RangeWeakAverage = {
       "J9o",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки (велью + блефы)
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "55",
@@ -3470,30 +3718,6 @@ export const utg1RangeWeakAverage = {
       "AKs",
       // Несьютовые руки
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      "JTs",
-      // Несьютовые руки
-      "AJo",
-      "AQo",
-      "AKo",
-      "KQo",
     ],
     fourBet: [
       // Пары
@@ -3590,6 +3814,49 @@ export const utg1RangeWeakAverage = {
       "J9o",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки (велью + блефы)
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "55",
@@ -3697,29 +3964,6 @@ export const utg1RangeWeakAverage = {
       "AKs",
       // Несьютовые руки
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      "JTs",
-      // Несьютовые руки
-      "AJo",
-      "AQo",
-      "AKo",
-      "KQo",
     ],
     fourBet: [
       // Пары
@@ -3827,6 +4071,49 @@ export const utg1RangeWeakAverage = {
       "J9o",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки (велью + блефы)
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "55",
@@ -3955,29 +4242,6 @@ export const utg1RangeWeakAverage = {
       // Несьютовые руки
       "AKo",
     ],
-    threeBet: [
-      // Пары
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      "JTs",
-      // Несьютовые руки
-      "AJo",
-      "AQo",
-      "AKo",
-      "KQo",
-    ],
     fourBet: [
       // Пары
       "QQ",
@@ -4082,6 +4346,7 @@ export const mpRangeStandardAverage = {
       "JTo",
     ],
     threeBet: [], // Не применимо для <10 BB (пуш или фолд)
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -4232,6 +4497,47 @@ export const mpRangeStandardAverage = {
       "J9o",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      // Несьютовые руки (велью)
+      "AQo",
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "55",
@@ -4339,30 +4645,6 @@ export const mpRangeStandardAverage = {
       "AKs",
       // Несьютовые руки
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      "JTs",
-      // Несьютовые руки
-      "AJo",
-      "AQo",
-      "AKo",
-      "KQo",
     ],
     fourBet: [
       // Пары
@@ -4459,6 +4741,48 @@ export const mpRangeStandardAverage = {
       "QJo",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки (велью)
+      "AQo",
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "55",
@@ -4566,30 +4890,6 @@ export const mpRangeStandardAverage = {
       "AKs",
       // Несьютовые руки
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      "JTs",
-      // Несьютовые руки
-      "AJo",
-      "AQo",
-      "AKo",
-      "KQo",
     ],
     fourBet: [
       // Пары
@@ -4696,6 +4996,49 @@ export const mpRangeStandardAverage = {
       "J9o",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки (велью + блефы)
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "55",
@@ -4824,30 +5167,6 @@ export const mpRangeStandardAverage = {
       // Несьютовые руки
       "AKo",
     ],
-    threeBet: [
-      // Пары
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      "JTs",
-      // Несьютовые руки
-      "AJo",
-      "AQo",
-      "AKo",
-      "KQo",
-    ],
     fourBet: [
       // Пары
       "JJ",
@@ -4906,6 +5225,7 @@ export const mpRangeTightAverage = {
       "AKo",
     ],
     threeBet: [], // Не применимо для <10 BB (пуш или фолд)
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -4974,6 +5294,34 @@ export const mpRangeTightAverage = {
       "AKo",
       "KQo",
     ],
+    threeBet: [
+      // Пары
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки
+      "AKo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью)
+      "AQs",
+      "AKs",
+      // Несьютовые руки (велью)
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "66",
@@ -5046,23 +5394,6 @@ export const mpRangeTightAverage = {
       // Сьютовые руки
       "AQs",
       "AKs",
-    ],
-    threeBet: [
-      // Пары
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AQs",
-      "AKs",
-      "KQs",
-      // Несьютовые руки
-      "AKo",
     ],
     fourBet: [
       // Пары
@@ -5116,6 +5447,34 @@ export const mpRangeTightAverage = {
       "AKo",
       "KQo",
     ],
+    threeBet: [
+      // Пары
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки
+      "AKo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + минимальный блеф)
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки (велью)
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "66",
@@ -5188,22 +5547,6 @@ export const mpRangeTightAverage = {
       // Сьютовые руки
       "AQs",
       "AKs",
-    ],
-    threeBet: [
-      // Пары
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AQs",
-      "AKs",
-      "KQs",
-      // Несьютовые руки
-      "AKo",
     ],
     fourBet: [
       // Пары
@@ -5266,6 +5609,35 @@ export const mpRangeTightAverage = {
       "KJo",
       "KQo",
     ],
+    threeBet: [
+      // Пары
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки
+      "AKo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + минимальный блеф)
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки (велью)
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "66",
@@ -5349,23 +5721,6 @@ export const mpRangeTightAverage = {
       // Сьютовые руки
       "AQs",
       "AKs",
-      // Несьютовые руки
-      "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AQs",
-      "AKs",
-      "KQs",
       // Несьютовые руки
       "AKo",
     ],
@@ -5478,6 +5833,7 @@ export const mpRangeWeakAverage = {
       "JTo",
     ],
     threeBet: [], // Не применимо для <10 BB (пуш или фолд)
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -5652,6 +6008,49 @@ export const mpRangeWeakAverage = {
       "J9o",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      // Несьютовые руки (велью + блефы)
+      "AJo",
+      "AQo",
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "44",
@@ -5780,31 +6179,6 @@ export const mpRangeWeakAverage = {
       "AKs",
       // Несьютовые руки
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      "JTs",
-      // Несьютовые руки
-      "AJo",
-      "AQo",
-      "AKo",
-      "KQo",
     ],
     fourBet: [
       // Пары
@@ -5909,6 +6283,49 @@ export const mpRangeWeakAverage = {
       "J9o",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки (велью + блефы)
+      "AJo",
+      "AQo",
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "44",
@@ -6037,30 +6454,6 @@ export const mpRangeWeakAverage = {
       "AKs",
       // Несьютовые руки
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      "JTs",
-      // Несьютовые руки
-      "AJo",
-      "AQo",
-      "AKo",
-      "KQo",
     ],
     fourBet: [
       // Пары
@@ -6178,6 +6571,50 @@ export const mpRangeWeakAverage = {
       "J9o",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки (велью + блефы)
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "44",
@@ -6329,30 +6766,6 @@ export const mpRangeWeakAverage = {
       "AKs",
       // Несьютовые руки
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      "JTs",
-      // Несьютовые руки
-      "AJo",
-      "AQo",
-      "AKo",
-      "KQo",
     ],
     fourBet: [
       // Пары
@@ -6467,6 +6880,7 @@ export const mpPlus1RangeStandardAverage = {
       "JTo",
     ],
     threeBet: [], // Не применимо для <10 BB (пуш или фолд)
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -6638,6 +7052,46 @@ export const mpPlus1RangeStandardAverage = {
       "J9o",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + минимальный блеф)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки (велью)
+      "AQo",
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "44",
@@ -6766,31 +7220,6 @@ export const mpPlus1RangeStandardAverage = {
       "AKs",
       // Несьютовые руки
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      "JTs",
-      // Несьютовые руки
-      "AJo",
-      "AQo",
-      "AKo",
-      "KQo",
     ],
     fourBet: [
       // Пары
@@ -6897,6 +7326,47 @@ export const mpPlus1RangeStandardAverage = {
       "J9o",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      // Несьютовые руки (велью)
+      "AQo",
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "44",
@@ -7025,31 +7495,6 @@ export const mpPlus1RangeStandardAverage = {
       "AKs",
       // Несьютовые руки
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      "JTs",
-      // Несьютовые руки
-      "AJo",
-      "AQo",
-      "AKo",
-      "KQo",
     ],
     fourBet: [
       // Пары
@@ -7163,6 +7608,48 @@ export const mpPlus1RangeStandardAverage = {
       "J9o",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки (велью)
+      "AQo",
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "44",
@@ -7312,31 +7799,6 @@ export const mpPlus1RangeStandardAverage = {
       // Несьютовые руки
       "AKo",
     ],
-    threeBet: [
-      // Пары
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      "JTs",
-      // Несьютовые руки
-      "AJo",
-      "AQo",
-      "AKo",
-      "KQo",
-    ],
     fourBet: [
       // Пары
       "QQ",
@@ -7399,6 +7861,7 @@ export const mpPlus1RangeTightAverage = {
       "AKo",
     ],
     threeBet: [], // Не применимо для <10 BB (пуш или фолд)
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -7479,6 +7942,35 @@ export const mpPlus1RangeTightAverage = {
       "KJo",
       "KQo",
     ],
+    threeBet: [
+      // Пары
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки
+      "AKo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью)
+      "AQs",
+      "AKs",
+      // Несьютовые руки (велью)
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "55",
@@ -7564,24 +8056,6 @@ export const mpPlus1RangeTightAverage = {
       // Сьютовые руки
       "AQs",
       "AKs",
-    ],
-    threeBet: [
-      // Пары
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AQs",
-      "AKs",
-      "KQs",
-      // Несьютовые руки
-      "AKo",
     ],
     fourBet: [
       // Пары
@@ -7645,6 +8119,34 @@ export const mpPlus1RangeTightAverage = {
       "KJo",
       "KQo",
     ],
+    threeBet: [
+      // Пары
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки
+      "AKo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью)
+      "AQs",
+      "AKs",
+      // Несьютовые руки (велью)
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "55",
@@ -7730,23 +8232,6 @@ export const mpPlus1RangeTightAverage = {
       // Сьютовые руки
       "AQs",
       "AKs",
-    ],
-    threeBet: [
-      // Пары
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AQs",
-      "AKs",
-      "KQs",
-      // Несьютовые руки
-      "AKo",
     ],
     fourBet: [
       // Пары
@@ -7818,6 +8303,36 @@ export const mpPlus1RangeTightAverage = {
       "KJo",
       "KQo",
     ],
+    threeBet: [
+      // Пары
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки
+      "AKo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + минимальный блеф)
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки (велью)
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "55",
@@ -7914,24 +8429,6 @@ export const mpPlus1RangeTightAverage = {
       // Сьютовые руки
       "AQs",
       "AKs",
-      // Несьютовые руки
-      "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AQs",
-      "AKs",
-      "KQs",
       // Несьютовые руки
       "AKo",
     ],
@@ -8054,6 +8551,7 @@ export const mpPlus1RangeWeakAverage = {
       "JTo",
     ],
     threeBet: [], // Не применимо для <10 BB (пуш или фолд)
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -8425,6 +8923,24 @@ export const mpPlus1RangeWeakAverage = {
       "AKo",
       "KQo",
     ],
+    multiThreeBet: [
+      // Пары (велью)
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "QJs",
+      "JTs",
+      "T9s",
+      // Несьютовые руки (велью)
+      "AQo",
+      "AKo",
+    ],
     fourBet: [
       // Пары
       "QQ",
@@ -8715,6 +9231,24 @@ export const mpPlus1RangeWeakAverage = {
       "AQo",
       "AKo",
       "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "QJs",
+      "JTs",
+      "T9s",
+      // Несьютовые руки (велью)
+      "AQo",
+      "AKo",
     ],
     fourBet: [
       // Пары
@@ -9043,6 +9577,24 @@ export const mpPlus1RangeWeakAverage = {
       "AKo",
       "KQo",
     ],
+    multiThreeBet: [
+      // Пары (велью)
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "QJs",
+      "JTs",
+      "T9s",
+      // Несьютовые руки (велью)
+      "AQo",
+      "AKo",
+    ],
     fourBet: [
       // Пары
       "QQ",
@@ -9069,7 +9621,7 @@ export const mpPlus1RangeWeakAverage = {
     ],
   },
 };
-//////////////////////////
+//////////////////////////тут остоновился
 export const hjRangeStandardAverage = {
   // Ультракороткий стек (<10 BB)
   ultraShort: {
@@ -9169,6 +9721,7 @@ export const hjRangeStandardAverage = {
       "JTo",
     ],
     threeBet: [], // Не применимо для <10 BB (пуш или фолд)
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -9363,6 +9916,50 @@ export const hjRangeStandardAverage = {
       "J9o",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "44",
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      // Несьютовые руки (велью)
+      "AJo",
+      "AQo",
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "33",
@@ -9511,34 +10108,8 @@ export const hjRangeStandardAverage = {
       // Сьютовые руки
       "AQs",
       "AKs",
-      // Несьютные руки
-      "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "44",
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      "JTs",
       // Несьютовые руки
-      "AJo",
-      "AQo",
       "AKo",
-      "KQo",
     ],
     fourBet: [
       // Пары
@@ -9657,6 +10228,51 @@ export const hjRangeStandardAverage = {
       "J9o",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "44",
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки (велью)
+      "AJo",
+      "AQo",
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "33",
@@ -9807,32 +10423,6 @@ export const hjRangeStandardAverage = {
       "AKs",
       // Несьютовые руки
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "44",
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      "JTs",
-      // Несьютовые руки
-      "AJo",
-      "AQo",
-      "AKo",
-      "KQo",
     ],
     fourBet: [
       // Пары
@@ -9958,6 +10548,52 @@ export const hjRangeStandardAverage = {
       "J9o",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "44",
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью + блеф)
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки (велью)
+      "AJo",
+      "AQo",
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "33",
@@ -10125,32 +10761,6 @@ export const hjRangeStandardAverage = {
       // Несьютовые руки
       "AKo",
     ],
-    threeBet: [
-      // Пары
-      "44",
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      "JTs",
-      // Несьютовые руки
-      "AJo",
-      "AQo",
-      "AKo",
-      "KQo",
-    ],
     fourBet: [
       // Пары
       "QQ",
@@ -10217,6 +10827,7 @@ export const hjRangeTightAverage = {
       "AKo",
     ],
     threeBet: [], // Не применимо для <10 BB (пуш или фолд)
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -10307,6 +10918,35 @@ export const hjRangeTightAverage = {
       "KJo",
       "KQo",
     ],
+    threeBet: [
+      // Пары
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки
+      "AKo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью)
+      "AKs",
+      // Несьютовые руки (велью)
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "44",
@@ -10405,25 +11045,6 @@ export const hjRangeTightAverage = {
       // Сьютовые руки
       "AQs",
       "AKs",
-    ],
-    threeBet: [
-      // Пары
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AQs",
-      "AKs",
-      "KQs",
-      // Несьютовые руки
-      "AKo",
     ],
     fourBet: [
       // Пары
@@ -10495,6 +11116,35 @@ export const hjRangeTightAverage = {
       "KJo",
       "KQo",
     ],
+    threeBet: [
+      // Пары
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки
+      "AKo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью)
+      "AQs",
+      "AKs",
+      // Несьютовые руки (велью)
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "44",
@@ -10593,24 +11243,6 @@ export const hjRangeTightAverage = {
       // Сьютовые руки
       "AQs",
       "AKs",
-    ],
-    threeBet: [
-      // Пары
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AQs",
-      "AKs",
-      "KQs",
-      // Несьютовые руки
-      "AKo",
     ],
     fourBet: [
       // Пары
@@ -10689,6 +11321,37 @@ export const hjRangeTightAverage = {
       "KJo",
       "KQo",
     ],
+    threeBet: [
+      // Пары
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки
+      "AKo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блеф)
+      "AQs",
+      "AKs",
+      "KQs",
+      // Несьютовые руки (велью)
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "44",
@@ -10797,25 +11460,6 @@ export const hjRangeTightAverage = {
       // Сьютовые руки
       "AQs",
       "AKs",
-      // Несьютовые руки
-      "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AQs",
-      "AKs",
-      "KQs",
       // Несьютовые руки
       "AKo",
     ],
@@ -10952,6 +11596,7 @@ export const hjRangeWeakAverage = {
       "JTo",
     ],
     threeBet: [], // Не применимо для <10 BB (пуш или фолд)
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -11174,6 +11819,53 @@ export const hjRangeWeakAverage = {
       "J9o",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "33",
+      "44",
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки (велью + блефы)
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "33",
@@ -11339,33 +12031,6 @@ export const hjRangeWeakAverage = {
       "AKs",
       // Несьютовые руки
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "33",
-      "44",
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      "JTs",
-      // Несьютовые руки
-      "AJo",
-      "AQo",
-      "AKo",
-      "KQo",
     ],
     fourBet: [
       // Пары
@@ -11495,6 +12160,52 @@ export const hjRangeWeakAverage = {
       "J9o",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "44",
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки (велью + блефы)
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "33",
@@ -11660,32 +12371,6 @@ export const hjRangeWeakAverage = {
       "AKs",
       // Несьютовые руки
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "44",
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      "JTs",
-      // Несьютовые руки
-      "AJo",
-      "AQo",
-      "AKo",
-      "KQo",
     ],
     fourBet: [
       // Пары
@@ -11804,7 +12489,7 @@ export const hjRangeWeakAverage = {
       "AJo",
       "AQo",
       "AKo",
-      "K4o",
+      "K obej4o",
       "K5o",
       "K6o",
       "K7o",
@@ -11826,6 +12511,52 @@ export const hjRangeWeakAverage = {
       "J8o",
       "J9o",
       "JTo",
+    ],
+    threeBet: [
+      // Пары
+      "44",
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки (велью + блефы)
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
     ],
     defendThreeBetLittle: [
       // Пары
@@ -12015,32 +12746,6 @@ export const hjRangeWeakAverage = {
       "AKs",
       // Несьютовые руки
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "44",
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      "JTs",
-      // Несьютовые руки
-      "AJo",
-      "AQo",
-      "AKo",
-      "KQo",
     ],
     fourBet: [
       // Пары
@@ -12184,6 +12889,7 @@ export const btnRangeStandardAverage = {
       "JTo",
     ],
     threeBet: [], // Не применимо для <10 BB (пуш или фолд)
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -12419,6 +13125,51 @@ export const btnRangeStandardAverage = {
       "J9o",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "33",
+      "44",
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + минимальные блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      // Несьютовые руки (велью)
+      "AJo",
+      "AQo",
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "33",
@@ -12584,33 +13335,6 @@ export const btnRangeStandardAverage = {
       "AKs",
       // Несьютовые руки
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "33",
-      "44",
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      "JTs",
-      // Несьютовые руки
-      "AJo",
-      "AQo",
-      "AKo",
-      "KQo",
     ],
     fourBet: [
       // Пары
@@ -12757,6 +13481,52 @@ export const btnRangeStandardAverage = {
       "J9o",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "33",
+      "44",
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки (велью)
+      "AJo",
+      "AQo",
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "33",
@@ -12922,33 +13692,6 @@ export const btnRangeStandardAverage = {
       "AKs",
       // Несьютовые руки
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "33",
-      "44",
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      "JTs",
-      // Несьютовые руки
-      "AJo",
-      "AQo",
-      "AKo",
-      "KQo",
     ],
     fourBet: [
       // Пары
@@ -13098,6 +13841,53 @@ export const btnRangeStandardAverage = {
       "J9o",
       "JTo",
     ],
+    threeBet: [
+      // Пары
+      "33",
+      "44",
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KQs",
+      "QJs",
+      "JTs",
+      // Несьютовые руки (велью + блефы)
+      "AJo",
+      "AQo",
+      "AKo",
+      "KQo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "33",
@@ -13282,33 +14072,6 @@ export const btnRangeStandardAverage = {
       // Несьютовые руки
       "AKo",
     ],
-    threeBet: [
-      // Пары
-      "33",
-      "44",
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AJs",
-      "AQs",
-      "AKs",
-      "KQs",
-      "QJs",
-      "JTs",
-      // Несьютовые руки
-      "AJo",
-      "AQo",
-      "AKo",
-      "KQo",
-    ],
     fourBet: [
       // Пары
       "QQ",
@@ -13400,6 +14163,7 @@ export const btnRangeTightAverage = {
       "KQo",
     ],
     threeBet: [], // Не применимо для <10 BB (пуш или фолд)
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -13536,6 +14300,33 @@ export const btnRangeTightAverage = {
       "QTo",
       "QJo",
     ],
+    threeBet: [
+      // Пары
+      "44",
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AQs",
+      "AKs",
+      "KQs",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью)
+      "AQs",
+      "AKs",
+    ],
     defendThreeBetLittle: [
       // Пары
       "33",
@@ -13664,24 +14455,6 @@ export const btnRangeTightAverage = {
       // Сьютовые руки
       "AQs",
       "AKs",
-    ],
-    threeBet: [
-      // Пары
-      "44",
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AQs",
-      "AKs",
-      "KQs",
     ],
     fourBet: [
       // Пары
@@ -13770,6 +14543,33 @@ export const btnRangeTightAverage = {
       "QTo",
       "QJo",
     ],
+    threeBet: [
+      // Пары
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AQs",
+      "AKs",
+      "KQs",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + минимальный блеф)
+      "AQs",
+      "AKs",
+      "KQs",
+    ],
     defendThreeBetLittle: [
       // Пары
       "33",
@@ -13898,23 +14698,6 @@ export const btnRangeTightAverage = {
       // Сьютовые руки
       "AQs",
       "AKs",
-    ],
-    threeBet: [
-      // Пары
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AQs",
-      "AKs",
-      "KQs",
     ],
     fourBet: [
       // Пары
@@ -14009,6 +14792,34 @@ export const btnRangeTightAverage = {
       "QTo",
       "QJo",
     ],
+    threeBet: [
+      // Пары
+      "44",
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "AQs",
+      "AKs",
+      "KQs",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + минимальный блеф)
+      "AQs",
+      "AKs",
+      "KQs",
+    ],
     defendThreeBetLittle: [
       // Пары
       "33",
@@ -14148,24 +14959,6 @@ export const btnRangeTightAverage = {
       // Сьютовые руки
       "AQs",
       "AKs",
-    ],
-    threeBet: [
-      // Пары
-      "44",
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "AQs",
-      "AKs",
-      "KQs",
     ],
     fourBet: [
       // Пары
@@ -14365,6 +15158,7 @@ export const btnRangeWeakAverage = {
       "32o",
     ],
     threeBet: [], // Не применимо для <10 BB
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -14719,6 +15513,74 @@ export const btnRangeWeakAverage = {
       "43o",
       "32o",
     ],
+    threeBet: [
+      // Пары
+      "22",
+      "33",
+      "44",
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "A9s",
+      "ATs",
+      "AJs",
+      "AQs",
+      "AKs",
+      "K9s",
+      "KTs",
+      "KJs",
+      "KQs",
+      "Q9s",
+      "QTs",
+      "QJs",
+      "J9s",
+      "JTs",
+      "T9s",
+      // Несьютовые руки
+      "A9o",
+      "ATo",
+      "AJo",
+      "AQo",
+      "AKo",
+      "K9o",
+      "KTo",
+      "KJo",
+      "KQo",
+      "Q9o",
+      "QTo",
+      "QJo",
+      "J9o",
+      "JTo",
+      "T9o",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AQs",
+      "AKs",
+      "K9s",
+      "QTs",
+      "JTs",
+      "T9s",
+      // Несьютовые руки (велью + блефы)
+      "AQo",
+      "AKo",
+      "K9o",
+      "QTo",
+      "JTo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "22",
@@ -14947,54 +15809,6 @@ export const btnRangeWeakAverage = {
       "AJo",
       "AQo",
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "22",
-      "33",
-      "44",
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "A9s",
-      "ATs",
-      "AJs",
-      "AQs",
-      "AKs",
-      "K9s",
-      "KTs",
-      "KJs",
-      "KQs",
-      "Q9s",
-      "QTs",
-      "QJs",
-      "J9s",
-      "JTs",
-      "T9s",
-      // Несьютовые руки
-      "A9o",
-      "ATo",
-      "AJo",
-      "AQo",
-      "AKo",
-      "K9o",
-      "KTo",
-      "KJo",
-      "KQo",
-      "Q9o",
-      "QTo",
-      "QJo",
-      "J9o",
-      "JTo",
-      "T9o",
     ],
     fourBet: [
       // Пары
@@ -15199,6 +16013,74 @@ export const btnRangeWeakAverage = {
       "43o",
       "32o",
     ],
+    threeBet: [
+      // Пары
+      "22",
+      "33",
+      "44",
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "A9s",
+      "ATs",
+      "AJs",
+      "AQs",
+      "AKs",
+      "K9s",
+      "KTs",
+      "KJs",
+      "KQs",
+      "Q9s",
+      "QTs",
+      "QJs",
+      "J9s",
+      "JTs",
+      "T9s",
+      // Несьютовые руки
+      "A9o",
+      "ATo",
+      "AJo",
+      "AQo",
+      "AKo",
+      "K9o",
+      "KTo",
+      "KJo",
+      "KQo",
+      "Q9o",
+      "QTo",
+      "QJo",
+      "J9o",
+      "JTo",
+      "T9o",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AQs",
+      "AKs",
+      "K9s",
+      "QTs",
+      "JTs",
+      "T9s",
+      // Несьютовые руки (велью + блефы)
+      "AQo",
+      "AKo",
+      "K9o",
+      "QTo",
+      "JTo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "22",
@@ -15427,54 +16309,6 @@ export const btnRangeWeakAverage = {
       "AJo",
       "AQo",
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "22",
-      "33",
-      "44",
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "A9s",
-      "ATs",
-      "AJs",
-      "AQs",
-      "AKs",
-      "K9s",
-      "KTs",
-      "KJs",
-      "KQs",
-      "Q9s",
-      "QTs",
-      "QJs",
-      "J9s",
-      "JTs",
-      "T9s",
-      // Несьютовые руки
-      "A9o",
-      "ATo",
-      "AJo",
-      "AQo",
-      "AKo",
-      "K9o",
-      "KTo",
-      "KJo",
-      "KQo",
-      "Q9o",
-      "QTo",
-      "QJo",
-      "J9o",
-      "JTo",
-      "T9o",
     ],
     fourBet: [
       // Пары
@@ -15679,6 +16513,74 @@ export const btnRangeWeakAverage = {
       "43o",
       "32o",
     ],
+    threeBet: [
+      // Пары
+      "22",
+      "33",
+      "44",
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "A9s",
+      "ATs",
+      "AJs",
+      "AQs",
+      "AKs",
+      "K9s",
+      "KTs",
+      "KJs",
+      "KQs",
+      "Q9s",
+      "QTs",
+      "QJs",
+      "J9s",
+      "JTs",
+      "T9s",
+      // Несьютовые руки
+      "A9o",
+      "ATo",
+      "AJo",
+      "AQo",
+      "AKo",
+      "K9o",
+      "KTo",
+      "KJo",
+      "KQo",
+      "Q9o",
+      "QTo",
+      "QJo",
+      "J9o",
+      "JTo",
+      "T9o",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AQs",
+      "AKs",
+      "K9s",
+      "QTs",
+      "JTs",
+      "T9s",
+      // Несьютовые руки (велью + блефы)
+      "AQo",
+      "AKo",
+      "K9o",
+      "QTo",
+      "JTo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "22",
@@ -15907,54 +16809,6 @@ export const btnRangeWeakAverage = {
       "AJo",
       "AQo",
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "22",
-      "33",
-      "44",
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "A9s",
-      "ATs",
-      "AJs",
-      "AQs",
-      "AKs",
-      "K9s",
-      "KTs",
-      "KJs",
-      "KQs",
-      "Q9s",
-      "QTs",
-      "QJs",
-      "J9s",
-      "JTs",
-      "T9s",
-      // Несьютовые руки
-      "A9o",
-      "ATo",
-      "AJo",
-      "AQo",
-      "AKo",
-      "K9o",
-      "KTo",
-      "KJo",
-      "KQo",
-      "Q9o",
-      "QTo",
-      "QJo",
-      "J9o",
-      "JTo",
-      "T9o",
     ],
     fourBet: [
       // Пары
@@ -16337,6 +17191,7 @@ export const sbRangeStandardAverage = {
       "32o",
     ],
     threeBet: [], // Не используется при <10 BB
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -16719,6 +17574,65 @@ export const sbRangeStandardAverage = {
       "QTo",
       "QJo",
     ],
+    threeBet: [
+      // Пары
+      "22",
+      "33",
+      "44",
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "A9s",
+      "ATs",
+      "AJs",
+      "AQs",
+      "AKs",
+      "K9s",
+      "KTs",
+      "KJs",
+      "KQs",
+      "Q9s",
+      "QTs",
+      "QJs",
+      "J9s",
+      "JTs",
+      "T9s",
+      // Несьютовые руки
+      "A9o",
+      "ATo",
+      "AJo",
+      "AQo",
+      "AKo",
+      "K9o",
+      "KTo",
+      "KJo",
+      "KQo",
+      "Q9o",
+      "QTo",
+      "QJo",
+      "J9o",
+      "JTo",
+      "T9o",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AQs",
+      "AKs",
+      // Несьютовые руки (велью)
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "22",
@@ -16901,54 +17815,6 @@ export const sbRangeStandardAverage = {
       "AJo",
       "AQo",
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "22",
-      "33",
-      "44",
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "A9s",
-      "ATs",
-      "AJs",
-      "AQs",
-      "AKs",
-      "K9s",
-      "KTs",
-      "KJs",
-      "KQs",
-      "Q9s",
-      "QTs",
-      "QJs",
-      "J9s",
-      "JTs",
-      "T9s",
-      // Несьютовые руки
-      "A9o",
-      "ATo",
-      "AJo",
-      "AQo",
-      "AKo",
-      "K9o",
-      "KTo",
-      "KJo",
-      "KQo",
-      "Q9o",
-      "QTo",
-      "QJo",
-      "J9o",
-      "JTo",
-      "T9o",
     ],
     fourBet: [
       // Пары
@@ -17181,6 +18047,68 @@ export const sbRangeStandardAverage = {
       "QTo",
       "QJo",
     ],
+    threeBet: [
+      // Пары
+      "22",
+      "33",
+      "44",
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "A9s",
+      "ATs",
+      "AJs",
+      "AQs",
+      "AKs",
+      "K9s",
+      "KTs",
+      "KJs",
+      "KQs",
+      "Q9s",
+      "QTs",
+      "QJs",
+      "J9s",
+      "JTs",
+      "T9s",
+      // Несьютовые руки
+      "A9o",
+      "ATo",
+      "AJo",
+      "AQo",
+      "AKo",
+      "K9o",
+      "KTo",
+      "KJo",
+      "KQo",
+      "Q9o",
+      "QTo",
+      "QJo",
+      "J9o",
+      "JTo",
+      "T9o",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AQs",
+      "AKs",
+      "KQs",
+      "QTs",
+      "JTs",
+      // Несьютовые руки (велью)
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "22",
@@ -17363,54 +18291,6 @@ export const sbRangeStandardAverage = {
       "AJo",
       "AQo",
       "AKo",
-    ],
-    threeBet: [
-      // Пары
-      "22",
-      "33",
-      "44",
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "A9s",
-      "ATs",
-      "AJs",
-      "AQs",
-      "AKs",
-      "K9s",
-      "KTs",
-      "KJs",
-      "KQs",
-      "Q9s",
-      "QTs",
-      "QJs",
-      "J9s",
-      "JTs",
-      "T9s",
-      // Несьютовые руки
-      "A9o",
-      "ATo",
-      "AJo",
-      "AQo",
-      "AKo",
-      "K9o",
-      "KTo",
-      "KJo",
-      "KQo",
-      "Q9o",
-      "QTo",
-      "QJo",
-      "J9o",
-      "JTo",
-      "T9o",
     ],
     fourBet: [
       // Пары
@@ -17643,6 +18523,68 @@ export const sbRangeStandardAverage = {
       "QTo",
       "QJo",
     ],
+    threeBet: [
+      // Пары
+      "22",
+      "33",
+      "44",
+      "55",
+      "66",
+      "77",
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки
+      "A9s",
+      "ATs",
+      "AJs",
+      "AQs",
+      "AKs",
+      "K9s",
+      "KTs",
+      "KJs",
+      "KQs",
+      "Q9s",
+      "QTs",
+      "QJs",
+      "J9s",
+      "JTs",
+      "T9s",
+      // Несьютовые руки
+      "A9o",
+      "ATo",
+      "AJo",
+      "AQo",
+      "AKo",
+      "K9o",
+      "KTo",
+      "KJo",
+      "KQo",
+      "Q9o",
+      "QTo",
+      "QJo",
+      "J9o",
+      "JTo",
+      "T9o",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AQs",
+      "AKs",
+      "KQs",
+      "QTs",
+      "JTs",
+      // Несьютовые руки (велью)
+      "AKo",
+    ],
     defendThreeBetLittle: [
       // Пары
       "22",
@@ -17826,54 +18768,6 @@ export const sbRangeStandardAverage = {
       "AQo",
       "AKo",
     ],
-    threeBet: [
-      // Пары
-      "22",
-      "33",
-      "44",
-      "55",
-      "66",
-      "77",
-      "88",
-      "99",
-      "TT",
-      "JJ",
-      "QQ",
-      "KK",
-      "AA",
-      // Сьютовые руки
-      "A9s",
-      "ATs",
-      "AJs",
-      "AQs",
-      "AKs",
-      "K9s",
-      "KTs",
-      "KJs",
-      "KQs",
-      "Q9s",
-      "QTs",
-      "QJs",
-      "J9s",
-      "JTs",
-      "T9s",
-      // Несьютовые руки
-      "A9o",
-      "ATo",
-      "AJo",
-      "AQo",
-      "AKo",
-      "K9o",
-      "KTo",
-      "KJo",
-      "KQo",
-      "Q9o",
-      "QTo",
-      "QJo",
-      "J9o",
-      "JTo",
-      "T9o",
-    ],
     fourBet: [
       // Пары
       "JJ",
@@ -18016,6 +18910,7 @@ export const sbRangeTightAverage = {
       "KQo",
     ],
     threeBet: [], // Не применимо для <10 BB
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -18303,6 +19198,15 @@ export const sbRangeTightAverage = {
       "AQo",
       "AKo",
     ],
+    multiThreeBet: [
+      // Пары (велью)
+      "KK",
+      "AA",
+      // Сьютовые руки (велью)
+      "AKs",
+      // Несьютовые руки (велью)
+      "AKo",
+    ],
     fourBet: [
       // Пары
       "QQ",
@@ -18552,6 +19456,16 @@ export const sbRangeTightAverage = {
       "AQo",
       "AKo",
     ],
+    multiThreeBet: [
+      // Пары (велью)
+      "KK",
+      "AA",
+      // Сьютовые руки (велью)
+      "AQs",
+      "AKs",
+      // Несьютовые руки (велью)
+      "AKo",
+    ],
     fourBet: [
       // Пары
       "QQ",
@@ -18799,6 +19713,16 @@ export const sbRangeTightAverage = {
       "AKs",
       // Несьютовые руки
       "AQo",
+      "AKo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "KK",
+      "AA",
+      // Сьютовые руки (велью)
+      "AQs",
+      "AKs",
+      // Несьютовые руки (велью)
       "AKo",
     ],
     fourBet: [
@@ -19176,6 +20100,7 @@ export const sbRangeWeakAverage = {
       "32o",
     ],
     threeBet: [], // Не используется при <10 BB
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -19985,6 +20910,24 @@ export const sbRangeWeakAverage = {
       "JTo",
       "T8o",
       "T9o",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AQs",
+      "AKs",
+      "QTs",
+      "JTs",
+      // Несьютовые руки (велью)
+      "AQo",
+      "AKo",
     ],
     fourBet: [
       // Пары
@@ -20651,6 +21594,26 @@ export const sbRangeWeakAverage = {
       "T8o",
       "T9o",
     ],
+    multiThreeBet: [
+      // Пары (велью)
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AQs",
+      "AKs",
+      "KQs",
+      "QTs",
+      "JTs",
+      "T9s",
+      // Несьютовые руки (велью)
+      "AQo",
+      "AKo",
+    ],
     fourBet: [
       // Пары
       "TT",
@@ -21315,6 +22278,27 @@ export const sbRangeWeakAverage = {
       "JTo",
       "T8o",
       "T9o",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "88",
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AQs",
+      "AKs",
+      "KQs",
+      "QTs",
+      "QJs",
+      "JTs",
+      "T9s",
+      // Несьютовые руки (велью)
+      "AQo",
+      "AKo",
     ],
     fourBet: [
       // Пары
@@ -21589,6 +22573,7 @@ export const bbRangeStandardAverage = {
       "JTo",
     ],
     threeBet: [], // Не используется при <10 BB
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -22153,6 +23138,23 @@ export const bbRangeStandardAverage = {
       "JTo",
       "T9o",
     ],
+    multiThreeBet: [
+      // Пары (велью)
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AQs",
+      "AKs",
+      "QTs",
+      "JTs",
+      // Несьютовые руки (велью)
+      "AQo",
+      "AKo",
+    ],
     fourBet: ["JJ", "QQ", "KK", "AA", "AKs", "AQs", "AKo", "AQo"],
     allIn: ["JJ", "QQ", "KK", "AA", "AKs", "AQs", "AKo", "AQo"],
   },
@@ -22650,6 +23652,24 @@ export const bbRangeStandardAverage = {
       "J9o",
       "JTo",
       "T9o",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AQs",
+      "AKs",
+      "QTs",
+      "JTs",
+      "T9s",
+      // Несьютовые руки (велью)
+      "AQo",
+      "AKo",
     ],
     fourBet: ["JJ", "QQ", "KK", "AA", "AKs", "AQs", "AKo", "AQo"],
     allIn: ["JJ", "QQ", "KK", "AA", "AKs", "AQs", "AKo", "AQo"],
@@ -23191,6 +24211,24 @@ export const bbRangeStandardAverage = {
       "JTo",
       "T9o",
     ],
+    multiThreeBet: [
+      // Пары (велью)
+      "99",
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AQs",
+      "AKs",
+      "QTs",
+      "JTs",
+      "T9s",
+      // Несьютовые руки (велью)
+      "AQo",
+      "AKo",
+    ],
     fourBet: ["JJ", "QQ", "KK", "AA", "AKs", "AQs", "AKo", "AQo"],
     allIn: ["JJ", "QQ", "KK", "AA", "AKs", "AQs", "AKo", "AQo"],
   },
@@ -23282,6 +24320,7 @@ export const bbRangeTightAverage = {
     ],
     defend_open: [], // Не используется при <10 BB
     threeBet: [], // Не используется при <10 BB
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -23644,6 +24683,18 @@ export const bbRangeTightAverage = {
       "AQo",
       "AKo",
     ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      // Несьютовые руки (велью)
+      "AKo",
+    ],
     fourBet: ["JJ", "QQ", "KK", "AA", "AKs"],
     allIn: ["JJ", "QQ", "KK", "AA", "AKs"],
   },
@@ -23898,6 +24949,18 @@ export const bbRangeTightAverage = {
       // Несьютовые руки
       "AJo",
       "AQo",
+      "AKo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      // Несьютовые руки (велью)
       "AKo",
     ],
     fourBet: ["JJ", "QQ", "KK", "AA", "AKs"],
@@ -24170,6 +25233,18 @@ export const bbRangeTightAverage = {
       // Несьютовые руки
       "AJo",
       "AQo",
+      "AKo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      // Несьютовые руки (велью)
       "AKo",
     ],
     fourBet: ["JJ", "QQ", "KK", "AA", "AKs"],
@@ -24345,6 +25420,7 @@ export const bbRangeWeakAverage = {
     ],
     defend_open: [], // Не используется при <10 BB
     threeBet: [], // Не используется при <10 BB
+    multiThreeBet: [], // Пустой для <10 BB, так как пуш-фолд
     defendThreeBetLittle: [], // Не применимо для <10 BB
     defendThreeBetAverage: [], // Не применимо для <10 BB
     defendThreeBetBig: [], // Не применимо для <10 BB
@@ -25143,6 +26219,25 @@ export const bbRangeWeakAverage = {
       "KJo",
       "KQo",
     ],
+    multiThreeBet: [
+      // Пары (велью)
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KJs",
+      "QJs",
+      "JTs",
+      "T9s",
+      // Несьютовые руки (велью)
+      "AQo",
+      "AKo",
+    ],
     fourBet: ["QQ", "KK", "AA", "AKs", "AKo"],
     allIn: ["QQ", "KK", "AA", "AKs", "AKo"],
   },
@@ -25779,6 +26874,25 @@ export const bbRangeWeakAverage = {
       "KJo",
       "KQo",
     ],
+    multiThreeBet: [
+      // Пары (велью)
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KJs",
+      "QJs",
+      "JTs",
+      "T9s",
+      // Несьютовые руки (велью)
+      "AQo",
+      "AKo",
+    ],
     fourBet: ["QQ", "KK", "AA", "AKs", "AKo"],
     allIn: ["QQ", "KK", "AA", "AKs", "AKo"],
   },
@@ -26414,6 +27528,25 @@ export const bbRangeWeakAverage = {
       "KTo",
       "KJo",
       "KQo",
+    ],
+    multiThreeBet: [
+      // Пары (велью)
+      "TT",
+      "JJ",
+      "QQ",
+      "KK",
+      "AA",
+      // Сьютовые руки (велью + блефы)
+      "AJs",
+      "AQs",
+      "AKs",
+      "KJs",
+      "QJs",
+      "JTs",
+      "T9s",
+      // Несьютовые руки (велью)
+      "AQo",
+      "AKo",
     ],
     fourBet: ["QQ", "KK", "AA", "AKs", "AKo"],
     allIn: ["QQ", "KK", "AA", "AKs", "AKo"],

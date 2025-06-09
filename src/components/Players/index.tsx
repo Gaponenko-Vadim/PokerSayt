@@ -9,6 +9,7 @@ import MainPlayer from "../MainPlayer";
 import { updatePlayerStatus } from "../../Redux/slice/pozitionSlice";
 import { PlayerStatus } from "../type";
 import StatusPlayer from "../StatusPlayer";
+import Pass from "../Pass";
 interface PlayersProps {
   setOpenMatrix: (isOpen: boolean) => void;
   setIsModalOpen: (isOpen: boolean) => void;
@@ -106,8 +107,10 @@ const Players: React.FC<PlayersProps> = ({
                     currentPosition={currentPosition}
                   />
                 )}
+                <Pass position={currentPosition} />
               </>
             )}
+
             <div
               className={`${styles.actionButton} ${
                 styles[actionClass] || styles.fold

@@ -38,13 +38,13 @@ export const calculateEquityWithoutBlockers = (
   selectedCards: string[],
   villainRange: string[][]
 ): { equity: number | null; totalCountSum: number } => {
-  console.log("Raw selectedCards:", selectedCards);
+  // console.log("Raw selectedCards:", selectedCards);
   if (villainRange.length === 0) {
     return { equity: null, totalCountSum: 0 };
   }
 
   const selectedHand = formatHand(selectedCards);
-  console.log("Selected hand:", selectedHand);
+  // console.log("Selected hand:", selectedHand);
 
   // НЕ исключаем руку героя, чтобы получить полный диапазон (1326 комбинаций)
   const comboCount: Record<string, number> = {};
@@ -88,10 +88,10 @@ export const calculateEquityWithoutBlockers = (
   }
 
   const calculatedEquity = totalEquity / totalCombinations;
-  console.log("Total combinations:", totalCombinations);
-  console.log("Total equity:", totalEquity);
-  console.log("Calculated equity:", calculatedEquity);
-  console.log("Total count sum:", totalCountSum);
+  // console.log("Total combinations:", totalCombinations);
+  // console.log("Total equity:", totalEquity);
+  // console.log("Calculated equity:", calculatedEquity);
+  // console.log("Total count sum:", totalCountSum);
 
   return { equity: calculatedEquity, totalCountSum };
 };

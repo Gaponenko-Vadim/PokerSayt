@@ -18,7 +18,7 @@ const MenuStack: React.FC<TypeMenuSteckProps> = ({
 
   const handleSelectStack = (
     position: string,
-    value: "little" | "middle" | "big" | null
+    value: "little" | "middle" | "big"
   ) => {
     dispatch(updatePlayerStack({ position, value }));
   };

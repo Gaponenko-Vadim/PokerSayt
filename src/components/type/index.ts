@@ -3,6 +3,7 @@ export type PlayerAction =
   | "call"
   | "raise"
   | "allin"
+  | "pass"
   | "2bb"
   | "3bb"
   | "4bb"
@@ -10,7 +11,7 @@ export type PlayerAction =
   | "50%"
   | "75%"
   | "100%";
-export type ReduxPlayerAction = "fold" | "call" | "raise" | "allin";
+export type ReduxPlayerAction = "fold" | "call" | "raise" | "allin" | "pass";
 export type PlayerStack = "little" | "middle" | "big";
 export type PlayerStatus = "standard" | "tight" | "weak" | "fish";
 
@@ -36,6 +37,7 @@ export type PlayerData = {
 
 export type MainPlayers = {
   position: string;
+  stack: PlayerStack;
   cardsOnTheTable?: string[];
   selectedCards?: string[];
   stackSize: number;

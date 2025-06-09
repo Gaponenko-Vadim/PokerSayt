@@ -65,6 +65,9 @@
   &.allin {
     background-color: #ff0000; // Красный для allin
   }
+  &.pass {
+    background-color: #af874c; // Красный для allin
+  }
 
   &:hover {
     opacity: 0.8; // Эффект при наведении

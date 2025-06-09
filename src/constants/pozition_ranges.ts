@@ -10,6 +10,7 @@ interface RangeActions {
   defendThreeBetBig?: string[];
   defendThreeBetMax?: string[];
   threeBet: string[];
+  multiThreeBet: string[];
   fourBet: string[];
   allIn: string[];
 }

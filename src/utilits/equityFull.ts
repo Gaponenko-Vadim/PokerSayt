@@ -20,12 +20,12 @@ export const equityFull = (
 
   // Логика для двух диапазонов
   if (opponentRanges.length === 2) {
-    const range1 = opponentRanges[0].cards;
-    const range2 = opponentRanges[1].cards;
+    // const range1 = opponentRanges[0].cards;
+    // const range2 = opponentRanges[1].cards;
     const equity1 = opponentRanges[0].equity;
     const equity2 = opponentRanges[1].equity;
-    const totalCountSum1 = opponentRanges[0].totalCountSum;
-    const totalCountSum2 = opponentRanges[1].totalCountSum;
+    // const totalCountSum1 = opponentRanges[0].totalCountSum;
+    // const totalCountSum2 = opponentRanges[1].totalCountSum;
 
     // Проверяем размеры диапазонов
     // console.log("Initial range1 length:", range1.length);
@@ -34,15 +34,15 @@ export const equityFull = (
     // console.log("Filtered range2 length (totalCountSum2):", totalCountSum2);
 
     // Рассчитываем заблокированные комбинации
-    const blockedCombos1 = range1.length - totalCountSum1;
-    const blockedCombos2 = range2.length - totalCountSum2;
+    // const blockedCombos1 = range1.length - totalCountSum1;
+    // const blockedCombos2 = range2.length - totalCountSum2;
     // console.log("Blocked combos for range1:", blockedCombos1);
     // console.log("Blocked combos for range2:", blockedCombos2);
 
     // Рассчитываем процент от 1326 комбинаций
-    const totalCombinations = 1326;
-    const percentageRange1 = (totalCountSum1 / totalCombinations) * 100;
-    const percentageRange2 = (totalCountSum2 / totalCombinations) * 100;
+    // const totalCombinations = 1326;
+    // const percentageRange1 = (totalCountSum1 / totalCombinations) * 100;
+    // const percentageRange2 = (totalCountSum2 / totalCombinations) * 100;
     // console.log(
     //   "Percentage of range1 from 1326:",
     //   percentageRange1.toFixed(2) + "%"
@@ -72,15 +72,15 @@ export const equityFull = (
 
   // Логика для трех диапазонов
   if (opponentRanges.length === 3) {
-    const range1 = opponentRanges[0].cards;
-    const range2 = opponentRanges[1].cards;
-    const range3 = opponentRanges[2].cards;
+    // const range1 = opponentRanges[0].cards;
+    // const range2 = opponentRanges[1].cards;
+    // const range3 = opponentRanges[2].cards;
     const equity1 = opponentRanges[0].equity;
     const equity2 = opponentRanges[1].equity;
     const equity3 = opponentRanges[2].equity;
-    const totalCountSum1 = opponentRanges[0].totalCountSum;
-    const totalCountSum2 = opponentRanges[1].totalCountSum;
-    const totalCountSum3 = opponentRanges[2].totalCountSum;
+    // const totalCountSum1 = opponentRanges[0].totalCountSum;
+    // const totalCountSum2 = opponentRanges[1].totalCountSum;
+    // const totalCountSum3 = opponentRanges[2].totalCountSum;
 
     // Проверяем размеры диапазонов
     // console.log("Initial range1 length:", range1.length);
@@ -91,18 +91,18 @@ export const equityFull = (
     // console.log("Filtered range3 length (totalCountSum3):", totalCountSum3);
 
     // Рассчитываем заблокированные комбинации
-    const blockedCombos1 = range1.length - totalCountSum1;
-    const blockedCombos2 = range2.length - totalCountSum2;
-    const blockedCombos3 = range3.length - totalCountSum3;
-    // console.log("Blocked combos for range1:", blockedCombos1);
+    // const blockedCombos1 = range1.length - totalCountSum1;
+    // const blockedCombos2 = range2.length - totalCountSum2;
+    // const blockedCombos3 = range3.length - totalCountSum3;
+    // // console.log("Blocked combos for range1:", blockedCombos1);
     // console.log("Blocked combos for range2:", blockedCombos2);
     // console.log("Blocked combos for range3:", blockedCombos3);
 
     // Рассчитываем процент от 1326 комбинаций
-    const totalCombinations = 1326;
-    const percentageRange1 = (totalCountSum1 / totalCombinations) * 100;
-    const percentageRange2 = (totalCountSum2 / totalCombinations) * 100;
-    const percentageRange3 = (totalCountSum3 / totalCombinations) * 100;
+    // const totalCombinations = 1326;
+    // const percentageRange1 = (totalCountSum1 / totalCombinations) * 100;
+    // const percentageRange2 = (totalCountSum2 / totalCombinations) * 100;
+    // const percentageRange3 = (totalCountSum3 / totalCombinations) * 100;
     // console.log(
     //   "Percentage of range1 from 1326:",
     //   percentageRange1.toFixed(2) + "%"

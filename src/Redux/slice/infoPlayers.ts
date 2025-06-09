@@ -79,9 +79,9 @@ const getRangeByActionAndCount = (
       selectedRange = range[stack].open || [];
     }
   } else if (action === "call" && (position === "SB" || position === "BB")) {
-    selectedRange = range[stack].defend_open || []; // Используем defend_open для SB и BB при call
+    selectedRange = range[stack].defend_open || [];
   } else {
-    selectedRange = range[stack].open || []; // Для других действий или позиций
+    selectedRange = range[stack].open || [];
   }
 
   return {
@@ -90,7 +90,7 @@ const getRangeByActionAndCount = (
   };
 };
 
-// Обновленная функция getCardsByPosition, возвращающая оба значения
+// Обновленная функция getCardsByPosition
 const getCardsByPosition = (
   position: string,
   status: PlayerStatus,
@@ -118,6 +118,7 @@ const initializeMainPlayerIfNull = (state: TypeInfoPlayers): MainPlayers => {
     state.mainPlayers = {
       position: "",
       selectedCards: [],
+      stack: "middle",
       stackSize: INITIAL_STACK_SIZE,
       equity: null,
       sumBet: 0,
@@ -213,7 +214,6 @@ export const infoPlayers = createSlice({
         }
       }
 
-      // Обновление диапазона на основе action и текущего count
       const { raw, converted } = getRangeByActionAndCount(
         position,
         state.players[position].status,
@@ -234,7 +234,6 @@ export const infoPlayers = createSlice({
       }
       state.players[position].count = count;
 
-      // Обновление диапазона на основе текущего action и нового count
       const { raw, converted } = getRangeByActionAndCount(
         position,
         state.players[position].status,
@@ -315,6 +314,15 @@ export const infoPlayers = createSlice({
       const mainPlayer = initializeMainPlayerIfNull(state);
       mainPlayer.myBet = action.payload.myBet;
     },
+    updateMainPlayerStack: (
+      state,
+      action: PayloadAction<{ stack: PlayerStack }>
+    ) => {
+      const mainPlayer = initializeMainPlayerIfNull(state);
+      mainPlayer.stack = action.payload.stack;
+      mainPlayer.stackSize =
+        STACK_SIZES[action.payload.stack] || INITIAL_STACK_SIZE;
+    },
     resetselectAction: (state) => {
       if (state.mainPlayers?.selectedCards) {
         state.mainPlayers.selectedCards = [];
@@ -350,6 +358,7 @@ export const {
   updateMainPlayerMyBet,
   updateGameStadia,
   setPlayerCount,
+  updateMainPlayerStack,
 } = infoPlayers.actions;
 
 // Экспортируем редьюсер

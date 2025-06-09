@@ -22,7 +22,7 @@ export const calculatePercentageRaiseBets = (
       (maxBet + (sumBet + maxBet) * coefficient).toFixed(1)
     );
     raiseBets[key] = betValue;
-    console.log(`Calculated raise bet for ${key}%:`, betValue);
+    // console.log(`Calculated raise bet for ${key}%:`, betValue);
   });
 
   return raiseBets;

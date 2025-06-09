@@ -1,9 +1,9 @@
 .bet {
   position: absolute;
   top: -20px;
-  left: 50%;
+  left: 150%;
   transform: translateX(-50%);
-  background-color: #4caf50;
+  background-color: #af874c; // Зеленый по умолчанию
   color: white;
   padding: 5px 10px;
   border-radius: 5px;
@@ -12,10 +12,15 @@
   text-align: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   z-index: 10;
+  cursor: pointer;
 }
 
-// Максимальная ставка — жёлтая
 .bet.maxBet {
   background-color: yellow;
-  color: black; // можно поменять цвет текста для контрастности
+  color: black;
+}
+
+.bet.allInBet {
+  background-color: #f44336; // Красный для алл-ина
+  color: white;
 }
