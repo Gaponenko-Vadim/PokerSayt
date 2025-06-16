@@ -12,8 +12,9 @@ export type PlayerAction =
   | "75%"
   | "100%";
 export type ReduxPlayerAction = "fold" | "call" | "raise" | "allin" | "pass";
-export type PlayerStack = "little" | "middle" | "big";
+export type PlayerStack = "little" | "middle" | "big" | "ultraShort";
 export type PlayerStatus = "standard" | "tight" | "weak" | "fish";
+export type TypeStatusRise = "little" | "average" | "big" | "max" | "no";
 
 export type TypeGameStadia = "initial" | "Average" | "late" | "prize";
 

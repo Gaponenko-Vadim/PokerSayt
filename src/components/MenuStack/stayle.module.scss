@@ -49,13 +49,16 @@
 }
 
 .playerStack:hover .stackButton:nth-child(1) {
+  transform: translateX(-110px); // Первая кнопка смещается влево
+}
+.playerStack:hover .stackButton:nth-child(2) {
   transform: translateX(-50px); // Первая кнопка смещается влево
 }
 
-.playerStack:hover .stackButton:nth-child(2) {
+.playerStack:hover .stackButton:nth-child(3) {
   transform: translateX(0); // Вторая кнопка (активная) остается по центру
 }
 
-.playerStack:hover .stackButton:nth-child(3) {
+.playerStack:hover .stackButton:nth-child(4) {
   transform: translateX(50px); // Третья кнопка смещается вправо
 }

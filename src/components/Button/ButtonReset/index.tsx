@@ -1,5 +1,8 @@
 import { useDispatch } from "react-redux";
-import { setNextPozition } from "../../../Redux/slice/pozitionSlice";
+import {
+  setNextPozition,
+  updateStatusRise,
+} from "../../../Redux/slice/pozitionSlice";
 import { resetAllCards } from "../../../Redux/slice/cardSlice";
 import { resetselectAction } from "../../../Redux/slice/infoPlayers"; // Импортируем из infoPlayers
 import { resetselectLostAction } from "../../../Redux/slice/actionLastStackSlice";
@@ -16,6 +19,7 @@ const ButtonReset: React.FC<FlopProps> = ({ setFlop }) => {
     dispatch(setNextPozition()); // Изменение позиции
     dispatch(resetselectAction()); // Сброс состояния игроков и ставок
     dispatch(resetselectLostAction());
+    dispatch(updateStatusRise("no"));
 
     setFlop(false);
   };

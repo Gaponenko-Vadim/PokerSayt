@@ -55,10 +55,7 @@ export function calculateFoldPercentagesBehind(
       } as PlayerData);
 
     const positionRanges = POSITION_RANGES[position];
-    const range =
-      positionRanges?.[player.status as PlayerStatus] ||
-      positionRanges?.standard;
-
+    const range = positionRanges?.[player.status as PlayerStatus];
     raiseSizes.forEach((raiseSize) => {
       let defendOpenRaw: string[] | "full" | undefined;
       switch (raiseSize) {

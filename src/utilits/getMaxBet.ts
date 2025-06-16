@@ -9,3 +9,14 @@ export const getMaxBet = (players: { [key: string]: PlayerData }): number => {
     0
   );
 };
+
+export const getMaxCount = (players: { [key: string]: PlayerData }): number => {
+  return Math.max(
+    ...Object.values(players).map((player) => {
+      if (!player.count) return 0;
+      const betValue = player.count;
+      return betValue;
+    }),
+    0
+  );
+};

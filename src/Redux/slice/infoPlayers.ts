@@ -15,6 +15,7 @@ import { POSITION_RANGES } from "../../constants/pozition_ranges";
 // Константы
 const INITIAL_STACK_SIZE = 30;
 const STACK_SIZES: Record<PlayerStack, number> = {
+  ultraShort: 12,
   little: 18,
   middle: 30,
   big: 50,

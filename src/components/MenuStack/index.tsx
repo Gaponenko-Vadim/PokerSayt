@@ -1,11 +1,12 @@
 import styles from "./stayle.module.scss";
 import { useDispatch } from "react-redux";
 import { updatePlayerStack } from "../../Redux/slice/infoPlayers";
+import { PlayerStack } from "../type";
 
 type TypeMenuSteckProps = {
   player: {
     action: string;
-    stack: "little" | "middle" | "big" | null;
+    stack: PlayerStack;
   };
   currentPosition: string;
 };
@@ -18,14 +19,14 @@ const MenuStack: React.FC<TypeMenuSteckProps> = ({
 
   const handleSelectStack = (
     position: string,
-    value: "little" | "middle" | "big"
+    value: "ultraShort" | "little" | "middle" | "big"
   ) => {
     dispatch(updatePlayerStack({ position, value }));
   };
 
   return (
     <div className={styles.playerStack}>
-      {(["little", "middle", "big"] as const).map((size) => (
+      {(["ultraShort", "little", "middle", "big"] as const).map((size) => (
         <button
           key={size}
           className={`${styles.stackButton} ${

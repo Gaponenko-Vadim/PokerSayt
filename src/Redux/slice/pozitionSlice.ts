@@ -1,10 +1,12 @@
 // pozitionSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PlayerStatus } from "../../components/type";
+import { TypeStatusRise } from "../../components/type";
 type TypePosition = {
   value: string[];
   order: { index: number; status: PlayerStatus }[];
   index: number;
+  statusRise: TypeStatusRise;
 };
 
 const initialState: TypePosition = {
@@ -20,6 +22,7 @@ const initialState: TypePosition = {
     { index: 1, status: "standard" },
   ],
   index: 0,
+  statusRise: "no",
 };
 
 export const pozitionSlice = createSlice({
@@ -28,6 +31,9 @@ export const pozitionSlice = createSlice({
   reducers: {
     setNextPozition: (state) => {
       state.index = (state.index - 1 + state.value.length) % state.value.length;
+    },
+    updateStatusRise: (state, action: PayloadAction<TypeStatusRise>) => {
+      state.statusRise = action.payload;
     },
     updatePlayerStatus: (
       state,
@@ -42,5 +48,6 @@ export const pozitionSlice = createSlice({
   },
 });
 
-export const { setNextPozition, updatePlayerStatus } = pozitionSlice.actions;
+export const { setNextPozition, updatePlayerStatus, updateStatusRise } =
+  pozitionSlice.actions;
 export default pozitionSlice.reducer;
