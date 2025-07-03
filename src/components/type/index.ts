@@ -46,3 +46,11 @@ export type MainPlayers = {
   sumBet: number;
   myBet: string | null; // Новое поле для текущей ставки mainPlayer
 };
+
+export type DiscardedPercentage = {
+  position: string;
+  bet: string | null;
+  action: string;
+  discardedPercentage: number;
+  cards: string[][];
+};

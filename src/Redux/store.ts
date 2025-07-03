@@ -4,6 +4,7 @@ import cardSlice from "./slice/cardSlice";
 import convertSlice from "./slice/convertSlice";
 import actionLastStackSlice from "./slice/actionLastStackSlice";
 import infoPlayers from "./slice/infoPlayers";
+import generalInformation from "./slice/generalInformation";
 export const store = configureStore({
   reducer: {
     infoPlayers,
@@ -11,6 +12,7 @@ export const store = configureStore({
     cardSlice,
     convertSlice,
     actionLastStackSlice,
+    generalInformation,
   },
 });
 

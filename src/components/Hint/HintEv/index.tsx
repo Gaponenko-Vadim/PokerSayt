@@ -22,6 +22,10 @@ const HintEv = () => {
   const statusRise = useSelector(
     (state: RootState) => state.pozitionSlice.statusRise
   );
+
+  const maxBetPlayers = useSelector(
+    (state: RootState) => state.generalInformation.maxBetPlayers
+  );
   const mainPlayerCards = mainPlayer?.selectedCards;
   const mainPlayerBet = mainPlayer?.myBet;
   const positionMainPlayer = mainPlayer?.position || "";
@@ -57,7 +61,8 @@ const HintEv = () => {
     maxBet,
     infoPlayers,
     maxCount,
-    statusRise
+    statusRise,
+    maxBetPlayers
   );
 
   console.log("doFlopCallResult", doFlopCallResult);

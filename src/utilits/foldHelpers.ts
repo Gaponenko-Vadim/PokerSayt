@@ -15,20 +15,6 @@ interface PlayerData {
 }
 
 // Определяет позиции за спиной главного игрока
-export function getPositionsBehind(
-  players: { [key: string]: PlayerData },
-  maxBet: number,
-  positionMainPlayer: string,
-  fullPosition: string[]
-): string[] {
-  const standardOrder = ["UTG", "UTG+1", "MP", "MP+1", "HJ", "BT", "SB", "BB"];
-  const mainPlayerIndex = standardOrder.indexOf(positionMainPlayer);
-  return mainPlayerIndex >= 0
-    ? standardOrder
-        .slice(mainPlayerIndex + 1)
-        .filter((pos) => fullPosition.includes(pos))
-    : [];
-}
 
 // Рассчитывает проценты фолда для позиций за спиной
 export function calculateFoldPercentagesBehind(

@@ -1,156 +1,32 @@
 import { filterCardsByMainPlayer } from "./foldHelpers";
+import { calculateEquity } from "./allСombinations/calculateEquity";
 import { full } from "../constants/positionsRanges8maxMtt";
-import { PlayerData, PlayerStack } from "../components/type";
-import { POSITION_RANGES } from "../constants/pozition_ranges";
+import { PlayerData, TypeStatusRise } from "../components/type";
 import { convertRangeToCards } from "./allСombinations/allTwoCardCombinations";
-import { PlayerStatus, TypeStatusRise } from "../components/type";
+import { calculatePercentageRaiseBets } from "./calculatePercentageRaiseBets";
+import { calculateMultiPotEquity } from "./calculateMultiPotEquity";
+import {
+  findPositionWithMostCombinations,
+  protectionRange,
+  doflopCallThreeBet,
+  calculateDiscardedPercentage,
+} from "./helpersFunction/calculateDoflopCallHelper";
 
-const protectionRange = (
-  positionMulti: string[],
-  infoPlayers: { [key: string]: PlayerData },
-  mainPlayerCards: string[],
-  maxCount: number,
-  statusRise: TypeStatusRise
-): { position: string; cards: string[][] }[] => {
-  return positionMulti.map((pos) => {
-    const stack: PlayerStack = infoPlayers[pos].stack;
-    const positionRanges = POSITION_RANGES[pos];
-    const status: PlayerStatus = infoPlayers[pos]?.status || "active";
-
-    let rangeSelection: string;
-
-    if (maxCount === 1) {
-      if (statusRise === "little") {
-        rangeSelection = "open";
-      } else if (statusRise === "average") {
-        rangeSelection = "open";
-      } else if (statusRise === "big") {
-        rangeSelection = "defendThreeBetAverage";
-      } else {
-        rangeSelection = "open"; // Для statusRise === "no" или других
-        alert("Ошибка: Что-то пошло не так!");
-      }
-    } else if (maxCount === 2) {
-      if (statusRise === "little") {
-        rangeSelection = "defendThreeBetLittle";
-      } else if (statusRise === "average") {
-        rangeSelection = "defendThreeBetAverage";
-      } else if (statusRise === "big") {
-        rangeSelection = "defendThreeBetBig";
-      } else if (statusRise === "max") {
-        rangeSelection = "defendThreeBetMax";
-      } else {
-        rangeSelection = "threeBet";
-      }
-    } else if (maxCount === 3) {
-      if (statusRise === "big") {
-        rangeSelection = "fourBet";
-      } else {
-        rangeSelection = "fourBet"; // Для других statusRise
-      }
-    } else if (maxCount >= 4) {
-      if (statusRise === "big") {
-        rangeSelection = "allIn";
-      } else {
-        rangeSelection = "allIn";
-      }
-    } else {
-      rangeSelection = "open"; // Для maxCount < 1 или других
-    }
-
-    // Проверка, что rangeSelection является ключом RangeActions
-    const rangeActions = positionRanges?.[status]?.[stack];
-    const diapason =
-      rangeActions && rangeSelection in rangeActions
-        ? rangeActions[rangeSelection as keyof typeof rangeActions] || []
-        : [];
-
-    const diapasonCombination = diapason.flatMap((range: string) =>
-      convertRangeToCards(range)
-    );
-    const cards =
-      diapasonCombination && mainPlayerCards
-        ? filterCardsByMainPlayer(diapasonCombination, mainPlayerCards)
-        : diapasonCombination;
-
-    if (!diapason.length) {
-      console.log(
-        `Warning: No range found for ${pos}, ${status}, ${stack}, ${rangeSelection}`
-      );
-    }
-
-    return { position: pos, cards };
-  });
+type PlayerDataTwo = {
+  position: string;
+  action?: string;
+  stack?: "little" | "middle" | "big" | null;
+  stackSize?: number;
+  bet?: string | null;
+  status?: string;
+  cards: string[][];
+  cardsdiaposon?: string[];
 };
 
-const calculateDiscardedPercentage = (
-  intermediatePositions: { position: string; diapason: string[][] }[],
-  cardsInfoPlayers: { position: string; cards: string[][] }[]
-): {
-  discardedPercentages: {
-    position: string;
-    discardedPercentage: number;
-    cards: string[][];
-  }[];
-  averageDiscardedPercentage: number;
-} => {
-  const discardedPercentages = intermediatePositions.map(
-    ({ position, diapason }) => {
-      // Находим соответствующие cards для позиции
-      const playerCards =
-        cardsInfoPlayers.find((p) => p.position === position)?.cards || [];
-
-      // Преобразуем комбинации в строки для сравнения (например, ['As', 'Ad'] → 'AsAd')
-      const diapasonSet = new Set(diapason.map((combo) => combo.join("")));
-      const cardsSet = new Set(playerCards.map((combo) => combo.join("")));
-
-      // Подсчитываем комбинации, которые есть в diapason, но отсутствуют в cards
-      let discardedCount = 0;
-      for (const combo of diapasonSet) {
-        if (!cardsSet.has(combo)) {
-          discardedCount++;
-        }
-      }
-
-      // Вычисляем процент скинутых комбинаций с округлением до двух знаков
-      const discardedPercentage =
-        diapason.length > 0
-          ? Number(((discardedCount / diapason.length) * 100).toFixed(2))
-          : 0;
-
-      return { position, discardedPercentage, cards: playerCards };
-    }
-  );
-
-  // Вычисляем средний процент скинутых комбинаций с округлением до двух знаков
-  const totalDiscardedPercentage = discardedPercentages.reduce(
-    (sum, { discardedPercentage }) => sum + discardedPercentage,
-    0
-  );
-  const averageDiscardedPercentage =
-    discardedPercentages.length > 0
-      ? Number(
-          (totalDiscardedPercentage / discardedPercentages.length).toFixed(2)
-        )
-      : 0;
-
-  // Логирование для отладки
-  console.log("calculateDiscardedPercentage result:", {
-    intermediatePositions: intermediatePositions.map(
-      ({ position, diapason }) => ({
-        position,
-        diapasonLength: diapason.length,
-      })
-    ),
-    cardsInfoPlayers: cardsInfoPlayers.map(({ position, cards }) => ({
-      position,
-      cardsLength: cards.length,
-    })),
-    discardedPercentages,
-    averageDiscardedPercentage,
-  });
-
-  return { discardedPercentages, averageDiscardedPercentage };
+const calculateFinalCoefficient = (positionMulti: string[]): number => {
+  if (positionMulti.length === 0) return 1.0; // Если массив пуст, вернуть 1.0
+  const lastIndex = positionMulti.length;
+  return 1.0 + lastIndex * 0.1;
 };
 
 export const calculateDoflopCall = (
@@ -162,7 +38,8 @@ export const calculateDoflopCall = (
   maxBet: number,
   infoPlayers: { [key: string]: PlayerData },
   maxCount: number,
-  statusRise: TypeStatusRise
+  statusRise: TypeStatusRise,
+  maxBetPlayers: PlayerDataTwo[]
 ): number => {
   const mainBet = parseFloat(mainPlayerBet || "");
   const equityDo1 = equity / 100;
@@ -178,6 +55,16 @@ export const calculateDoflopCall = (
     maxCount,
     statusRise
   );
+
+  const threeBet = doflopCallThreeBet(
+    positionMulti,
+    infoPlayers,
+    mainPlayerCards,
+    maxCount
+  );
+
+  const coefficientsAllPosition = calculateFinalCoefficient(positionMulti);
+
   const intermediatePositions = positionMulti.map((pos) => {
     const player = infoPlayers[pos];
     let diapason: string[][];
@@ -217,43 +104,165 @@ export const calculateDoflopCall = (
     const cards = mainPlayerCards
       ? filterCardsByMainPlayer(players.cards, mainPlayerCards)
       : players.cards;
-    return { position: players.position, cards: cards };
+    return {
+      position: players.position,
+      cards: cards,
+      action: players.action,
+      bet: players.bet,
+    };
   });
 
   const foldCall =
     maxCount != 0
-      ? calculateDiscardedPercentage(intermediatePositions, range)
-      : calculateDiscardedPercentage(intermediatePositions, cardsInfoPlayers);
+      ? calculateDiscardedPercentage(intermediatePositions, range, infoPlayers)
+      : calculateDiscardedPercentage(
+          intermediatePositions,
+          cardsInfoPlayers,
+          infoPlayers
+        );
 
-  const ev1stage =
-    (1 - foldCall.averageDiscardedPercentage / 100) *
-    (equityDo1 * (sumBet + mainBet) - (maxBet - mainBet));
+  const foldCallThreeBet = calculateDiscardedPercentage(
+    intermediatePositions,
+    threeBet,
+    infoPlayers
+  );
+
+  const aaa = calculateDiscardedPercentage(
+    intermediatePositions,
+    range,
+    infoPlayers
+  );
+
+  // 1. Получаем данные о ставке
+  const threeBetStavka = findPositionWithMostCombinations(
+    foldCallThreeBet.discardedPercentages
+  );
+
+  const MultiStavka = findPositionWithMostCombinations(
+    aaa.discardedPercentages
+  );
+
+  // 2. Проверяем все необходимые условия перед расчетом
+  let equityThreeBet;
+  if (
+    mainPlayerCards &&
+    mainPlayerCards.length > 0 &&
+    threeBetStavka &&
+    threeBetStavka.cards &&
+    threeBetStavka.cards.length > 0
+  ) {
+    // 3. Только если все условия выполнены - делаем расчет
+    equityThreeBet = calculateEquity(mainPlayerCards, threeBetStavka.cards);
+  } else {
+    // 4. В противном случае - возвращаем значение по умолчанию
+    equityThreeBet = { equity: 0 };
+  }
+
+  const calculatePercentageRaise = calculatePercentageRaiseBets(
+    maxBet,
+    sumBet
+  )[50];
+
+  const newMaxBetPlayers = [...maxBetPlayers, MultiStavka.result];
+  const multiCall = calculateMultiPotEquity(mainPlayerCards, newMaxBetPlayers);
+  const ev1stage = () => {
+    const AllFold =
+      1 - (foldCall.averageDiscardedPercentage / 100) * coefficientsAllPosition;
+    const ThereWillTribute =
+      1 - foldCallThreeBet.averageDiscardedPercentage / 100;
+    const multiCallOponent =
+      (foldCall.averageDiscardedPercentage / 100) * coefficientsAllPosition -
+      ThereWillTribute;
+    const mainStavka = maxBet - mainBet;
+    console.log(
+      "все сбросили",
+      foldCall.averageDiscardedPercentage,
+      "equity против основного опонента",
+      equityDo1,
+      "equity против трибетта",
+      equityThreeBet.equity,
+      "equity против мультипотта",
+      multiCall,
+      "процент того что сделает трибетт",
+      foldCallThreeBet.averageDiscardedPercentage,
+      "coefficientsAllPosition",
+      coefficientsAllPosition,
+      AllFold,
+      ThereWillTribute,
+      multiCallOponent
+    );
+    return (() => {
+      if (positionMulti.length === 0) {
+        return equityDo1 * (sumBet + mainStavka) - mainStavka;
+      } else if (multiCallOponent < 0) {
+        return (
+          AllFold * (equityDo1 * (sumBet + mainStavka) - mainBet) +
+          (ThereWillTribute *
+            ((equityThreeBet.equity / 100) *
+              (sumBet +
+                calculatePercentageRaise +
+                (calculatePercentageRaise - mainBet))) -
+            (calculatePercentageRaise - mainBet))
+        );
+      } else
+        return (
+          AllFold * (equityDo1 * (sumBet + mainStavka) - mainStavka) +
+          (ThereWillTribute *
+            ((equityThreeBet.equity / 100) *
+              (sumBet +
+                calculatePercentageRaise +
+                (calculatePercentageRaise - mainBet))) -
+            (calculatePercentageRaise - mainBet)) +
+          (multiCallOponent *
+            ((multiCall / 100) * (sumBet + maxBet + mainStavka)) -
+            mainStavka)
+        );
+    })();
+  };
   // Логирование для отладки
 
-  console.log(
-    "fold",
-    foldCall,
-    "mainPlayerCard",
-    mainPlayerCards,
-    "equity",
-    equityDo1,
-    "sumBet",
-    sumBet,
-    "mainPlayerBet",
-    mainBet,
-    "positionMulti",
-    positionMulti,
-    "maxBet",
-    maxBet,
-    intermediatePositions,
-    " maxCount",
-    maxCount,
-    "cardsCall",
-    cardsInfoPlayers,
-    "stavka",
-    range,
-    "sfdaf",
-    foldCall.discardedPercentages
-  );
-  return ev1stage;
+  // console.log(
+  //   "fold",
+  //   foldCall,
+  //   "mainPlayerCard",
+  //   mainPlayerCards,
+  //   "equity",
+  //   equityDo1,
+  //   "sumBet",
+  //   sumBet,
+  //   "mainPlayerBet",
+  //   mainBet,
+  //   "positionMulti",
+  //   positionMulti,
+  //   "maxBet",
+  //   maxBet,
+  //   intermediatePositions,
+  //   " maxCount",
+  //   maxCount,
+  //   "cardsCall",
+  //   cardsInfoPlayers,
+  //   "stavka",
+  //   range,
+  //   "threeBetstavka",
+  //   threeBet,
+  //   "call",
+  //   foldCall.discardedPercentages,
+  //   "threeBet",
+
+  //   threeBetStavka.result,
+  //   " foldCallThreeBet",
+  //   foldCallThreeBet.averageDiscardedPercentage,
+  //   "equityThreeBet",
+  //   equityThreeBet.equity,
+  //   "reise",
+  //   calculatePercentageRaise,
+  //   "dfrgf",
+  //   MultiStavka.result,
+  //   "maxBetPlayers",
+  //   newMaxBetPlayers,
+  //   "multiCall",
+  //   multiCall
+  // );
+  return ev1stage();
 };
+// сделать высчет ставки рейза - что стаит , от сам бет

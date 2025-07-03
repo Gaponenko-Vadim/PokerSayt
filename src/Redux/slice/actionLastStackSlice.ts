@@ -2,8 +2,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type PlayerLastBet = {
   lostMaxBet: number;
-  lostSumBet: number;
   hasRaise: boolean; // Поле для хранения предыдущего hasRaise
+  lostSumBet: number;
 };
 
 const initialState: PlayerLastBet = {
