@@ -14,11 +14,13 @@ export const findPositionWithMostCombinations = (
 ): {
   result: { position: string; cards: string[][] };
   cards: string[][];
+  bet: number;
 } => {
   if (!discardedPercentages || discardedPercentages.length === 0) {
     return {
       result: { position: "Unknown", cards: [] },
       cards: [],
+      bet: 0,
     };
   }
 
@@ -30,12 +32,16 @@ export const findPositionWithMostCombinations = (
     const maxByCards = discardedPercentages.reduce((max, current) => {
       return current.cards.length > max.cards.length ? current : max;
     }, discardedPercentages[0]);
+    const stavka = maxByCards.bet
+      ? parseFloat(maxByCards.bet.replace(/[^0-9.]/g, ""))
+      : 0;
     return {
       result: {
         position: maxByCards.position,
         cards: maxByCards.cards,
       },
       cards: maxByCards.cards,
+      bet: stavka,
     };
   }
 
@@ -67,10 +73,13 @@ export const findPositionWithMostCombinations = (
       return current.cards.length > max.cards.length ? current : max;
     }, discardedPercentages[0]);
   }
-
+  const stavka = selected.bet
+    ? parseFloat(selected.bet.replace(/[^0-9.]/g, ""))
+    : 0;
   return {
     result: { position: selected.position, cards: selected.cards },
     cards: selected.cards,
+    bet: stavka,
   };
 };
 
@@ -80,9 +89,13 @@ export const protectionRange = (
   mainPlayerCards: string[],
   maxCount: number,
   statusRise: TypeStatusRise
-): { position: string; cards: string[][] }[] => {
+): { position: string; cards: string[][]; betFinal: number }[] => {
   return positionMulti.map((pos) => {
     const stack: PlayerStack = infoPlayers[pos].stack;
+    const betString = infoPlayers[pos].bet;
+    const betFinal: number = betString
+      ? parseFloat(betString.replace(/[^0-9.]/g, ""))
+      : 0;
     const positionRanges = POSITION_RANGES[pos];
     const status: PlayerStatus = infoPlayers[pos]?.status || "active";
 
@@ -148,7 +161,7 @@ export const protectionRange = (
       );
     }
 
-    return { position: pos, cards };
+    return { position: pos, cards, betFinal };
   });
 };
 
@@ -157,9 +170,13 @@ export const doflopCallThreeBet = (
   infoPlayers: { [key: string]: PlayerData },
   mainPlayerCards: string[],
   maxCount: number
-): { position: string; cards: string[][] }[] => {
+): { position: string; cards: string[][]; betFinal: number }[] => {
   return positionMulti.map((pos) => {
     const stack: PlayerStack = infoPlayers[pos].stack;
+    const betString = infoPlayers[pos].bet;
+    const betFinal: number = betString
+      ? parseFloat(betString.replace(/[^0-9.]/g, ""))
+      : 0;
     const positionRanges = POSITION_RANGES[pos];
     const status: PlayerStatus = infoPlayers[pos]?.status || "active";
 
@@ -198,7 +215,7 @@ export const doflopCallThreeBet = (
       );
     }
 
-    return { position: pos, cards };
+    return { position: pos, cards, betFinal };
   });
 };
 

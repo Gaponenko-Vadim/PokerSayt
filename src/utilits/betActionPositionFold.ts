@@ -91,7 +91,7 @@ export const betActionPositionFold = (
     for (let i = 1; i < fullPosition.length; i++) {
       const index = (positionIndex + i) % fullPosition.length;
       const pos = fullPosition[index];
-      if (pos === "SB") {
+      if (pos === "BB") {
         console.log(`Reached SB, stopping`);
         break;
       }
@@ -106,12 +106,16 @@ export const betActionPositionFold = (
     console.log(`No positionsToSB for position ${position} (SB or BB)`);
   }
   console.log("Positions to SB:", positionsToSB);
-
-  // Формируем результат
-  const result =
-    currentBetValue === null && position !== "SB" && position !== "BB"
-      ? [...positionsWithBets, ...positionsToSB]
-      : [...positionsWithBets];
+  const bb = ["BB"];
+  // Формируем результат с уникальными позициями
+  const resultSet = new Set<string>(
+    currentBetValue === null ||
+    (position === "SB" && currentBetValue === 0.5) ||
+    position !== "BB"
+      ? [...positionsWithBets, ...positionsToSB, ...bb]
+      : [...positionsWithBets]
+  );
+  const result = Array.from(resultSet);
   console.log(
     `Final result (positionsToSB included: ${
       currentBetValue === null && position !== "SB" && position !== "BB"
