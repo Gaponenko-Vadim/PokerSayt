@@ -111,7 +111,7 @@ export const betActionPositionFold = (
   const resultSet = new Set<string>(
     currentBetValue === null ||
     (position === "SB" && currentBetValue === 0.5) ||
-    position !== "BB"
+    (position === "BB" && currentBetValue === 1)
       ? [...positionsWithBets, ...positionsToSB, ...bb]
       : [...positionsWithBets]
   );

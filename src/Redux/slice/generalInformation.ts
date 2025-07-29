@@ -1,21 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { PlayerDataTwo } from "../../components/type";
 
-type PlayerDataTwo = {
-  position: string;
-  action: string;
-  stack: "little" | "middle" | "big" | null;
-  stackSize: number;
-  bet: string | null;
-  status: string;
-  cards: string[][];
-  cardsdiaposon: string[];
-};
 type Information = {
   maxBetPlayers: PlayerDataTwo[];
+  ante: number;
 };
 
 const initialState: Information = {
   maxBetPlayers: [],
+  ante: 0,
 };
 
 const generalInformation = createSlice({
@@ -28,9 +21,12 @@ const generalInformation = createSlice({
     clearMaxBetPlayers: (state) => {
       state.maxBetPlayers = [];
     },
+    setAnte: (state, action: PayloadAction<number>) => {
+      state.ante = action.payload;
+    },
   },
 });
 
-export const { setMaxBetPlayers, clearMaxBetPlayers } =
+export const { setMaxBetPlayers, clearMaxBetPlayers, setAnte } =
   generalInformation.actions;
 export default generalInformation.reducer;

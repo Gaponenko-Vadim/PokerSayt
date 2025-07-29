@@ -1,6 +1,8 @@
 export const calculatePercentageRaiseBets = (
   maxBet: number,
-  sumBet: number
+  sumBet: number,
+  callPlayersCount?: number,
+  maxCount?: number
 ): { [key in "33" | "50" | "75" | "100"]: number } => {
   const coefficients: { [key in "33" | "50" | "75" | "100"]: number } = {
     "33": 0.33,
@@ -16,13 +18,35 @@ export const calculatePercentageRaiseBets = (
     "100": 0,
   };
 
+  // Проверяем условия для специальных случаев
+  const shouldUseBBLogic =
+    callPlayersCount !== undefined &&
+    maxCount !== undefined &&
+    callPlayersCount === 0 &&
+    maxCount === 0;
+
   (["33", "50", "75", "100"] as const).forEach((key) => {
-    const coefficient = coefficients[key];
-    const betValue = Number(
-      (maxBet + (sumBet + maxBet) * coefficient).toFixed(1)
-    );
-    raiseBets[key] = betValue;
-    // console.log(`Calculated raise bet for ${key}%:`, betValue);
+    if (shouldUseBBLogic) {
+      // Специальная логика для 0 callPlayersCount и 0 maxCount
+      switch (key) {
+        case "33":
+          raiseBets[key] = maxBet * 2; // 2 бб
+          break;
+        case "50":
+          raiseBets[key] = maxBet * 3; // 3 бб
+          break;
+        case "75":
+        case "100":
+          raiseBets[key] = maxBet * 4; // 4 бб
+          break;
+      }
+    } else {
+      // Стандартная логика расчета
+      const coefficient = coefficients[key];
+      raiseBets[key] = Number(
+        (maxBet + (sumBet + maxBet) * coefficient).toFixed(1)
+      );
+    }
   });
 
   return raiseBets;

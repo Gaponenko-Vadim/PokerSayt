@@ -1,14 +1,19 @@
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { RootState } from "../../../Redux/store";
-import { calculateFold } from "../../../utilits/calculateFold";
+// import { calculateFold } from "../../../utilits/calculateFold";
 import { calculateDoflopCall } from "../../../utilits/calculateDoflopCall";
-import { calculatePercentageRaiseBets } from "../../../utilits/calculatePercentageRaiseBets";
-import { getMaxBet, getMaxCount } from "../../../utilits/getMaxBet";
-import { calculateAllin } from "../../../utilits/calculateAllin";
+// import { calculatePercentageRaiseBets } from "../../../utilits/calculatePercentageRaiseBets";
+import {
+  getMaxBet,
+  getMaxCount,
+  getMaxBetPosition,
+} from "../../../utilits/getMaxBet";
+// import { calculateAllin } from "../../../utilits/calculateAllin";
 import { betActionPositionFold } from "../../../utilits/betActionPositionFold";
 import styles from "./HintEv.module.scss";
-
+import { calculatePositionCoefficient } from "../../../utilits/calculatePositionCoefficient";
+import { calculateDoflopThreeBet } from "../../../utilits/calculateDoflopThreeBet";
 const HintEv = () => {
   const infoPlayers = useSelector(
     (state: RootState) => state.infoPlayers.players
@@ -26,6 +31,11 @@ const HintEv = () => {
   const maxBetPlayers = useSelector(
     (state: RootState) => state.generalInformation.maxBetPlayers
   );
+
+  const callPlayersCount = Object.values(infoPlayers).filter(
+    (player) => player.action === "call"
+  ).length;
+
   const mainPlayerCards = mainPlayer?.selectedCards;
   const mainPlayerBet = mainPlayer?.myBet;
   const positionMainPlayer = mainPlayer?.position || "";
@@ -33,6 +43,7 @@ const HintEv = () => {
   const sumBet = mainPlayer?.sumBet || 0;
   const maxBet = getMaxBet(infoPlayers);
   const maxCount = getMaxCount(infoPlayers);
+  const maxBetPosition = getMaxBetPosition(infoPlayers);
   const equity = mainPlayer?.equity || 0;
 
   const [positionMulti, setPositionMulti] = useState<string[]>([]);
@@ -65,13 +76,45 @@ const HintEv = () => {
     maxBetPlayers
   );
 
-  console.log("doFlopCallResult", doFlopCallResult);
-  console.log("statusRise", statusRise);
+  const doFlopThreeBetResult = calculateDoflopThreeBet(
+    positionMulti,
+    maxBet,
+    sumBet,
+    mainPlayerBet,
+    maxBetPlayers,
+    mainPlayerCards || [],
+    maxCount,
+    callPlayersCount
+    // equity
+  );
+
+  const resultCallsPosition = calculatePositionCoefficient(
+    fullPosition,
+    positionMainPlayer,
+    maxBetPosition,
+    positionMulti,
+    doFlopCallResult
+  );
+
+  const resultThreePosition = calculatePositionCoefficient(
+    fullPosition,
+    positionMainPlayer,
+    maxBetPosition,
+    positionMulti,
+    doFlopThreeBetResult
+  );
+
+  // console.log("doFlopCallResult", doFlopCallResult);
+  // console.log("statusRise", statusRise);
+  console.log("maxBetPlayers", maxBetPlayers);
 
   return (
     <div className={styles.hintEvWrapper}>
       {/* Выводим результат */}
-      <div>колл: {doFlopCallResult.toFixed(2)}</div>
+      {/* <div>колл: {doFlopCallResult.toFixed(2)}</div> */}
+
+      <div>колл: {resultCallsPosition.toFixed(2)}</div>
+      <div>трибет:{resultThreePosition.toFixed(2)}</div>
     </div>
   );
 };

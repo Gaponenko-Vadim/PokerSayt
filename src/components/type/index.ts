@@ -24,6 +24,32 @@ export type TypeInfoPlayers = {
   stadia: TypeGameStadia | null;
 };
 
+export type RangeActions = {
+  open: string[];
+
+  defend_open?: string[];
+  defendThreeBetLittle?: string[];
+  defendThreeBetAverage?: string[];
+  defendThreeBetBig?: string[];
+  defendThreeBetMax?: string[];
+  threeBet: string[];
+  multiThreeBet: string[];
+  fourBet: string[];
+  allIn: string[];
+};
+
+export type RangeActionsVarant =
+  | "open"
+  | "defend_open"
+  | "defendThreeBetLittle"
+  | "defendThreeBetAverage"
+  | "defendThreeBetBig"
+  | "defendThreeBetMax"
+  | "threeBet"
+  | "multiThreeBet"
+  | "fourBet"
+  | "allIn";
+
 export type PlayerData = {
   position: string;
   action: PlayerAction;
@@ -53,4 +79,15 @@ export type DiscardedPercentage = {
   action: string;
   discardedPercentage: number;
   cards: string[][];
+};
+
+export type PlayerDataTwo = {
+  position: string;
+  action: string;
+  stack: PlayerStack;
+  stackSize: number;
+  bet: string | null;
+  status: PlayerStatus;
+  cards: string[][];
+  cardsdiaposon: string[];
 };

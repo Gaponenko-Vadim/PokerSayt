@@ -9,6 +9,12 @@ import { POSITION_RANGES } from "../../constants/pozition_ranges";
 import { convertRangeToCards } from "../allСombinations/allTwoCardCombinations";
 import { filterCardsByMainPlayer } from "../foldHelpers";
 
+export const calculateFinalCoefficient = (positionMulti: string[]): number => {
+  if (positionMulti.length === 0) return 1.0; // Если массив пуст, вернуть 1.0
+  const lastIndex = positionMulti.length - 1;
+  return 1.0 + lastIndex * 0.1;
+};
+
 export const findPositionWithMostCombinations = (
   discardedPercentages: DiscardedPercentage[] | null | undefined
 ): {
@@ -326,20 +332,20 @@ export const calculateDiscardedPercentage = (
       : 0;
 
   // Логирование для отладки
-  console.log("calculateDiscardedPercentage result:", {
-    intermediatePositions: intermediatePositions.map(
-      ({ position, diapason }) => ({
-        position,
-        diapasonLength: diapason.length,
-      })
-    ),
-    cardsInfoPlayers: cardsInfoPlayers.map(({ position, cards }) => ({
-      position,
-      cardsLength: cards.length,
-    })),
-    discardedPercentages,
-    averageDiscardedPercentage,
-  });
+  // console.log("calculateDiscardedPercentage result:", {
+  //   intermediatePositions: intermediatePositions.map(
+  //     ({ position, diapason }) => ({
+  //       position,
+  //       diapasonLength: diapason.length,
+  //     })
+  //   ),
+  //   cardsInfoPlayers: cardsInfoPlayers.map(({ position, cards }) => ({
+  //     position,
+  //     cardsLength: cards.length,
+  //   })),
+  //   discardedPercentages,
+  //   averageDiscardedPercentage,
+  // });
 
   return { discardedPercentages, averageDiscardedPercentage };
 };

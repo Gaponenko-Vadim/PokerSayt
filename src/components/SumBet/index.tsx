@@ -5,6 +5,7 @@ import { updateMainPlayerSumBet } from "../../Redux/slice/infoPlayers"; // Им�
 import styles from "./stayle.module.scss";
 
 const SumBet = () => {
+  const ante = useSelector((state: RootState) => state.generalInformation.ante);
   const dispatch = useDispatch();
   const players = useSelector((state: RootState) => state.infoPlayers.players);
   const mainPlayers = useSelector(
@@ -21,7 +22,6 @@ const SumBet = () => {
       return sum;
     }, 0);
 
-    const ante = 0.2;
     const totalWithAnte = totalBet + Object.keys(players).length * ante;
     return totalWithAnte;
   };

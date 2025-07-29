@@ -23671,7 +23671,7 @@ export const bbRangeStandardAverage = {
       "AQo",
       "AKo",
     ],
-    fourBet: ["JJ", "QQ", "KK", "AA", "AKs", "AQs", "AKo", "AQo"],
+    fourBet: ["TT", "JJ", "QQ", "KK", "AA", "AKs", "AQs", "AKo", "AQo"],
     allIn: ["JJ", "QQ", "KK", "AA", "AKs", "AQs", "AKo", "AQo"],
   },
   // Большой стек (>40 BB)

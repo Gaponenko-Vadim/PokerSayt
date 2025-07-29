@@ -1,7 +1,7 @@
 export const calculatePositionCoefficient = (
   fullPosition: string[],
   position: string,
-  maxBetPlayers: string[],
+  maxBetPlayers: string,
   positionMulti: string[],
   result: number
 ): number => {
@@ -12,22 +12,36 @@ export const calculatePositionCoefficient = (
     return result; // Возвращаем исходное значение result по умолчанию
   }
 
+  // Специальный случай для позиции SB
+  if (position === "SB") {
+    console.log(`Позиция SB, уменьшаем result на 0.3`);
+    return result - 0.25;
+  }
+
   // Объединяем maxBetPlayers и positionMulti, убирая дубликаты
   const relevantPositions = Array.from(
     new Set([...maxBetPlayers, ...positionMulti])
   );
 
   // Проверяем наличие более поздних позиций
-  const hasLaterPositions = relevantPositions.some(
+  const laterPositions = relevantPositions.filter(
     (pos) => fullPosition.indexOf(pos) > positionIndex
   );
+  const laterCount = laterPositions.length;
 
   // Если есть более поздние позиции
-  if (hasLaterPositions) {
-    console.log(
-      `Обнаружены более поздние позиции для ${position}, коэффициент: 0.9`
-    );
-    return result - result * 0.1; // Уменьшаем result на 10% (коэффициент 0.9)
+  if (laterCount > 0) {
+    if (laterCount === 1) {
+      console.log(
+        `Обнаружена одна более поздняя позиция для ${position}, коэффициент: 0.9`
+      );
+      return result - result * 0.1; // Уменьшаем result на 10% (коэффициент 0.9)
+    } else {
+      console.log(
+        `Обнаружено более одной поздней позиции для ${position}, коэффициент: 0.85`
+      );
+      return result - result * 0.15; // Уменьшаем result на 15% (коэффициент 0.85)
+    }
   }
 
   // Если нет более поздних позиций, проверяем более ранние

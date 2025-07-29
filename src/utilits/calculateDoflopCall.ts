@@ -1,33 +1,18 @@
 import { filterCardsByMainPlayer } from "./foldHelpers";
 import { calculateEquity } from "./allСombinations/calculateEquity";
 import { full } from "../constants/positionsRanges8maxMtt";
-import { PlayerData, TypeStatusRise } from "../components/type";
+import { PlayerData, TypeStatusRise, PlayerDataTwo } from "../components/type";
 import { convertRangeToCards } from "./allСombinations/allTwoCardCombinations";
 import { calculatePercentageRaiseBets } from "./calculatePercentageRaiseBets";
 import { calculateMultiPotEquity } from "./calculateMultiPotEquity";
+import { calculateFinalCoefficient } from "./helpersFunction/calculateDoflopCallHelper";
+
 import {
   findPositionWithMostCombinations,
   protectionRange,
   doflopCallThreeBet,
   calculateDiscardedPercentage,
 } from "./helpersFunction/calculateDoflopCallHelper";
-
-type PlayerDataTwo = {
-  position: string;
-  action?: string;
-  stack?: "little" | "middle" | "big" | null;
-  stackSize?: number;
-  bet?: string | null;
-  status?: string;
-  cards: string[][];
-  cardsdiaposon?: string[];
-};
-
-const calculateFinalCoefficient = (positionMulti: string[]): number => {
-  if (positionMulti.length === 0) return 1.0; // Если массив пуст, вернуть 1.0
-  const lastIndex = positionMulti.length - 1;
-  return 1.0 + lastIndex * 0.1;
-};
 
 export const calculateDoflopCall = (
   mainPlayerCards: string[],
@@ -167,45 +152,58 @@ export const calculateDoflopCall = (
   const multiCall = calculateMultiPotEquity(mainPlayerCards, newMaxBetPlayers);
   const ev1stage = () => {
     const AllFold =
-      1 - (foldCall.averageDiscardedPercentage / 100) * coefficientsAllPosition;
+      (1 - foldCall.averageDiscardedPercentage / 100) * coefficientsAllPosition;
     const ThereWillTribute =
       1 - foldCallThreeBet.averageDiscardedPercentage / 100;
-    const multiCallOponent =
-      (foldCall.averageDiscardedPercentage / 100) * coefficientsAllPosition -
-      ThereWillTribute;
+    const multiCallOponent = 1 - foldCall.averageDiscardedPercentage / 100;
     const mainStavka = maxBet - mainBet;
     const stavkaDoThreeBet = threeBetStavka.bet;
     const stavkaDoCallMultipot = MultiStavka.bet;
-    console.log(
-      "все сбросили",
-      foldCall.averageDiscardedPercentage,
-      "equity против основного опонента",
-      equityDo1,
-      "equity против трибетта",
-      equityThreeBet.equity,
-      "equity против мультипотта",
-      multiCall,
-      "процент того что сделает трибетт",
-      foldCallThreeBet.averageDiscardedPercentage,
-      "coefficientsAllPosition",
-      coefficientsAllPosition,
-      AllFold,
-      ThereWillTribute,
-      multiCallOponent
-    );
+    // console.log(
+    //   "все сбросили",
+    //   foldCall.averageDiscardedPercentage,
+    //   "equity против основного опонента",
+    //   equityDo1,
+    //   "equity против трибетта",
+    //   equityThreeBet.equity,
+    //   "equity против мультипотта",
+    //   multiCall,
+    //   "процент того что сделает трибетт",
+    //   foldCallThreeBet.averageDiscardedPercentage,
+    //   "ответ с коэфицентом",
+    //   AllFold,
+    //   "coefficientsAllPosition",
+    //   coefficientsAllPosition,
+    //   ThereWillTribute,
+    //   multiCallOponent
+    // );
     return (() => {
-      if (positionMulti.length === 1) {
+      if (positionMulti.length === 1 || multiCallOponent < 0) {
         const result =
-          (foldCallThreeBet.averageDiscardedPercentage / 100) *
-            (equityDo1 * (sumBet + mainStavka) - mainStavka) +
-          ThereWillTribute *
+          (1 - AllFold) * (equityDo1 * (sumBet + mainStavka) - mainStavka) +
+          AllFold *
             ((equityThreeBet.equity / 100) *
               (sumBet +
                 (calculatePercentageRaise - stavkaDoThreeBet) +
                 (calculatePercentageRaise - mainBet)) -
               (calculatePercentageRaise - mainBet));
+
         return result;
-      } else return 5;
+      }
+
+      return (
+        (1 - AllFold) * (equityDo1 * (sumBet + mainStavka) - mainStavka) +
+        ThereWillTribute *
+          ((equityThreeBet.equity / 100) *
+            (sumBet +
+              (calculatePercentageRaise - stavkaDoThreeBet) +
+              (calculatePercentageRaise - mainBet)) -
+            (calculatePercentageRaise - mainBet)) +
+        ((AllFold - ThereWillTribute) *
+          ((multiCall / 100) *
+            (sumBet + (maxBet - stavkaDoCallMultipot) + mainStavka)) -
+          mainStavka)
+      );
 
       //
       // } else if (multiCallOponent < 0) {
@@ -236,48 +234,49 @@ export const calculateDoflopCall = (
   };
   // Логирование для отладки
 
-  console.log(
-    "fold",
-    foldCall,
-    "mainPlayerCard",
-    mainPlayerCards,
-    "equity",
-    equityDo1,
-    "sumBet",
-    sumBet,
-    "mainPlayerBet",
-    mainBet,
-    "positionMulti",
-    positionMulti,
-    "maxBet",
-    maxBet,
-    intermediatePositions,
-    " maxCount",
-    maxCount,
-    "cardsCall",
-    cardsInfoPlayers,
-    "stavka",
-    range,
-    "threeBetstavka",
-    threeBet,
-    "call",
-    foldCall.discardedPercentages,
-    "threeBet",
+  // console.log(
+  //   "fold",
+  //   foldCall,
+  //   "mainPlayerCard",
+  //   mainPlayerCards,
+  //   "equity",
+  //   equityDo1,
+  //   "sumBet",
+  //   sumBet,
+  //   "mainPlayerBet",
+  //   mainBet,
+  //   "positionMulti",
+  //   positionMulti,
+  //   "maxBet",
+  //   maxBet,
+  //   intermediatePositions,
+  //   " maxCount",
+  //   maxCount,
+  //   "cardsCall",
+  //   cardsInfoPlayers,
+  //   "stavka",
+  //   range,
+  //   "threeBetstavka",
+  //   threeBet,
+  //   "call",
+  //   foldCall.discardedPercentages,
+  //   "threeBet",
 
-    threeBetStavka.result,
-    " foldCallThreeBet",
-    foldCallThreeBet.averageDiscardedPercentage,
-    "equityThreeBet",
-    equityThreeBet.equity,
-    "reise",
-    calculatePercentageRaise,
-    "dfrgf",
-    MultiStavka.result,
-    "maxBetPlayers",
-    newMaxBetPlayers,
-    "multiCall",
-    multiCall
-  );
+  //   threeBetStavka.result,
+  //   " foldCallThreeBet",
+  //   foldCallThreeBet.averageDiscardedPercentage,
+  //   "equityThreeBet",
+  //   equityThreeBet.equity,
+  //   "reise",
+  //   calculatePercentageRaise,
+  //   "dfrgf",
+  //   MultiStavka.result,
+  //   "maxBetPlayers",
+  //   newMaxBetPlayers,
+  //   "multiCall",
+  //   multiCall
+  // );
+  // console.log("agreeeeeeeaedffffgggggggggggggggggggggggggggg", positionMulti);
   return ev1stage();
 };
 // сделать высчет ставки рейза - что стаит , от сам бет

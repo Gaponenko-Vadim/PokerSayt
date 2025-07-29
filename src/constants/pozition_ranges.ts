@@ -1,19 +1,5 @@
 import rages from "./positionsRanges8maxMtt";
-import { PlayerStatus } from "../components/type";
-
-interface RangeActions {
-  open: string[];
-
-  defend_open?: string[];
-  defendThreeBetLittle?: string[];
-  defendThreeBetAverage?: string[];
-  defendThreeBetBig?: string[];
-  defendThreeBetMax?: string[];
-  threeBet: string[];
-  multiThreeBet: string[];
-  fourBet: string[];
-  allIn: string[];
-}
+import { PlayerStatus, RangeActions } from "../components/type";
 
 interface Range {
   middle: RangeActions;

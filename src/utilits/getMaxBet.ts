@@ -20,3 +20,23 @@ export const getMaxCount = (players: { [key: string]: PlayerData }): number => {
     0
   );
 };
+
+export const getMaxBetPosition = (players: {
+  [key: string]: PlayerData;
+}): string => {
+  let maxPosition = "";
+  let maxBetValue = -Infinity;
+
+  Object.values(players).forEach((player) => {
+    // <-- убрали [_, player]
+    if (!player.bet || player.bet === "All-in") return;
+
+    const betValue = parseFloat(player.bet.replace("BB", ""));
+    if (!isNaN(betValue) && betValue > maxBetValue) {
+      maxBetValue = betValue;
+      maxPosition = player.position;
+    }
+  });
+
+  return maxPosition;
+};
