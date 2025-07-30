@@ -1,15 +1,20 @@
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../Redux/store"; // Предполагаем, что RootState определён
-import { updateGameStadia } from "../../Redux/slice/infoPlayers"; // Импортируем действие
+import { RootState } from "../../Redux/store";
+import { TypeGameStadia } from "../type";
+import { updateGameStadia } from "../../Redux/slice/infoPlayers";
+import { setCalculateTournamentStacks } from "../../Redux/slice/infoPlayers";
+import { stackStadiaName } from "../../utilits/stackStadiaName";
+import { setFacktStack } from "../../Redux/slice/generalInformation";
 import styles from "./stayle.module.css";
-
-export type TypeGameStadia = "initial" | "Average" | "late" | "prize";
 
 const GameStadia: React.FC = () => {
   const dispatch = useDispatch();
   const selectedStadia = useSelector(
     (state: RootState) => state.infoPlayers.stadia
-  ); // Получаем стадию из Redux
+  );
+  const baseStartingStack = useSelector(
+    (state: RootState) => state.generalInformation.startingStack
+  );
 
   const stadiaOptions: TypeGameStadia[] = [
     "initial",
@@ -19,10 +24,14 @@ const GameStadia: React.FC = () => {
   ];
 
   const handleStadiaClick = (stadia: TypeGameStadia) => {
+    const stadiaFinal: TypeGameStadia = stadia !== null ? stadia : "initial";
     if (selectedStadia === stadia) {
-      dispatch(updateGameStadia({ stadia: null })); // Сбрасываем выбор
+      dispatch(updateGameStadia({ stadia: null }));
     } else {
-      dispatch(updateGameStadia({ stadia })); // Устанавливаем новую стадию
+      const newStack = stackStadiaName(stadiaFinal, baseStartingStack);
+      dispatch(setFacktStack(newStack));
+      dispatch(updateGameStadia({ stadia: stadiaFinal }));
+      dispatch(setCalculateTournamentStacks({ startingStack: newStack }));
     }
   };
 

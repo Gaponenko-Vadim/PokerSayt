@@ -12,7 +12,7 @@ import GeneralHint from "../GeneralHint";
 import GameStadia from "../GameStadia";
 import TableMatrix from "../TableMatrix"; // Импортируем TableMatrix
 import CardPostFlop from "../CardPostFlop";
-import Ante from "../Ante/ante";
+import SettingUpTheInitialStackAndAnte from "../settingUpTheInitialStackAndAnte";
 
 const CardTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,7 +32,7 @@ const CardTable = () => {
 
   return (
     <div>
-      <Ante />
+      <SettingUpTheInitialStackAndAnte />
       <GameStadia />
       <div className={styles.poker__table}>
         <Players

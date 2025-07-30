@@ -13,11 +13,11 @@ import {
 import { POSITION_RANGES } from "../../constants/pozition_ranges";
 
 // Константы
-const INITIAL_STACK_SIZE = 30;
-const STACK_SIZES: Record<PlayerStack, number> = {
-  ultraShort: 12,
-  little: 18,
-  middle: 30,
+let INITIAL_STACK_SIZE = 100; // Начальное значение, будет обновляться
+let STACK_SIZES: Record<PlayerStack, number> = {
+  ultraShort: 10,
+  little: 30,
+  middle: 100,
   big: 50,
 };
 
@@ -324,6 +324,33 @@ export const infoPlayers = createSlice({
       mainPlayer.stackSize =
         STACK_SIZES[action.payload.stack] || INITIAL_STACK_SIZE;
     },
+    setCalculateTournamentStacks: (
+      state,
+      action: PayloadAction<{ startingStack: number }>
+    ) => {
+      const { startingStack } = action.payload;
+      // Обновляем INITIAL_STACK_SIZE
+      INITIAL_STACK_SIZE = startingStack;
+      // Обновляем STACK_SIZES
+      STACK_SIZES = {
+        ultraShort: 10,
+        little: Math.round(startingStack * 0.3),
+        middle: startingStack,
+        big: Math.round(startingStack * 1.67),
+      };
+
+      // Обновляем stackSize для всех игроков
+      Object.keys(state.players).forEach((position) => {
+        state.players[position].stackSize =
+          STACK_SIZES[state.players[position].stack] || 0;
+      });
+
+      // Обновляем stackSize для главного игрока
+      if (state.mainPlayers) {
+        state.mainPlayers.stackSize =
+          STACK_SIZES[state.mainPlayers.stack] || INITIAL_STACK_SIZE;
+      }
+    },
     resetselectAction: (state) => {
       if (state.mainPlayers?.selectedCards) {
         state.mainPlayers.selectedCards = [];
@@ -360,6 +387,7 @@ export const {
   updateGameStadia,
   setPlayerCount,
   updateMainPlayerStack,
+  setCalculateTournamentStacks,
 } = infoPlayers.actions;
 
 // Экспортируем редьюсер
