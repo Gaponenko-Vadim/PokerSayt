@@ -153,27 +153,20 @@ export const calculateDoflopCall = (
   const ev1stage = () => {
     const AllFold =
       (1 - foldCall.averageDiscardedPercentage / 100) * coefficientsAllPosition;
+
+    const moyCallpriMnogihOponentax =
+      1 -
+      (foldCallThreeBet.averageDiscardedPercentage / 100) *
+        coefficientsAllPosition;
+    const ThreeBetMoegoCallProcent = 1 - moyCallpriMnogihOponentax;
+    const MultiCallMoegoCall =
+      1 - ThreeBetMoegoCallProcent - moyCallpriMnogihOponentax;
     const ThereWillTribute =
-      1 - foldCallThreeBet.averageDiscardedPercentage / 100;
+      AllFold - foldCallThreeBet.averageDiscardedPercentage / 100;
     const multiCallOponent = 1 - foldCall.averageDiscardedPercentage / 100;
     const mainStavka = maxBet - mainBet;
     const stavkaDoThreeBet = threeBetStavka.bet;
     const stavkaDoCallMultipot = MultiStavka.bet;
-
-    const callPriMnogixIgrakach =
-      maxCount < 2
-        ? (1 - AllFold) * (equityDo1 * (sumBet + mainStavka) - mainStavka) +
-          ThereWillTribute *
-            ((equityThreeBet.equity / 100) *
-              (sumBet +
-                (calculatePercentageRaise - stavkaDoThreeBet) +
-                (calculatePercentageRaise - mainBet)) -
-              (calculatePercentageRaise - mainBet)) +
-          ((AllFold - ThereWillTribute) *
-            ((multiCall / 100) *
-              (sumBet + (maxBet - stavkaDoCallMultipot) + mainStavka)) -
-            mainStavka)
-        : equityDo1 * (sumBet + mainStavka) - mainStavka;
     // console.log(
     //   "все сбросили",
     //   foldCall.averageDiscardedPercentage,
@@ -192,10 +185,52 @@ export const calculateDoflopCall = (
     //   ThereWillTribute,
     //   multiCallOponent
     // );
+    const odinNaodinCallprotivBBnachalo =
+      (1 - AllFold) * (equityDo1 * (sumBet + mainStavka) - mainStavka);
+
+    const odinNaodinCall =
+      moyCallpriMnogihOponentax *
+      (equityDo1 * (sumBet + mainStavka) - mainStavka);
+
+    const thBetMoegoCalla =
+      ThreeBetMoegoCallProcent > 0
+        ? 1 -
+          ThreeBetMoegoCallProcent *
+            ((equityThreeBet.equity / 100) *
+              (sumBet +
+                (calculatePercentageRaise - stavkaDoThreeBet) +
+                (calculatePercentageRaise - mainBet)) -
+              (calculatePercentageRaise - mainBet))
+        : 0;
+
+    const MultipotMoegoCall =
+      MultiCallMoegoCall > 0
+        ? MultiCallMoegoCall *
+            ((multiCall / 100) *
+              (sumBet + (maxBet - stavkaDoCallMultipot) + mainStavka)) -
+          mainStavka
+        : 0;
+
+    console.log(
+      "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      odinNaodinCall,
+      thBetMoegoCalla,
+      MultipotMoegoCall,
+      "alldfold",
+      AllFold,
+      "moyCallpriMnogihOponentax",
+      moyCallpriMnogihOponentax,
+      "ThreeBetMoegoCallProcent",
+      ThreeBetMoegoCallProcent,
+      calculatePercentageRaise - mainBet,
+      "equityThreeBet.equity / 100)",
+      equityThreeBet.equity / 100
+    );
+
     return (() => {
       if (positionMulti.length === 1 || multiCallOponent < 0) {
         const result =
-          (1 - AllFold) * (equityDo1 * (sumBet + mainStavka) - mainStavka) +
+          odinNaodinCallprotivBBnachalo +
           AllFold *
             ((equityThreeBet.equity / 100) *
               (sumBet +
@@ -206,35 +241,10 @@ export const calculateDoflopCall = (
         return result;
       }
 
-      return callPriMnogixIgrakach;
-
-      //
-      // } else if (multiCallOponent < 0) {
-      //   return (
-      //     AllFold * (equityDo1 * (sumBet + mainStavka) - mainBet) +
-      //     (ThereWillTribute *
-      //       ((equityThreeBet.equity / 100) *
-      //         (sumBet +
-      //           (calculatePercentageRaise - stavkaDoThreeBet) +
-      //           (calculatePercentageRaise - mainBet))) -
-      //       (calculatePercentageRaise - mainBet))
-      //   );
-      // } else
-      //   return (
-      //     AllFold * (equityDo1 * (sumBet + mainStavka) - mainStavka) +
-      //     ThereWillTribute *
-      //       ((equityThreeBet.equity / 100) *
-      //         (sumBet +
-      //           (calculatePercentageRaise - stavkaDoThreeBet) +
-      //           (calculatePercentageRaise - mainBet)) -
-      //         (calculatePercentageRaise - mainBet)) +
-      //     multiCallOponent *
-      //       ((multiCall / 100) *
-      //         (sumBet + (maxBet - stavkaDoCallMultipot) + mainStavka) -
-      //         mainStavka)
-      //   );
+      return odinNaodinCall + thBetMoegoCalla + MultipotMoegoCall;
     })();
   };
+
   // Логирование для отладки
 
   // console.log(
@@ -280,6 +290,7 @@ export const calculateDoflopCall = (
   //   multiCall
   // );
   // console.log("agreeeeeeeaedffffgggggggggggggggggggggggggggg", positionMulti);
+
   return ev1stage();
 };
 // сделать высчет ставки рейза - что стаит , от сам бет

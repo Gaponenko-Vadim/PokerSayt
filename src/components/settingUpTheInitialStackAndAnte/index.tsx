@@ -29,6 +29,9 @@ const SettingUpTheInitialStackAndAnte: React.FC = () => {
 
   const [anteAmount, setAnteAmount] = useState<number>(0);
   const [inputValue, setInputValue] = useState<string>("");
+  const [stackInputValue, setStackInputValue] = useState<string>(
+    facktStack?.toString() || ""
+  );
   const disabled = ante === 0 ? false : true;
   const [isInputDisabled, setIsInputDisabled] = useState<boolean>(disabled);
   const [showStackSelector, setShowStackSelector] = useState<boolean>(false);
@@ -46,9 +49,31 @@ const SettingUpTheInitialStackAndAnte: React.FC = () => {
     }
   };
 
+  const handleStackInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (/^\d*\.?\d*$/.test(value) || value === "") {
+      setStackInputValue(value);
+    }
+  };
+
   const handleOkClick = (anteAmount: number) => {
     setIsInputDisabled(true);
     dispatch(setAnte(anteAmount));
+    const parsedValue = Number(stackInputValue);
+    if (!isNaN(parsedValue) && parsedValue > 0 && stadiaFinal === "prize") {
+      // Для призовой стадии обновляем оба значения
+      dispatch(setStartingStack(parsedValue)); // Добавляем эту строку
+      dispatch(setFacktStack(parsedValue));
+      dispatch(setCalculateTournamentStacks({ startingStack: parsedValue }));
+      setShowStackSelector(false);
+
+      // Для отладки
+      console.log("Updated values:", {
+        startingStack: parsedValue,
+        facktStack: parsedValue,
+        currentStadia: stadiaFinal,
+      });
+    }
   };
 
   const handleStackSelect = (stadia: TypeGameStadia, stack: number) => {
@@ -57,6 +82,52 @@ const SettingUpTheInitialStackAndAnte: React.FC = () => {
     dispatch(setFacktStack(stackFinal));
     dispatch(setCalculateTournamentStacks({ startingStack: stackFinal }));
     setShowStackSelector(false);
+  };
+
+  const handleStackInputConfirm = () => {
+    const parsedValue = Number(stackInputValue);
+    if (!isNaN(parsedValue) && parsedValue > 0) {
+      // Для призовой стадии обновляем оба значения
+      dispatch(setStartingStack(parsedValue)); // Добавляем эту строку
+      dispatch(setFacktStack(parsedValue));
+      dispatch(setCalculateTournamentStacks({ startingStack: parsedValue }));
+      setShowStackSelector(false);
+
+      // Для отладки
+      console.log("Updated values:", {
+        startingStack: parsedValue,
+        facktStack: parsedValue,
+        currentStadia: stadiaFinal,
+      });
+    }
+  };
+
+  const renderStackSelector = (
+    selectedStack: number,
+    options: number[],
+    onSelect: (stack: number) => void,
+    title: string = "Выберите начальный стек:",
+    containerClass: string = styles.stackSelection,
+    buttonClass: string = styles.stackButton
+  ) => {
+    return (
+      <div className={containerClass}>
+        <h3 className={styles.stackTitle}>{title}</h3>
+        <div className={styles.stackButtons}>
+          {options.map((stack) => (
+            <button
+              key={stack}
+              onClick={() => onSelect(stack)}
+              className={`${buttonClass} ${
+                selectedStack === stack ? styles.selected : ""
+              }`}
+            >
+              {stack} ББ
+            </button>
+          ))}
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -76,61 +147,88 @@ const SettingUpTheInitialStackAndAnte: React.FC = () => {
             className={styles.stackDisplay}
           >
             <h2 className={styles.title}>
-              средний cтек: {facktStack || 100} ББ
+              средний cтек: {facktStack || startingStack} ББ
             </h2>
           </div>
 
           {showStackSelector && (
-            <div className={styles.stackSelector}>
-              {stackOptions.map((stack) => (
-                <button
-                  key={stack}
-                  onClick={() => handleStackSelect(stadiaFinal, stack)}
-                  className={styles.stackButton}
-                >
-                  {stack} ББ
-                </button>
-              ))}
-            </div>
+            <>
+              {stadiaFinal === "prize" ? (
+                <div className={styles.prizeStackContainer}>
+                  <div className={styles.stackInputContainer}>
+                    <input
+                      type="text"
+                      value={stackInputValue}
+                      onChange={handleStackInputChange}
+                      placeholder="Введите средний стек"
+                      className={styles.input}
+                    />
+                  </div>
+                  <button
+                    onClick={handleStackInputConfirm}
+                    className={`${styles.button} ${
+                      Number(stackInputValue) === 0
+                        ? styles.transparentButton
+                        : ""
+                    }`}
+                    disabled={Number(stackInputValue) === 0}
+                  >
+                    OK
+                  </button>
+                </div>
+              ) : (
+                renderStackSelector(
+                  startingStack,
+                  stackOptions,
+                  (stack) => handleStackSelect(stadiaFinal, stack),
+                  "Выберите стек:",
+                  styles.stackSelector
+                )
+              )}
+            </>
           )}
         </div>
       ) : (
-        <div className={styles.container}>
-          <h3 className={styles.title}>
-            Введите сумму общего банка с малым и большим BB
-          </h3>
-          <input
-            type="text"
-            value={inputValue}
-            onChange={handleInputChange}
-            placeholder="Введите сумму"
-            className={styles.input}
-          />
-          <p className={styles.amount}>Текущая анте: {anteAmount.toFixed(2)}</p>
+        <div className={styles.overlay}>
+          <div className={styles.container}>
+            <h3 className={styles.title}>
+              Введите сумму общего банка с малым и большим BB
+            </h3>
+            <input
+              type="text"
+              value={inputValue}
+              onChange={handleInputChange}
+              placeholder="Введите сумму"
+              className={styles.input}
+            />
+            <p className={styles.amount}>
+              Текущая анте: {anteAmount.toFixed(2)}
+            </p>
 
-          <div className={styles.stackSelection}>
-            <h3 className={styles.stackTitle}>Выберите начальный стек:</h3>
-            <div className={styles.stackButtons}>
-              {stackOptions.map((stack) => (
-                <button
-                  key={stack}
-                  onClick={() => handleStackSelect(stadiaFinal, stack)}
-                  className={`${styles.stackButton} ${
-                    startingStack === stack ? styles.selected : ""
-                  }`}
-                >
-                  {stack} ББ
-                </button>
-              ))}
-            </div>
+            {stadiaFinal === "prize" ? (
+              <div className={styles.stackInputContainer}>
+                <h3 className={styles.stackTitle}>Введите средний стек:</h3>
+                <input
+                  type="text"
+                  value={stackInputValue}
+                  onChange={handleStackInputChange}
+                  placeholder="Введите средний стек"
+                  className={styles.input}
+                />
+              </div>
+            ) : (
+              renderStackSelector(startingStack, stackOptions, (stack) =>
+                handleStackSelect(stadiaFinal, stack)
+              )
+            )}
+
+            <button
+              onClick={() => handleOkClick(anteAmount)}
+              className={styles.button}
+            >
+              OK
+            </button>
           </div>
-
-          <button
-            onClick={() => handleOkClick(anteAmount)}
-            className={styles.button}
-          >
-            OK
-          </button>
         </div>
       )}
     </>

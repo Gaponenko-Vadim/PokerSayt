@@ -33,7 +33,7 @@ const SumBet = () => {
     if (mainPlayers) {
       dispatch(updateMainPlayerSumBet({ sumBet: totalWithAnte }));
     }
-  }, [players, dispatch, mainPlayers]); // Зависимости: players, dispatch, mainPlayers
+  }, [players, dispatch, mainPlayers, ante]); // Зависимости: players, dispatch, mainPlayers
 
   const totalWithAnte = calculateSumBet(); // Для отображения
   console.log(mainPlayers);

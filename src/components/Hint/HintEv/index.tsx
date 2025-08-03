@@ -84,8 +84,8 @@ const HintEv = () => {
     maxBetPlayers,
     mainPlayerCards || [],
     maxCount,
-    callPlayersCount
-    // equity
+    callPlayersCount,
+    equity
   );
 
   const resultCallsPosition = calculatePositionCoefficient(
@@ -93,7 +93,8 @@ const HintEv = () => {
     positionMainPlayer,
     maxBetPosition,
     positionMulti,
-    doFlopCallResult
+    doFlopCallResult,
+    equity
   );
 
   const resultThreePosition = calculatePositionCoefficient(
@@ -101,7 +102,8 @@ const HintEv = () => {
     positionMainPlayer,
     maxBetPosition,
     positionMulti,
-    doFlopThreeBetResult
+    doFlopThreeBetResult,
+    equity
   );
 
   // console.log("doFlopCallResult", doFlopCallResult);
@@ -113,8 +115,14 @@ const HintEv = () => {
       {/* Выводим результат */}
       {/* <div>колл: {doFlopCallResult.toFixed(2)}</div> */}
 
-      <div>колл: {resultCallsPosition.toFixed(2)}</div>
-      <div>трибет:{resultThreePosition.toFixed(2)}</div>
+      {equity >= 99 ? (
+        <div>трибет:{resultThreePosition.toFixed(2)}</div>
+      ) : (
+        <>
+          <div>колл: {resultCallsPosition.toFixed(2)}</div>
+          <div>трибет:{resultThreePosition.toFixed(2)}</div>
+        </>
+      )}
     </div>
   );
 };

@@ -8,18 +8,20 @@ import {
 } from "../../Redux/slice/infoPlayers";
 import styles from "./style.module.scss";
 import MenuStack from "../MenuStack";
+import { PlayerStack } from "../type";
 
 // Тип для пропсов
 type TypeMainProps = {
   player: {
     action: string;
-    stack: "little" | "middle" | "big" | null;
+    stack: PlayerStack;
   };
   currentPosition: string;
 };
 
 // Компонент с типизацией
 const MainPlayer: React.FC<TypeMainProps> = ({ currentPosition, player }) => {
+  const ante = useSelector((state: RootState) => state.generalInformation.ante);
   const dispatch = useDispatch();
   const selectedCards = useSelector(
     (state: RootState) => state.cardSlice.selectedCards
@@ -47,8 +49,6 @@ const MainPlayer: React.FC<TypeMainProps> = ({ currentPosition, player }) => {
   useEffect(() => {
     if (mainPlayer && mainPlayer.position && players[mainPlayer.position]) {
       const currentBet = players[mainPlayer.position].bet;
-      const ante = 0.2; // Анте 0.2 BB
-
       // Рассчитываем myBet с учетом анте
       let myBet: string | null;
       if (currentBet === "All-in") {

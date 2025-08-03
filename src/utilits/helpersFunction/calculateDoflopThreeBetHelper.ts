@@ -242,9 +242,12 @@ export const protectionRangeCallMaxBetThreeBet = (
 
   const finalFold = foldCardPercentage(defoldDiapason, diapason);
 
-  // Извлекаем только equity из результата calculateEquity
+  // Проверка mainPlayerCards перед вызовом calculateEquity
   const equityResult =
-    mainPlayerCards && diapason.length > 0
+    mainPlayerCards &&
+    Array.isArray(mainPlayerCards) &&
+    mainPlayerCards.length === 2 &&
+    diapason.length > 0
       ? calculateEquity(mainPlayerCards, diapason)
       : { equity: 0 };
 
@@ -252,11 +255,13 @@ export const protectionRangeCallMaxBetThreeBet = (
     typeof equityResult === "number" ? equityResult : equityResult.equity ?? 0;
 
   console.log(
-    "Fold percentage and diapason length22:",
+    "Fold percentage and diapason length:",
     finalFold,
     diapason.length,
     equityCallThreeBet,
-    maxCount
+    maxCount,
+    "mainPlayerCards:",
+    mainPlayerCards
   );
 
   return {
@@ -315,7 +320,10 @@ export const protectionRangeMaxBetThreeBetMyThreeBet = (
 
   // Извлекаем только equity из результата calculateEquity
   const equityResult =
-    mainPlayerCards && diapason.length > 0
+    mainPlayerCards &&
+    Array.isArray(mainPlayerCards) &&
+    mainPlayerCards.length === 2 &&
+    diapason.length > 0
       ? calculateEquity(mainPlayerCards, diapason)
       : { equity: 0 };
 

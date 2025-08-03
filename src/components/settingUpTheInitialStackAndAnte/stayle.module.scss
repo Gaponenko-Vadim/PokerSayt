@@ -1,4 +1,18 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5); /* Затемнение экрана */
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .container {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -8,21 +22,39 @@
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   max-width: 300px;
-  margin: 20px auto;
+  width: 100%;
+  z-index: 1001;
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #aaa;
+
+  &:hover {
+    color: #555;
+  }
 }
 
 .container__ante {
-  cursor: pointer;
+  position: fixed;
+  top: 20px;
+  right: 250px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 15px;
+  padding: 5px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   max-width: 250px;
-  margin: 0 auto;
   background-color: #ffffff;
-  position: relative;
+  z-index: 999;
+  cursor: pointer;
 }
 
 .title {
@@ -72,7 +104,7 @@
 .button {
   padding: 10px 20px;
   font-size: 1rem;
-  background-color: #007bff;
+  background-color: #4caf50;
   color: white;
   border: none;
   border-radius: 4px;
@@ -82,7 +114,15 @@
   margin-top: 10px;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: #45a049;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    background-color: transparent;
+    border: 1px solid #ccc;
+    color: #ccc;
+    cursor: not-allowed;
   }
 }
 
@@ -94,6 +134,7 @@
   margin-bottom: 10px;
   background-color: #f8f9fa;
   border-radius: 4px;
+  cursor: pointer;
   transition: background-color 0.2s ease;
 
   &:hover {
@@ -102,16 +143,12 @@
 }
 
 .stackSelector {
-  position: absolute;
-  top: 100%;
-  left: 0;
   width: 100%;
   background-color: white;
-  border-radius: 0 0 8px 8px;
+  border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 10;
   padding: 10px;
-  margin-top: -5px;
+  margin-top: 10px;
 }
 
 .stackSelection {
@@ -147,20 +184,33 @@
   }
 }
 
-/* Адаптивность для мобильных устройств */
+.stackInputContainer {
+  width: 100%;
+}
+
+.prizeStackContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  padding: 15px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
 @media (max-width: 600px) {
   .container,
-  .container__ante {
+  .container__ante,
+  .stackSelector,
+  .prizeStackContainer {
     padding: 15px;
     max-width: 90%;
   }
 
-  .title {
-    font-size: 1.1rem;
-  }
-
+  .title,
   .stackTitle {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
   .input {

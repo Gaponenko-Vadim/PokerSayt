@@ -3,19 +3,26 @@ export const calculatePositionCoefficient = (
   position: string,
   maxBetPlayers: string,
   positionMulti: string[],
-  result: number
+  result: number,
+  equity: number
 ): number => {
+  // Если equity >= 70, возвращаем result без изменений
+  if (equity >= 5) {
+    console.log(`Equity ${equity} >= 70, возвращаем result без изменений`);
+    return result;
+  }
+
   // Проверяем валидность текущей позиции
   const positionIndex = fullPosition.indexOf(position);
   if (positionIndex === -1) {
     console.log(`Ошибка: Неверная позиция: ${position}`);
-    return result; // Возвращаем исходное значение result по умолчанию
+    return result;
   }
 
   // Специальный случай для позиции SB
   if (position === "SB") {
-    console.log(`Позиция SB, уменьшаем result на 0.3`);
-    return result - 0.25;
+    console.log(`Позиция SB, уменьшаем result на 0.25`);
+    return result - 0.5;
   }
 
   // Объединяем maxBetPlayers и positionMulti, убирая дубликаты
@@ -35,12 +42,12 @@ export const calculatePositionCoefficient = (
       console.log(
         `Обнаружена одна более поздняя позиция для ${position}, коэффициент: 0.9`
       );
-      return result - result * 0.1; // Уменьшаем result на 10% (коэффициент 0.9)
+      return result - result * 0.1;
     } else {
       console.log(
         `Обнаружено более одной поздней позиции для ${position}, коэффициент: 0.85`
       );
-      return result - result * 0.15; // Уменьшаем result на 15% (коэффициент 0.85)
+      return result - result * 0.15;
     }
   }
 
@@ -52,13 +59,13 @@ export const calculatePositionCoefficient = (
 
   if (earlierCount === 1) {
     console.log(`Одна позиция перед ${position}, коэффициент: 1.1`);
-    return result + result * 0.1; // Увеличиваем result на 10% (коэффициент 1.1)
+    return result + result * 0.1;
   } else if (earlierCount === 2) {
     console.log(`Две позиции перед ${position}, коэффициент: 1.05`);
-    return result + result * 0.05; // Увеличиваем result на 5% (коэффициент 1.05)
+    return result + result * 0.05;
   }
 
   // По умолчанию, если нет подходящих условий
   console.log(`Стандартный случай для ${position}, коэффициент: 1.0`);
-  return result; // Возвращаем исходное значение result
+  return result;
 };

@@ -16,9 +16,9 @@ import { POSITION_RANGES } from "../../constants/pozition_ranges";
 let INITIAL_STACK_SIZE = 100; // Начальное значение, будет обновляться
 let STACK_SIZES: Record<PlayerStack, number> = {
   ultraShort: 10,
-  little: 30,
+  little: 40,
   middle: 100,
-  big: 50,
+  big: 150,
 };
 
 // Начальное состояние
@@ -334,9 +334,9 @@ export const infoPlayers = createSlice({
       // Обновляем STACK_SIZES
       STACK_SIZES = {
         ultraShort: 10,
-        little: Math.round(startingStack * 0.3),
+        little: Math.round(startingStack * 0.4),
         middle: startingStack,
-        big: Math.round(startingStack * 1.67),
+        big: Math.round(startingStack * 1.5),
       };
 
       // Обновляем stackSize для всех игроков

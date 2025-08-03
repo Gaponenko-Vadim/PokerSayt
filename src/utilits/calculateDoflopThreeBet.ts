@@ -67,18 +67,28 @@ export const calculateDoflopThreeBet = (
   );
   const threeLittleThreeBet = 1 - betThreeBet.fold;
   const callLittleThreeBet = (1 - littleBet.fold) * coefficientsAllPosition;
-  const littleBetFinal =
-    (1 - callLittleThreeBet) * (sumBet - mainBet) +
+  const three =
+    threeLittleThreeBet *
+    ((betThreeBet.equityThreeBet / 100) *
+      (sumBetposleMyThreeBet +
+        resultStavkatThreeBetNaThreeBet[50] +
+        (resultStavkatThreeBetNaThreeBet[50] - mainBet)) -
+      (resultStavkatThreeBetNaThreeBet[50] - mainBet));
+
+  const odin = (1 - callLittleThreeBet) * (sumBet - mainBet);
+  const threBetNaThreeBet =
     (callLittleThreeBet - threeLittleThreeBet) *
       ((littleBet.equityCallThreeBet / 100) *
         (sumBet + (resultStavka[33] - mainBet) + (resultStavka[33] - maxBet))) -
-    (resultStavka[33] - mainBet) +
-    threeLittleThreeBet *
-      ((betThreeBet.equityThreeBet / 100) *
-        (sumBetposleMyThreeBet +
-          resultStavkatThreeBetNaThreeBet[50] +
-          (resultStavkatThreeBetNaThreeBet[50] - mainBet)) -
-        (resultStavkatThreeBetNaThreeBet[50] - mainBet));
+    (resultStavka[33] - mainBet);
+  const littleBetFinal = odin + threBetNaThreeBet + three;
+  console.log(
+    "ошибка22222222222222222222222222222222",
+    odin,
+    threBetNaThreeBet,
+    three,
+    littleBet.fold
+  );
 
   console.log(
     "positionMulti",
