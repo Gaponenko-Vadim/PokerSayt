@@ -7,7 +7,7 @@ export const calculatePositionCoefficient = (
   equity: number
 ): number => {
   // Если equity >= 70, возвращаем result без изменений
-  if (equity >= 5) {
+  if (equity >= 75) {
     console.log(`Equity ${equity} >= 70, возвращаем result без изменений`);
     return result;
   }
@@ -42,12 +42,12 @@ export const calculatePositionCoefficient = (
       console.log(
         `Обнаружена одна более поздняя позиция для ${position}, коэффициент: 0.9`
       );
-      return result - result * 0.1;
+      return result - result * 0.13;
     } else {
       console.log(
         `Обнаружено более одной поздней позиции для ${position}, коэффициент: 0.85`
       );
-      return result - result * 0.15;
+      return result - result * 0.2;
     }
   }
 
@@ -60,9 +60,9 @@ export const calculatePositionCoefficient = (
   if (earlierCount === 1) {
     console.log(`Одна позиция перед ${position}, коэффициент: 1.1`);
     return result + result * 0.1;
-  } else if (earlierCount === 2) {
+  } else if (earlierCount > 2) {
     console.log(`Две позиции перед ${position}, коэффициент: 1.05`);
-    return result + result * 0.05;
+    return result + result * 0.12;
   }
 
   // По умолчанию, если нет подходящих условий

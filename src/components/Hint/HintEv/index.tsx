@@ -85,7 +85,8 @@ const HintEv = () => {
     mainPlayerCards || [],
     maxCount,
     callPlayersCount,
-    equity
+    equity,
+    maxBetPosition
   );
 
   const resultCallsPosition = calculatePositionCoefficient(
@@ -97,18 +98,56 @@ const HintEv = () => {
     equity
   );
 
-  const resultThreePosition = calculatePositionCoefficient(
+  const resultThreePositionLittle = calculatePositionCoefficient(
     fullPosition,
     positionMainPlayer,
     maxBetPosition,
     positionMulti,
-    doFlopThreeBetResult,
+    doFlopThreeBetResult.little.littleBetFinal,
     equity
   );
 
+  const resultThreePositionAverage = calculatePositionCoefficient(
+    fullPosition,
+    positionMainPlayer,
+    maxBetPosition,
+    positionMulti,
+    doFlopThreeBetResult.average.averageBetFinal,
+    equity
+  );
+  const resultThreePositionBig = calculatePositionCoefficient(
+    fullPosition,
+    positionMainPlayer,
+    maxBetPosition,
+    positionMulti,
+    doFlopThreeBetResult.big.bigBetFinal,
+    equity
+  );
+
+  const resultThreePositionMax = calculatePositionCoefficient(
+    fullPosition,
+    positionMainPlayer,
+    maxBetPosition,
+    positionMulti,
+    doFlopThreeBetResult.max.maxBetFinal,
+    equity
+  );
+
+  let reiseNasvanie = "open";
+
+  if (maxCount === 0) {
+    reiseNasvanie = "open";
+  } else if (maxCount === 1) {
+    reiseNasvanie = "ThreeBet";
+  } else if (maxCount === 2) {
+    reiseNasvanie = "fourBet";
+  } else {
+    reiseNasvanie = "reise";
+  }
+
   // console.log("doFlopCallResult", doFlopCallResult);
   // console.log("statusRise", statusRise);
-  console.log("maxBetPlayers", maxBetPlayers);
+  console.log("maxBetPlayers", maxBetPlayers, "maxCount", maxCount);
 
   return (
     <div className={styles.hintEvWrapper}>
@@ -116,11 +155,40 @@ const HintEv = () => {
       {/* <div>колл: {doFlopCallResult.toFixed(2)}</div> */}
 
       {equity >= 99 ? (
-        <div>трибет:{resultThreePosition.toFixed(2)}</div>
+        <div>
+          {reiseNasvanie}:{resultThreePositionLittle.toFixed(2)}
+        </div>
       ) : (
         <>
-          <div>колл: {resultCallsPosition.toFixed(2)}</div>
-          <div>трибет:{resultThreePosition.toFixed(2)}</div>
+          <div>call: {resultCallsPosition.toFixed(2)}</div>
+          <div>
+            {reiseNasvanie}&nbsp;
+            {doFlopThreeBetResult.little.stavka}BB:
+            {resultThreePositionLittle.toFixed(2)}
+          </div>
+          <div>
+            {reiseNasvanie}&nbsp;
+            {doFlopThreeBetResult.average.stavka}BB:
+            {resultThreePositionAverage.toFixed(2)}
+          </div>
+          <div>
+            {maxCount > 0 ? (
+              <>
+                {reiseNasvanie}&nbsp;
+                {doFlopThreeBetResult.big.stavka}BB:
+                {resultThreePositionBig.toFixed(2)}
+              </>
+            ) : null}
+          </div>
+          <div>
+            {maxCount > 0 && equity > 58 ? (
+              <>
+                {reiseNasvanie}&nbsp;
+                {doFlopThreeBetResult.max.stavka}BB:
+                {resultThreePositionMax.toFixed(2)}
+              </>
+            ) : null}
+          </div>
         </>
       )}
     </div>

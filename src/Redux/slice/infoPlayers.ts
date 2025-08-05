@@ -77,7 +77,7 @@ const getRangeByActionAndCount = (
     } else if (count === 3) {
       selectedRange = range[stack].fourBet || [];
     } else {
-      selectedRange = range[stack].open || [];
+      selectedRange = range[stack].allIn || [];
     }
   } else if (action === "call" && (position === "SB" || position === "BB")) {
     selectedRange = range[stack].defend_open || [];

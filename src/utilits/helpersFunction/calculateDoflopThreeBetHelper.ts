@@ -93,7 +93,6 @@ export const getLongestCardsDiaposon = (
 
   // Применяем filterCardsByMainPlayer к cards игрока с самым длинным массивом
 
-  console.log("sfdaaaaaaadddddddddddd", diaposonFinal.length);
   return {
     diaposon: diaposonFinal,
     position: playerWithLongestCards.position || null,
@@ -223,7 +222,7 @@ export const protectionRangeCallMaxBetThreeBet = (
   } else if (maxCount + 1 === 3) {
     rangeSelection = "fourBet";
   } else {
-    rangeSelection = maxCount >= 4 ? "allIn" : "open";
+    rangeSelection = "allIn";
   }
 
   const rawRange = positionMaxBet

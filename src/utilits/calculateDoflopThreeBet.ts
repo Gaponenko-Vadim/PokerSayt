@@ -12,10 +12,29 @@ export const calculateDoflopThreeBet = (
   maxBetPlayers: PlayerDataTwo[],
   mainPlayerCards: string[],
   maxCount: number,
-  callPlayersCount: number
-  // equity: number
-) => {
-  const coefficientsAllPosition = calculateFinalCoefficient(positionMulti);
+  callPlayersCount: number,
+  equity: number,
+  maxBetPosition: string
+): {
+  little: { littleBetFinal: number; stavka: number };
+  average: {
+    averageBetFinal: number;
+    stavka: number;
+  };
+  big: {
+    bigBetFinal: number;
+    stavka: number;
+  };
+  max: {
+    maxBetFinal: number;
+    stavka: number;
+  };
+} => {
+  const coefficientsAllPosition = calculateFinalCoefficient(
+    positionMulti,
+    maxCount,
+    maxBetPosition
+  );
   const mainBet = parseFloat(mainPlayerBet || "");
   const resultStavka = calculatePercentageRaiseBets(
     maxBet,
@@ -24,12 +43,9 @@ export const calculateDoflopThreeBet = (
     maxCount
   );
 
-  const sumBetposleMyThreeBet = sumBet + resultStavka[33] - mainBet;
-  const maxBetMyThreeBet = resultStavka[33];
-  const resultStavkatThreeBetNaThreeBet = calculatePercentageRaiseBets(
-    maxBetMyThreeBet,
-    sumBetposleMyThreeBet,
-    callPlayersCount,
+  const betThreeBet = protectionRangeMaxBetThreeBetMyThreeBet(
+    maxBetPlayers,
+    mainPlayerCards,
     maxCount
   );
 
@@ -38,11 +54,6 @@ export const calculateDoflopThreeBet = (
     mainPlayerCards,
     maxCount,
     "little"
-  );
-  const betThreeBet = protectionRangeMaxBetThreeBetMyThreeBet(
-    maxBetPlayers,
-    mainPlayerCards,
-    maxCount
   );
 
   const averageBet = protectionRangeCallMaxBetThreeBet(
@@ -65,43 +76,82 @@ export const calculateDoflopThreeBet = (
     maxCount,
     "max"
   );
-  const threeLittleThreeBet = 1 - betThreeBet.fold;
-  const callLittleThreeBet = (1 - littleBet.fold) * coefficientsAllPosition;
-  const three =
-    threeLittleThreeBet *
-    ((betThreeBet.equityThreeBet / 100) *
-      (sumBetposleMyThreeBet +
-        resultStavkatThreeBetNaThreeBet[50] +
-        (resultStavkatThreeBetNaThreeBet[50] - mainBet)) -
-      (resultStavkatThreeBetNaThreeBet[50] - mainBet));
 
-  const odin = (1 - callLittleThreeBet) * (sumBet - mainBet);
-  const threBetNaThreeBet =
-    (callLittleThreeBet - threeLittleThreeBet) *
-      ((littleBet.equityCallThreeBet / 100) *
-        (sumBet + (resultStavka[33] - mainBet) + (resultStavka[33] - maxBet))) -
-    (resultStavka[33] - mainBet);
-  const littleBetFinal = odin + threBetNaThreeBet + three;
-  console.log(
-    "ошибка22222222222222222222222222222222",
-    odin,
-    threBetNaThreeBet,
-    three,
-    littleBet.fold
-  );
+  const final = (fold: number, stavka: number) => {
+    const maxBetMyThreeBet = stavka;
+    const sumBetposleMyThreeBet = sumBet + maxBetMyThreeBet - mainBet;
 
-  console.log(
-    "positionMulti",
-    positionMulti,
-    callLittleThreeBet,
-    "переставил",
-    resultStavkatThreeBetNaThreeBet[50],
-    "betThreeBet",
-    betThreeBet.equityThreeBet,
-    littleBet.equityCallThreeBet,
-    maxCount
-  );
+    const callThreeBet = Math.min((1 - fold) * coefficientsAllPosition, 1);
+    const resultStavkatThreeBetNaThreeBet = calculatePercentageRaiseBets(
+      maxBetMyThreeBet,
+      sumBetposleMyThreeBet,
+      callPlayersCount,
+      maxCount
+    );
+    const odinTest =
+      callThreeBet *
+      ((equity / 100) *
+        (sumBetposleMyThreeBet +
+          (maxBetMyThreeBet - maxBet) +
+          -(maxBetMyThreeBet - mainBet)) -
+        (maxBetMyThreeBet - mainBet));
 
-  return littleBetFinal;
-  // return resultStavka[75];
+    const odinSbrosilTest =
+      callThreeBet < 1 ? (1 - callThreeBet) * sumBet - mainBet : 0;
+    const odinThreeBet =
+      (betThreeBet.equityThreeBet / 100) *
+        (sumBetposleMyThreeBet +
+          resultStavkatThreeBetNaThreeBet[50] -
+          maxBet +
+          (resultStavkatThreeBetNaThreeBet[50] - maxBetMyThreeBet - mainBet)) -
+      (resultStavkatThreeBetNaThreeBet[50] - mainBet);
+
+    const betFinalTest =
+      betThreeBet.fold * (odinTest + odinSbrosilTest) +
+      (1 - betThreeBet.fold) * odinThreeBet;
+
+    console.log(
+      "2222222222222222222222222222222222222222222222",
+      callThreeBet,
+      betThreeBet.equityThreeBet / 100,
+      resultStavkatThreeBetNaThreeBet[50],
+      "(callThreeBet)",
+      betThreeBet.fold,
+      odinThreeBet,
+      "(1 - betThreeBet.fold) ",
+      betThreeBet.fold,
+      sumBetposleMyThreeBet,
+      maxCount,
+      mainBet,
+
+      maxBetMyThreeBet,
+      betFinalTest
+    );
+
+    return betFinalTest;
+  };
+
+  const littleBetFinal = final(littleBet.fold, resultStavka[33]);
+  const averageBetFinal = final(averageBet.fold, resultStavka[50]);
+  const bigBetFinal = final(bigBet.fold, resultStavka[75]);
+  const maxBetFinal = final(maximumBet.fold, resultStavka[100]);
+
+  return {
+    little: {
+      littleBetFinal: littleBetFinal,
+      stavka: resultStavka[33],
+    },
+    average: {
+      averageBetFinal: averageBetFinal,
+      stavka: resultStavka[50],
+    },
+    big: {
+      bigBetFinal: bigBetFinal,
+      stavka: resultStavka[75],
+    },
+    max: {
+      maxBetFinal: maxBetFinal,
+      stavka: resultStavka[100],
+    },
+  };
 };

@@ -9,10 +9,52 @@ import { POSITION_RANGES } from "../../constants/pozition_ranges";
 import { convertRangeToCards } from "../allСombinations/allTwoCardCombinations";
 import { filterCardsByMainPlayer } from "../foldHelpers";
 
-export const calculateFinalCoefficient = (positionMulti: string[]): number => {
-  if (positionMulti.length === 0) return 1.0; // Если массив пуст, вернуть 1.0
-  const lastIndex = positionMulti.length - 1;
-  return 1.0 + lastIndex * 0.1;
+const normalizePositions = (positions: string[]): string[] => {
+  const grouped: string[] = [];
+  let i = 0;
+
+  while (i < positions.length) {
+    if (positions[i] === "M" && positions[i + 1] === "P") {
+      grouped.push(
+        "MP" +
+          (positions[i + 2] === "+"
+            ? positions.slice(i + 2, i + 4).join("")
+            : "")
+      );
+      i += positions[i + 2] === "+" ? 4 : 2;
+    } else {
+      grouped.push(positions[i]);
+      i++;
+    }
+  }
+
+  return grouped;
+};
+
+export const calculateFinalCoefficient = (
+  positionMulti: string[],
+  maxCaunt: number,
+  maxBetPlayers?: string
+): number => {
+  // Группируем сложные позиции (например, "MP+1")
+  const normalizedPositionMulti = normalizePositions(positionMulti);
+  const normalizedMaxBetPlayers = maxBetPlayers ? [maxBetPlayers] : [];
+
+  const relevantPositions =
+    normalizedMaxBetPlayers.length > 0
+      ? Array.from(
+          new Set([...normalizedMaxBetPlayers, ...normalizedPositionMulti])
+        )
+      : normalizedPositionMulti;
+
+  console.log(relevantPositions, "Нормализованные позиции");
+  if (relevantPositions.length === 0) return 1.0;
+
+  const lastIndex = relevantPositions.length - 1;
+
+  return maxBetPlayers && maxBetPlayers.length > 1
+    ? 1.0 + lastIndex * 0.3
+    : 1.0 + lastIndex * 0.13;
 };
 
 export const findPositionWithMostCombinations = (
@@ -330,22 +372,6 @@ export const calculateDiscardedPercentage = (
           (totalDiscardedPercentage / discardedPercentages.length).toFixed(2)
         )
       : 0;
-
-  // Логирование для отладки
-  // console.log("calculateDiscardedPercentage result:", {
-  //   intermediatePositions: intermediatePositions.map(
-  //     ({ position, diapason }) => ({
-  //       position,
-  //       diapasonLength: diapason.length,
-  //     })
-  //   ),
-  //   cardsInfoPlayers: cardsInfoPlayers.map(({ position, cards }) => ({
-  //     position,
-  //     cardsLength: cards.length,
-  //   })),
-  //   discardedPercentages,
-  //   averageDiscardedPercentage,
-  // });
 
   return { discardedPercentages, averageDiscardedPercentage };
 };
