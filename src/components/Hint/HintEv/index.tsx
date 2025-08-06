@@ -31,7 +31,6 @@ const HintEv = () => {
   const maxBetPlayers = useSelector(
     (state: RootState) => state.generalInformation.maxBetPlayers
   );
-
   const callPlayersCount = Object.values(infoPlayers).filter(
     (player) => player.action === "call"
   ).length;

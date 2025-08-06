@@ -1,25 +1,28 @@
 import Button from "../Button/Button";
+import LimitsGame from "../Limits/indx";
 import styles from "./style.module.scss";
-const Menu = () => {
+
+const TableSelection = () => {
   return (
     <div className={styles.main}>
+      <LimitsGame />
       <div className={styles.main__container}>
         <div className={styles.main__container_block}>
-          <Button to="/TableSelection" label="Играть" />
+          <Button to="/CardTable" label="TurnirBaunti" />
         </div>
         <div
           className={`${styles.main__container_block} ${styles.main__container_block_blue}`}
         >
-          проверить удачу
+          Holdem
         </div>
         <div
           className={`${styles.main__container_block} ${styles.main__container_block_green}`}
         >
-          как пользоваться
+          turnir
         </div>
       </div>
     </div>
   );
 };
 
-export default Menu;
+export default TableSelection;

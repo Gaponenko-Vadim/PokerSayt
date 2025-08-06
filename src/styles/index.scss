@@ -1,9 +1,9 @@
 @forward "./reset.scss";
 @forward "./variable.scss";
 #root {
-  max-width: 1440px;
+  max-width: 100%px;
   width: 100%;
   margin: 0 auto;
 
-  background-color: #333333;
+  background: radial-gradient(circle, #2c3e50, #1a1a1a);
 }

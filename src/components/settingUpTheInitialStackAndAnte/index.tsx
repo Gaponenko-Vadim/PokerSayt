@@ -27,8 +27,8 @@ const SettingUpTheInitialStackAndAnte: React.FC = () => {
   const dispatch = useDispatch();
   const vsegoPosition: number = fullPosition.length;
 
-  const [anteAmount, setAnteAmount] = useState<number>(0);
-  const [inputValue, setInputValue] = useState<string>("");
+  const [anteAmount, setAnteAmount] = useState<number>(0.125);
+  const [inputValue, setInputValue] = useState<string>("2.5");
   const [stackInputValue, setStackInputValue] = useState<string>(
     facktStack?.toString() || ""
   );
@@ -138,9 +138,7 @@ const SettingUpTheInitialStackAndAnte: React.FC = () => {
             onClick={() => setIsInputDisabled(false)}
             className={styles.anteDisplay}
           >
-            <h2 className={styles.title}>
-              {anteAmount.toFixed(2)} анте сейчас
-            </h2>
+            <h2 className={styles.title}>{ante.toFixed(2)} анте сейчас</h2>
           </div>
           <div
             onClick={() => setShowStackSelector(!showStackSelector)}

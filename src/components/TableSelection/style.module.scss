@@ -1,0 +1,140 @@
+.main {
+  width: 80%;
+  min-height: 40vh;
+  margin-left: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 2rem;
+}
+
+.main__container {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
+  &_block {
+    border-radius: 50%; // Круглая форма как у покерного стола
+    width: 280px;
+    height: 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    padding: 20px;
+
+    // Эффект зеленого сукна
+    &:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(
+        circle at center,
+        rgba(0, 100, 0, 0.8) 0%,
+        rgba(0, 60, 0, 0.9) 70%
+      );
+      border-radius: 50%;
+      z-index: -1;
+    }
+
+    // Металлическая окантовка
+    &:after {
+      content: "";
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      border-radius: 50%;
+      background: linear-gradient(
+        135deg,
+        #e4e4e4 0%,
+        #c9c9c9 50%,
+        #e4e4e4 100%
+      );
+      z-index: -2;
+    }
+
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    // Стиль для кнопки внутри
+    a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.2rem;
+      padding: 15px 30px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 30px;
+      border: 2px solid gold;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.7);
+        transform: scale(1.1);
+      }
+    }
+
+    // Красный стол (турнир с баунти)
+    & {
+      background: radial-gradient(
+        circle at center,
+        rgba(200, 0, 0, 0.8) 0%,
+        rgba(150, 0, 0, 0.9) 70%
+      );
+    }
+
+    // Синий стол (холдем)
+    &_blue {
+      background: radial-gradient(
+        circle at center,
+        rgba(0, 0, 200, 0.8) 0%,
+        rgba(0, 0, 150, 0.9) 70%
+      );
+    }
+
+    // Зеленый стол (турнир)
+    &_green {
+      background: radial-gradient(
+        circle at center,
+        rgba(0, 100, 0, 0.8) 0%,
+        rgba(0, 60, 0, 0.9) 70%
+      );
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .main__container {
+    flex-direction: column;
+    gap: 20px;
+
+    &_block {
+      width: 250px;
+      height: 250px;
+      font-size: 1.3rem;
+
+      a {
+        font-size: 1rem;
+        padding: 12px 25px;
+      }
+    }
+  }
+}

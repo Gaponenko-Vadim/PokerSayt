@@ -1,4 +1,5 @@
 import Logo from "../Logo";
+import Profile from "../Profile";
 import styles from "./style.module.scss";
 const Header = () => {
   return (
@@ -7,7 +8,9 @@ const Header = () => {
         <div className={styles.container}>
           <Logo />
 
-          <div>логироваться</div>
+          <div>
+            <Profile />
+          </div>
         </div>
       </header>
     </>
